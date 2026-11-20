@@ -38,6 +38,7 @@ module.exports = function (config) {
       }
     },
     reporters: ['mocha'],
+    failOnSkippedTests: true,
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,

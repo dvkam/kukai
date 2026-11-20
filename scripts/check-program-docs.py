@@ -29,8 +29,17 @@ def main():
         if not path.exists():
           raise ValueError(f'Broken link in {document.relative_to(ROOT)}: {target}')
   evidence = PROGRAM / 'capabilities/build-evidence'
-  for result in json.loads((evidence / 'results.json').read_text())['checks']:
-    log = evidence / result['log']
+  packages = json.loads((ROOT / 'experiments/library-build-check/sources.json').read_text())['packages']
+  expected_builds = {(package['name'], package['version'], target)
+                     for package in packages for target in ['native', 'wasm32-unknown-unknown']}
+  results = json.loads((evidence / 'results.json').read_text())['checks']
+  actual_builds = [(result['package'], result['version'], result['target']) for result in results]
+  if not expected_builds or set(actual_builds) != expected_builds or len(actual_builds) != len(expected_builds):
+    raise ValueError('Retained build results must cover the complete unique pinned package/version/target matrix')
+  for result in results:
+    log = (evidence / result['log']).resolve()
+    if not log.is_relative_to(evidence.resolve()):
+      raise ValueError('Retained build log must be inside its evidence directory')
     if result['exit_code'] != 0 or not log.exists() or 'Finished' not in log.read_text():
       raise ValueError(f'Invalid retained build result: {result["package"]} {result["target"]}')
   print('Program baseline, ownership, local file links, and retained build logs pass')

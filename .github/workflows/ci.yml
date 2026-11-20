@@ -36,6 +36,7 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run test:ci
+      - run: npm run test:ci-policy
 
   program:
     name: PoC lint, typecheck, tests, and records
