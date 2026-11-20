@@ -32,6 +32,23 @@ The backup probe serializes only long-lived key packages into a temporary memory
 
 The experiment exercises complete EIP-1559 transaction encodings with synthetic values and chain IDs 1 and 8453. Alloy decodes the signed bytes and recovers the account. CGGMP24 also checks its own signature. These checks do not establish node acceptance, sufficient account balances, fee validity, Base-specific network rules, or asset migration.
 
+## Native results
+
+The 20 November 2026 Linux x86_64 run passed formatting, Clippy with warnings denied, and all three tests. The [result record](evidence/native-results.json) identifies the tested source commit, platform, compiler, commands, exit codes, dependency lock digest, and output digests. Captured outputs cover [formatting](evidence/format.txt), [Clippy](evidence/clippy.txt), and [tests](evidence/tests.txt).
+
+| Case | Expected and observed outcome | Status |
+| --- | --- | --- |
+| Device and recovery shares reconstruct without the service share | The reconstructed scalar produces the original public key. A standard k256 signing key signs transactions for both chain IDs. | Passed |
+| Device or recovery share alone reconstructs | Reconstruction returns an error. | Passed |
+| Duplicate identities or shares from separate DKG keys reconstruct | Reconstruction returns an error. | Passed |
+| Each participant alone attempts threshold signing | Each participant returns an error. | Passed |
+| Device and recovery shares sign with the service package removed | Both chain transaction encodings decode and recover the original account. | Passed |
+| Change the value or chain ID after signing | The changed transaction does not recover the original account. | Passed |
+| Restore long-lived user shares from the memory buffer | A new threshold-signing session succeeds without saved nonces or presignatures. | Passed |
+| Retain original shares after restoration | The original quorum still reconstructs the private key for the same account. | Passed |
+
+The retained run took about 169 seconds for safe-prime generation and 57 seconds for the auxiliary protocol. Its three signing sessions took about 2.7 to 3.0 seconds each. These are raw observations under the recorded conditions. They do not choose a presignature policy or predict browser or iPhone latency.
+
 ## Remaining evidence
 
-The issue stays open until its full acceptance criteria are met. Browser and physical iPhone execution, independent review, authenticated transport, malicious participants, concurrent requests, crash-safe nonce handling, presignature policy, protocol release cutoffs, and the full G3 exit drill remain unverified. Native results cannot establish those properties or pass a production gate.
+The issue stays open until its full acceptance criteria are met. Browser and physical iPhone execution are Deferred under POC-001. Authenticated transport, malicious and offline participants, concurrent requests, crash-safe nonce handling, presignature reuse attacks, protocol release cutoffs, migration, and the full G3 exit drill are Unrun. Independent review and the presignature-policy decision are Deferred. Native results cannot establish those properties or pass a production gate.

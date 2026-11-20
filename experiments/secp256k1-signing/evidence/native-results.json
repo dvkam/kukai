@@ -1,0 +1,61 @@
+{
+  "recorded_at_utc": "2026-11-20T11:12:45.634785+00:00",
+  "source_commit": "c50a8ef657f11402df6be4d1f0d0c32387003705",
+  "scope": "Native test-key transaction signing and reconstruction, not device or production-gate evidence",
+  "author": "Codex agent",
+  "accountable_owner": "dvkam",
+  "owner_acceptance": "Not claimed",
+  "os": "Linux",
+  "architecture": "x86_64",
+  "kernel": "6.18.57",
+  "logical_cpus": 5,
+  "measurement_conditions": "Shared Linux host, three parallel prime-generation workers, release profile, single observations rather than benchmarks",
+  "compiler": [
+    "rustc 1.100.0 (0ef1bc386 2026-11-09)",
+    "binary: rustc",
+    "commit-hash: 0ef1bc386059596dada8fb65b50425aab2ea637a",
+    "commit-date: 2026-11-09",
+    "host: x86_64-unknown-linux-gnu",
+    "release: 1.100.0",
+    "LLVM version: 23.1.5"
+  ],
+  "lock_sha256": "b4636d88b4f9a934957c304573fecce3fad24cca537624ad97da5152fd91335b",
+  "checks": [
+    {
+      "check": "format",
+      "command": ["cargo", "+1.100.0", "fmt", "--manifest-path", "experiments/secp256k1-signing/Cargo.toml", "--", "--check"],
+      "exit_code": 0,
+      "elapsed_seconds": 0.069,
+      "output": "format.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "check": "clippy",
+      "command": [
+        "cargo",
+        "+1.100.0",
+        "clippy",
+        "--release",
+        "--manifest-path",
+        "experiments/secp256k1-signing/Cargo.toml",
+        "--locked",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.32,
+      "output": "clippy.txt",
+      "sha256": "79ebf1c9ff5e05f48fb0c6ea52b184a87bded725e977ad03d405ba503c7f18b6"
+    },
+    {
+      "check": "tests",
+      "command": ["cargo", "+1.100.0", "test", "--release", "--manifest-path", "experiments/secp256k1-signing/Cargo.toml", "--locked", "--", "--nocapture"],
+      "exit_code": 0,
+      "elapsed_seconds": 240.645,
+      "output": "tests.txt",
+      "sha256": "89a1246c286cdec1d5ec3965219218d557b5a7d9db095a1b0666022b2b9dbf9d"
+    }
+  ]
+}
