@@ -46,7 +46,7 @@ Q-13 and Q-14 have no implementation ticket in Phases 0 to 3. P0-01 records thei
 
 ## Risks
 
-The [baseline risk register](program-plan-v0.5.1.md#10-risk-register) retains each severity and mitigation. The closing phase below is the target for the first mitigation decision, not a claim that the risk disappears. At that review, the owner records evidence, residual exposure, and a follow-up phase and ticket for remaining work. A safety failure cannot be accepted as a waiver. Every risk is currently open.
+Descriptions below quote the baseline verbatim. The [baseline risk register](program-plan-v0.5.1.md#10-risk-register) retains each severity and mitigation. The closing phase below is the target for the first mitigation decision, not a claim that the risk disappears. At that review, the owner records evidence, residual exposure, and a follow-up phase and ticket for remaining work. A safety failure cannot be accepted as a waiver. Every risk is currently open.
 
 | Risk | Description | Accountable owner | Mitigation decision phase | Tracking ticket | Status |
 | --- | --- | --- | --- | --- | --- |

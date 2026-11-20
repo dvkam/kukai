@@ -35,3 +35,5 @@ The [owner register](owners.md) assigns all 33 open questions and 27 risks. `dvk
 An accepted decision has an ID, a named accountable owner, a dated choice, reasons, evidence, rejected alternatives, remaining assumptions, and required reviewer outcomes. The owner accepts project scope and product decisions. Security outcomes also need the specialist reviewer specified by the ticket. Legal outcomes require qualified counsel's advice and the owner's decision. A reviewer recommendation alone is not a project decision.
 
 The [decision record](decisions.md) distinguishes the inherited decisions from proposals. Changes to accepted decisions need a new linked entry. Counterexamples reopen affected decisions and gates. Gate acceptance requires the ticket's evidence and named reviewers. Closing an issue, merging a document, or assigning an owner does not pass a gate.
+
+The [verification commands](verify-records.md) reproduce the ownership counts.

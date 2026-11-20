@@ -65,69 +65,11 @@ The optional tz2, tz3 and tz4 tickets must record either admission evidence or e
 
 ## Question ownership
 
-This table identifies the primary ticket that closes each open question. Later experiments can validate or reopen the decision. P2-06 closes Q-05 and Q-32 from the early curve experiments; P3-06 validates the complete exit tool.
+The [owner register](../owners.md#questions) records the decision ticket for each question. P2-06 closes Q-05 and Q-32 from the early curve experiments. P3-06 validates the complete exit tool.
 
-| Question | Decision ticket |
-| --- | --- |
-| Q-01 | [P2-06: Choose custody and enforceable web exposure controls](p2-06.md) |
-| Q-02 | [P2-02: Test identity independence and device-share storage](p2-02.md) |
-| Q-03 | [P1-01: Choose the audience and supported onboarding conditions](p1-01.md) |
-| Q-04 | [P2-07: Define recovery and validate it with users at C2](p2-07.md) |
-| Q-05 | [P2-06: Choose custody and enforceable web exposure controls](p2-06.md) |
-| Q-06 | [P3-01: Validate the minimum keys and decide derivation](p3-01.md) |
-| Q-07 | [P2-02: Test identity independence and device-share storage](p2-02.md) |
-| Q-08 | [P3-07: Run the services-language and Tezos-library comparison](p3-07.md) |
-| Q-09 | [P3-07: Run the services-language and Tezos-library comparison](p3-07.md) |
-| Q-10 | [P2-09: Decide fees, data services and operational boundaries](p2-09.md) |
-| Q-11 | [P1-01: Choose the audience and supported onboarding conditions](p1-01.md) |
-| Q-12 | [P1-02: Compare three interaction concepts and deliver C1](p1-02.md) |
-| Q-13 | Deferred to Phase 7b. Agent preparation and delegation are outside these drafts. |
-| Q-14 | Deferred until after release 1. The browser extension is outside these drafts. |
-| Q-15 | [P2-11: Receive legal advice for the selected custody design](p2-11.md) |
-| Q-16 | [P0-02: Establish code provenance and the Kukai reuse boundary](p0-02.md) |
-| Q-17 | [P1-03: Set product requirements and measurable quality targets](p1-03.md) |
-| Q-18 | [P2-09: Decide fees, data services and operational boundaries](p2-09.md) |
-| Q-19 | [P2-04: Test secp256k1 recovery and independent signing](p2-04.md) |
-| Q-20 | [P2-09: Decide fees, data services and operational boundaries](p2-09.md) |
-| Q-21 | [P2-04: Test secp256k1 recovery and independent signing](p2-04.md) |
-| Q-22 | [P1-01: Choose the audience and supported onboarding conditions](p1-01.md) |
-| Q-23 | [P1-01: Choose the audience and supported onboarding conditions](p1-01.md) |
-| Q-24 | [P0-04: Fund the work and reserve independent review](p0-04.md) |
-| Q-25 | [P2-02: Test identity independence and device-share storage](p2-02.md) |
-| Q-26 | [P2-06: Choose custody and enforceable web exposure controls](p2-06.md) |
-| Q-27 | [P3-09: Record key admission and review G3](p3-09.md) |
-| Q-28 | [P2-05: Select or defer the threshold BLS scheme](p2-05.md) |
-| Q-29 | [P2-02: Test identity independence and device-share storage](p2-02.md) |
-| Q-30 | [P2-06: Choose custody and enforceable web exposure controls](p2-06.md) |
-| Q-31 | [P2-08: Specify signing policy and transaction conformance cases](p2-08.md) |
-| Q-32 | [P2-06: Choose custody and enforceable web exposure controls](p2-06.md) |
-| Q-33 | [P2-07: Define recovery and validate it with users at C2](p2-07.md) |
+## Execution and publication
 
-## Evidence and closure
-
-These rules apply to every ticket. A later execution request must cover any spending, external communication or deployment it requires.
-
-- Decision tickets close with a reviewed choice, its reasons, rejected alternatives and remaining assumptions. A recommendation alone does not close a decision.
-- Experiment tickets retain reproducible commands, exact source revisions, tool versions, device and operating-system details, test inputs, raw measurements and results. Distinguish passed, failed, skipped and unrun cases.
-- A failed experiment can complete an investigation. It does not pass admission. Record the failure, reopen the dependent decision and keep its gate blocked.
-- Use test keys and test assets. Do not put private shares, recovery factors, authentication tokens or participant identities in public reports.
-- Preserve the plan's non-waivable safety properties. A bounded check is not an unbounded proof, and recorded-trace conformance says nothing about unrecorded executions.
-- Expected attacks outside a property's assumptions must match a named residual risk. An unexpected counterexample blocks the relevant gate. Do not add assumptions merely to dismiss a failure.
-- Exceptions apply only to eligible properties. Record them as "Accepted exception, unverified", with an owner, risk and closing date.
-- Verify independent exit with project-operated hosts blocked. Public RPC and chain availability remain dependencies. Recheck exit after supported recovery and share replacement.
-- A spending account's balance limits its present assets, not lifetime losses. Custody evidence must cover future deposits, replenishment and any authority over vault accounts.
-- Booked independent review satisfies the planning requirement only. It does not establish that an audit has passed. G5 remains a later release gate.
-- Each gate closes with a pass, blocked or fail verdict and a named reviewer. An issue's closed state is not itself a gate verdict.
-
-## GitHub publication
-
-The owner authorized publication. Each ticket has its own issue, created in dependency order. Local dependency links were replaced with GitHub issue links. All published titles and bodies were read back and verified. GitHub also has 64 native blocking relationships, each checked after creation. At publication, all 32 issues were open and listed dvkam as their author. Current issue states are on GitHub.
-
-Suggested labels are `phase:0` through `phase:3`, `kind:decision`, `kind:research`, `kind:experiment` and `kind:gate`. Apply `status:draft` until the owner accepts the ticket. Assign named people before execution. Keep later implementation tickets separate from this decision backlog.
-
-Use GitHub Projects for status and milestones for G0 through G3 if needed. These are recommendations; no labels, milestones or project were created during issue publication. Check existing repository conventions before adding them.
-
-Gate tickets are review records, not parent issues for their prerequisites. Add a program tracking issue if useful, and link all drafts to it without duplicating the plan.
+The [execution guide](../execute-tickets.md) defines evidence, closure, and GitHub update rules. The [verification commands](../verify-records.md) reproduce the register and dependency counts.
 
 ## Writing source
 

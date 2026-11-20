@@ -36,3 +36,5 @@ Published on 20 November 2026 under the dvkam account. All 32 issue titles and b
 | P3-07 | [P3-07: Run the services-language and Tezos-library comparison](https://github.com/dvkam/kukai/issues/30) |
 | P3-08 | [P3-08: Review measured usability and latency at C3](https://github.com/dvkam/kukai/issues/31) |
 | P3-09 | [P3-09: Record key admission and review G3](https://github.com/dvkam/kukai/issues/32) |
+
+[Verification commands](../verify-records.md) reproduce the publication counts.
