@@ -1,0 +1,31 @@
+{
+  "rust_toolchain": "1.100.0",
+  "packages": [
+    {
+      "name": "frost-ed25519",
+      "version": "3.0.0",
+      "checksum": "df345f704e41812a3ab238331a393126f76996c176d204296e289efe946c57f0",
+      "source_revision": "2016e44ba4a4757a996300350063b937a2ad33e8",
+      "repository": "https://github.com/ZcashFoundation/frost",
+      "license": "MIT OR Apache-2.0",
+      "rust_version": "1.81",
+      "created_at": "2026-04-23T15:38:36.363149Z",
+      "archive_url": "https://static.crates.io/crates/frost-ed25519/frost-ed25519-3.0.0.crate",
+      "features": []
+    },
+    {
+      "name": "cggmp24",
+      "version": "0.7.0-alpha.3",
+      "checksum": "c9a4f50f2c7c98676f10857cda178b6eea8468a8f95edba0745c8c1e288ebd25",
+      "source_revision": "d1ec5af47f93a909adc8a16aedd82a175f5b06b1",
+      "repository": "https://github.com/LFDT-Lockness/cggmp21",
+      "license": "MIT OR Apache-2.0",
+      "rust_version": null,
+      "created_at": "2025-12-04T14:54:17.355073Z",
+      "archive_url": "https://static.crates.io/crates/cggmp24/cggmp24-0.7.0-alpha.3.crate",
+      "features": [
+        "curve-secp256k1"
+      ]
+    }
+  ]
+}

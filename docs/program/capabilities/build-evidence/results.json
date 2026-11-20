@@ -1,0 +1,84 @@
+{
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "machine": "x86_64",
+  "checks": [
+    {
+      "package": "frost-ed25519",
+      "version": "3.0.0",
+      "target": "native",
+      "command": [
+        "cargo",
+        "+1.100.0",
+        "check",
+        "--locked",
+        "--manifest-path",
+        "/workspace/scratch/kukai-library-build-check/frost-ed25519-3.0.0/Cargo.toml",
+        "--target-dir",
+        "/workspace/scratch/kukai-library-build-check/target/frost-ed25519"
+      ],
+      "exit_code": 0,
+      "log": "frost-ed25519-native.log"
+    },
+    {
+      "package": "frost-ed25519",
+      "version": "3.0.0",
+      "target": "wasm32-unknown-unknown",
+      "command": [
+        "cargo",
+        "+1.100.0",
+        "check",
+        "--locked",
+        "--manifest-path",
+        "/workspace/scratch/kukai-library-build-check/frost-ed25519-3.0.0/Cargo.toml",
+        "--target-dir",
+        "/workspace/scratch/kukai-library-build-check/target/frost-ed25519",
+        "--target",
+        "wasm32-unknown-unknown"
+      ],
+      "exit_code": 0,
+      "log": "frost-ed25519-wasm32-unknown-unknown.log"
+    },
+    {
+      "package": "cggmp24",
+      "version": "0.7.0-alpha.3",
+      "target": "native",
+      "command": [
+        "cargo",
+        "+1.100.0",
+        "check",
+        "--locked",
+        "--manifest-path",
+        "/workspace/scratch/kukai-library-build-check/cggmp24-0.7.0-alpha.3/Cargo.toml",
+        "--target-dir",
+        "/workspace/scratch/kukai-library-build-check/target/cggmp24",
+        "--features",
+        "curve-secp256k1"
+      ],
+      "exit_code": 0,
+      "log": "cggmp24-native.log"
+    },
+    {
+      "package": "cggmp24",
+      "version": "0.7.0-alpha.3",
+      "target": "wasm32-unknown-unknown",
+      "command": [
+        "cargo",
+        "+1.100.0",
+        "check",
+        "--locked",
+        "--manifest-path",
+        "/workspace/scratch/kukai-library-build-check/cggmp24-0.7.0-alpha.3/Cargo.toml",
+        "--target-dir",
+        "/workspace/scratch/kukai-library-build-check/target/cggmp24",
+        "--features",
+        "curve-secp256k1",
+        "--target",
+        "wasm32-unknown-unknown"
+      ],
+      "exit_code": 0,
+      "log": "cggmp24-wasm32-unknown-unknown.log"
+    }
+  ],
+  "rustc": "rustc 1.100.0 (0ef1bc386 2026-11-09)\nbinary: rustc\ncommit-hash: 0ef1bc386059596dada8fb65b50425aab2ea637a\ncommit-date: 2026-11-09\nhost: x86_64-unknown-linux-gnu\nrelease: 1.100.0\nLLVM version: 23.1.5\n",
+  "cargo": "cargo 1.100.0 (3acc79c0c 2026-11-05)"
+}
