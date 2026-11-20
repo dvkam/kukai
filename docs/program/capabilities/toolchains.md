@@ -4,7 +4,7 @@ Retrieved on 20 November 2026 for P0-03. These are experiment candidates, not an
 
 | Tool | Source observation | Compatibility and current result |
 | --- | --- | --- |
-| Node | Official distribution index identifies v26.13.1 as LTS, codename Lithium. | The shell initially has v24.22.1. Node 26 is not installed or tested here. Do not use GitHub's “latest” alpha-tagged release as a stable candidate. |
+| Node | Official distribution index identifies v26.13.1 as LTS, codename Lithium. | The shell initially has v24.22.1. Node 26 is not installed or tested here. Do not use GitHub's "latest" alpha-tagged release as a stable candidate. |
 | pnpm | GitHub release v12.21.0. | The shell has 11.25.0. Node 26 with pnpm 12 needs a fresh web-project check before adoption. |
 | Rust | Release 1.100.0. | Installed in a workspace-local rustup directory. FROST 3.0.0 and CGGMP24 alpha.3 compile for the native host and WASM. No shared wallet toolchain changed. |
 | OCaml and Dune | Releases 5.5.2 and 3.25.0. | Not installed or built here. OCaml 5.5.2 conflicts with Gospel 0.3.1's declared upper bound. |

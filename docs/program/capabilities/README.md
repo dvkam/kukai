@@ -17,7 +17,7 @@ The FROST development snapshot `0966bd1529aa062ad3b621af99e277f976b1c0f0` declar
 
 ## Capability matrix
 
-“Present” below means a documented API or source implementation was found. It does not mean the protocol has passed this program's tests. “Unconfirmed” means this survey cannot establish the capability. Refresh, membership resharing, lost-share repair, and full-key reconstruction remain separate operations.
+"Present" below means a documented API or source implementation was found. It does not mean the protocol has passed this program's tests. "Unconfirmed" means this survey cannot establish the capability. Refresh, membership resharing, lost-share repair, and full-key reconstruction remain separate operations.
 
 | Candidate | DKG and signing | Refresh | Membership resharing | Lost-share repair | Key reconstruction |
 | --- | --- | --- | --- | --- | --- |
