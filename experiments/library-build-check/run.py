@@ -1,17 +1,16 @@
-#!/usr/bin/env python3
 # SPDX-License-Identifier: Apache-2.0 OR MIT
 """Check pinned upstream libraries without changing the wallet application."""
 import argparse
 import hashlib
 import io
 import json
-from pathlib import Path
 import platform
 import shutil
 import subprocess
 import tarfile
 import tempfile
 import urllib.request
+from pathlib import Path
 
 
 def unpack_package(package, output):
@@ -30,7 +29,10 @@ def unpack_package(package, output):
       relative = path.relative_to(prefix)
       destination = output / prefix / relative
       destination.parent.mkdir(parents=True, exist_ok=True)
-      destination.write_bytes(source.extractfile(member).read())
+      contents = source.extractfile(member)
+      if contents is None:
+        raise ValueError(f'Unreadable archive entry: {member.name}')
+      destination.write_bytes(contents.read())
   return output / prefix
 
 
@@ -62,7 +64,7 @@ def main():
         command += ['--target', target]
       log = output / f"{package['name']}-{target}.log"
       with log.open('w') as stream:
-        completed = subprocess.run(command, stdout=stream, stderr=subprocess.STDOUT)
+        completed = subprocess.run(command, check=False, stdout=stream, stderr=subprocess.STDOUT)
       result = {'package': package['name'], 'version': package['version'], 'target': target,
                 'command': command, 'exit_code': completed.returncode, 'log': log.name}
       results['checks'].append(result)

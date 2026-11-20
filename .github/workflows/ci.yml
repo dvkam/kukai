@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [production]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  wallet:
+    name: Wallet lint, typecheck, and tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Use HTTPS for the inherited Git dependency
+        run: |
+          git config --global url.https://github.com/.insteadOf git://github.com/
+          git config --global --add url.https://github.com/.insteadOf ssh://git@github.com/
+      - run: npm ci --no-audit --no-fund
+        env:
+          HUSKY: '0'
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm run test:ci
+
+  program:
+    name: PoC lint, typecheck, tests, and records
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: requirements-ci.txt
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24.22.1
+      - run: python -m pip install -r requirements-ci.txt
+      - run: ruff check experiments/library-build-check/run.py scripts/check-program-docs.py tests
+      - run: pyright
+      - run: python -m unittest discover -s tests -v
+      - run: python scripts/check-program-docs.py
+
+  crypto-builds:
+    name: Pinned crypto native and WASM builds
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - run: rustup toolchain install 1.100.0 --profile minimal --target wasm32-unknown-unknown
+      - run: python experiments/library-build-check/run.py --output "${RUNNER_TEMP}/library-build-check"

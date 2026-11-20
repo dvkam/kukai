@@ -1,3 +1,4 @@
+// Modified for dvkam: use a fixed clock and test singular and plural hour output.
 // general imports
 import { TestBed, getTestBed } from '@angular/core/testing';
 import { TranslateModule, TranslateService, TranslateLoader, TranslateFakeLoader } from '@ngx-translate/core';
@@ -31,7 +32,13 @@ describe('[ TimeAgoPipe ]', () => {
     injector = getTestBed();
     translate = injector.inject(TranslateService);
     pipe = new TimeAgoPipe(translate);
-    date = new Date();
+    date = new Date('2026-11-20T12:30:00Z');
+    jasmine.clock().install();
+    jasmine.clock().mockDate(date);
+  });
+
+  afterEach(() => {
+    jasmine.clock().uninstall();
   });
 
   // spec: expect instantiation
@@ -63,9 +70,12 @@ describe('[ TimeAgoPipe ]', () => {
       expect(pipe.transform(date.getTime())).toEqual(jasmine.any(String));
     });
 
-    it('should return timeago data given offset date', () => {
-      const expectedResult = date.getHours() + 'TIMEAGOPIPE.HOURS ' + date.getMinutes() + 'TIMEAGOPIPE.MINUTE';
-      expect(pipe.transform(Number(new Date(date.toDateString())))).toEqual(expectedResult);
+    it('uses the singular translation for one hour', () => {
+      expect(pipe.transform(date.getTime() - 90 * 60 * 1000)).toBe('1TIMEAGOPIPE.HOUR 30TIMEAGOPIPE.MINUTE');
+    });
+
+    it('uses the plural translation for two hours', () => {
+      expect(pipe.transform(date.getTime() - 150 * 60 * 1000)).toBe('2TIMEAGOPIPE.HOURS 30TIMEAGOPIPE.MINUTE');
     });
   });
 });
