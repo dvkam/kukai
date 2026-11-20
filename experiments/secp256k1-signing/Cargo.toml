@@ -1,0 +1,20 @@
+[package]
+name = "wallet-secp256k1-signing-experiment"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dev-dependencies]
+alloy-consensus = { version = "=2.6.1", features = ["k256"] }
+alloy-eips = "=2.6.1"
+alloy-primitives = { version = "=1.7.3", features = ["k256"] }
+cggmp24 = { version = "=0.7.0-alpha.3", default-features = false, features = ["std", "backend-num-bigint", "curve-secp256k1", "spof"] }
+k256 = { version = "=0.13.4", features = ["ecdsa"] }
+rand_core = { version = "=0.6.4", features = ["getrandom"] }
+round-based = { version = "=0.4.1", features = ["sim"] }
+serde_json = "=1.0.149"
+sha3 = "=0.10.8"
+
+[[test]]
+name = "quorum"
+path = "tests/quorum.rs"

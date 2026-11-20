@@ -12,6 +12,7 @@ These records define the program and its execution status.
 - [Capability survey](capabilities/README.md) records cryptographic APIs, audit limits, build evidence, and toolchain conflicts.
 - [Initial verification obligations](verification/README.md) preserve the source properties and propose review and evidence rules.
 - [Ed25519 signing experiment](../../experiments/ed25519-signing/README.md) checks native user-quorum signing through Solana and Tezos verifier libraries.
+- [secp256k1 signing experiment](../../experiments/secp256k1-signing/README.md) checks native user-quorum signing and reconstruction with Ethereum and Base transaction formats.
 - [Phase 0 to 3 tickets](tickets/README.md) record the decision and feasibility backlog.
 - [GitHub issue index](tickets/github-issues.md) links the 32 published tickets.
 

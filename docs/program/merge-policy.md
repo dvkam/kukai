@@ -10,7 +10,7 @@ The CI workflow runs on every pull request and every push to `production`, witho
 | --- | --- |
 | Wallet lint, typecheck, and tests | Existing Angular lint, application and test TypeScript checks, the complete headless Karma test suite, and a regression check that focused tests cannot hide failures. |
 | PoC lint, typecheck, tests, and records | Ruff, Pyright, Python regression tests, and program-record integrity checks. |
-| Pinned crypto native and WASM builds | All four checksum-pinned library compilation checks, using retained dependency locks. Native Ed25519 experiment formatting, Clippy type and lint checks, and the complete test suite. |
+| Pinned crypto native and WASM builds | All four checksum-pinned library compilation checks, using retained dependency locks. Native Ed25519 and secp256k1 experiment formatting, Clippy type and lint checks, and the complete test suites. |
 
 The inherited application uses Node 24.22.1 for this CI run, matching the locally exercised runtime. This is measured compatibility, not a claim that Angular 17 officially supports Node 24. It does not initialize the proposed new web stack.
 

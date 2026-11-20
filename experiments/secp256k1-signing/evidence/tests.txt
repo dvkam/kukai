@@ -1,0 +1,18 @@
+   Compiling wallet-secp256k1-signing-experiment v0.1.0 (/workspace/kukai/experiments/secp256k1-signing)
+    Finished `release` profile [optimized] target(s) in 5.48s
+     Running tests/quorum.rs (experiments/secp256k1-signing/target/release/build/wallet-secp256k1-signing-experiment/192b463556817efb/out/quorum-192b463556817efb)
+
+running 3 tests
+phase=dkg elapsed_ms=4
+test device_and_recovery_shares_reconstruct_without_service_share ... ok
+test duplicate_and_mixed_key_shares_cannot_reconstruct ... ok
+test user_quorum_signs_ethereum_and_base_transactions_without_service has been running for over 60 seconds
+phase=safe_primes elapsed_ms=169444
+phase=auxiliary elapsed_ms=57080
+phase=sign chain_id=1 elapsed_ms=2952
+phase=sign chain_id=8453 elapsed_ms=2857
+phase=sign chain_id=8453 elapsed_ms=2739
+test user_quorum_signs_ethereum_and_base_transactions_without_service ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 235.09s
+
