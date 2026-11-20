@@ -8,6 +8,10 @@ DEC-001 through DEC-027 retain their baseline meaning and status. Their dated gr
 
 The external-review verdicts in appendix R record review history. Only amendments incorporated into the owner's accepted baseline are decisions. Reviewer recommendations and AI review results do not independently authorize new scope or satisfy specialist review requirements.
 
+## Current execution decision
+
+[POC-001](poc-scope.md) records the owner's subsequent direction to continue as an unfunded solo PoC, with `dvkam` as the only human reviewer. Production dependencies remain deferred. The baseline decisions above are preserved.
+
 ## Proposals awaiting decisions
 
 Every baseline item labelled Proposal remains proposed. This index groups those items by decision work. It does not approve their implementation.

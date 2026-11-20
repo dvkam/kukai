@@ -1,6 +1,6 @@
 # Decision and risk owners
 
-`dvkam` is the accountable owner of every entry, as confirmed on 20 November 2026. Specialist reviewers remain unfilled. Ownership does not establish expertise or independent review.
+`dvkam` is the accountable owner of every entry, as confirmed on 20 November 2026. Specialist reviewers remain unfilled for production. Under [POC-001](poc-scope.md), `dvkam` is the sole current human PoC reviewer. Ownership does not establish expertise or independent review.
 
 The [baseline question register](program-plan-v0.5.1.md#11-open-questions-register) defines each question. All questions remain open or deferred. A ticket's completion closes a question only when its decision evidence is accepted.
 

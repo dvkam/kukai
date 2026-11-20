@@ -6,7 +6,7 @@ The plan is the accepted planning baseline. A draft ticket does not accept a pro
 
 ## Start here
 
-The owner authorized execution and assigned `dvkam` to P0-01. The [charter](../charter.md) records the accepted scope. The Phase 0 tickets then establish ownership, provenance, evidence, capacity and review rules. All later-phase work requires G0. Phase 1 and Phase 2 can run in parallel where their listed dependencies permit it.
+The owner authorized execution and assigned `dvkam` to P0-01. The [charter](../charter.md) records the accepted scope. The Phase 0 tickets then establish ownership, provenance, evidence, capacity and review rules. The baseline requires G0 for later-phase work. The owner's subsequent [POC-001 decision](../poc-scope.md) permits PoC investigations while production dependencies remain deferred. Phase 1 and Phase 2 can run in parallel where their listed dependencies permit it.
 
 The original ticket bodies below retain their Draft status. P0-01 now has an execution record in the [charter](../charter.md). No experiment has run and no gate has passed. The [owner register](../owners.md) assigns question and risk accountability. P0-04 must settle delivery roles, reviewer capacity, timeboxes, and dates before G0. Ticket IDs are local identifiers, not GitHub issue numbers.
 
@@ -59,7 +59,7 @@ The original ticket bodies below retain their Draft status. P0-01 now has an exe
 | C3 | [Review measured usability and latency](p3-08.md) | Measured results meet the accepted targets or trigger a reviewed change and new run. |
 | G3 | [Record key admission](p3-09.md) | Minimum keys are admitted, optional keys have verdicts, and required decisions and exit drills pass. |
 
-A listed dependency means the required evidence must be accepted before the dependent ticket starts. Research can use provisional findings, but it cannot close a dependent decision early. If an accepted finding changes, reopen every decision and gate that relied on it. A failed required G3 experiment reopens the affected Phase 2 decisions.
+For baseline execution, a listed dependency means the required evidence must be accepted before the dependent ticket starts. POC-001 separately permits PoC investigations with their technical prerequisites identified. Research can use provisional findings, but it cannot close a dependent decision early. If an accepted finding changes, reopen every decision and gate that relied on it. A failed required G3 experiment reopens the affected Phase 2 decisions.
 
 The optional tz2, tz3 and tz4 tickets must record either admission evidence or explicit deferral. Their tests do not all have to run for G3 to pass. Deferral preserves address recognition and protocol capability checks. Ed25519 for Solana and tz1 and secp256k1 for Ethereum and Base are required. Their failure blocks admission.
 

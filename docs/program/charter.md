@@ -2,7 +2,7 @@
 
 Owner: `dvkam`. Date: 20 November 2026. Source: [program plan v0.5.1](program-plan-v0.5.1.md). Execution ticket: [P0-01](https://github.com/dvkam/kukai/issues/1).
 
-The owner accepted v0.5.1 as the planning baseline and authorized implementation of the published issues. This charter records that scope and the owner's assignment of `dvkam` to the open decisions and risks. It does not pass G0 or approve unresolved proposals.
+The owner accepted v0.5.1 as the planning baseline and authorized implementation of the published issues. This charter records that scope and the owner's assignment of `dvkam` to the open decisions and risks. It does not pass G0 or approve unresolved proposals. The subsequent [solo PoC decision](poc-scope.md) defines current execution and deferred production dependencies.
 
 ## Accepted scope
 
