@@ -1,0 +1,16 @@
+[package]
+name = "wallet-ed25519-signing-experiment"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dev-dependencies]
+blake2 = "=0.10.6"
+frost-ed25519 = "=3.0.0"
+rand_core = { version = "=0.6.4", features = ["getrandom"] }
+solana-signature = { version = "=3.6.0", features = ["verify"] }
+tezos_crypto_rs = { version = "=0.6.0", default-features = false }
+
+[[test]]
+name = "quorum"
+path = "tests/quorum.rs"

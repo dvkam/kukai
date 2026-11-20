@@ -11,9 +11,10 @@ These records define the program and its execution status.
 - [Provenance inventory](provenance/README.md) pins inherited sources and records the PoC reuse boundary.
 - [Capability survey](capabilities/README.md) records cryptographic APIs, audit limits, build evidence, and toolchain conflicts.
 - [Initial verification obligations](verification/README.md) preserve the source properties and propose review and evidence rules.
+- [Ed25519 signing experiment](../../experiments/ed25519-signing/README.md) checks native user-quorum signing through Solana and Tezos verifier libraries.
 - [Phase 0 to 3 tickets](tickets/README.md) record the decision and feasibility backlog.
 - [GitHub issue index](tickets/github-issues.md) links the 32 published tickets.
 
-The owner authorized issue execution on 20 November 2026, then limited current work to a solo, unfunded PoC. P0-01 supplies the charter records in this change. No feasibility experiment has run and no gate has passed. GitHub issues and linked pull requests track execution. The local ticket files retain the original publication bodies as historical specifications.
+The owner authorized issue execution on 20 November 2026, then limited current work to a solo, unfunded PoC. The capability records and experiments contain the evidence collected so far. No production gate has passed. GitHub issues and linked pull requests track execution. The local ticket files retain the original publication bodies as historical specifications.
 
 [Verification commands](verify-records.md) reproduce the register and publication counts.
