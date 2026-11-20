@@ -7,6 +7,7 @@ These records define the program and its execution status.
 - [Charter](charter.md) records accepted scope, exclusions, research gaps, and decision authority.
 - [Owner register](owners.md) assigns the 33 open questions and 27 risks to `dvkam`.
 - [Decision record](decisions.md) separates accepted decisions from proposals.
+- [Provenance inventory](provenance/README.md) pins inherited sources and records the PoC reuse boundary.
 - [Phase 0 to 3 tickets](tickets/README.md) record the decision and feasibility backlog.
 - [GitHub issue index](tickets/github-issues.md) links the 32 published tickets.
 
