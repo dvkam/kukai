@@ -1,0 +1,55 @@
+{
+  "recorded_at_utc": "2026-11-20T01:48:04.326135+00:00",
+  "source_commit": "2f8c30a9ef7dc49d2d56dd12253b2838819a1db5",
+  "scope": "Native synthetic-message PoC, not device measurement or a production gate",
+  "author": "Codex agent",
+  "accountable_owner": "dvkam",
+  "owner_acceptance": "Not claimed by this record",
+  "os": "Linux",
+  "architecture": "x86_64",
+  "kernel": "6.18.57",
+  "compiler": [
+    "rustc 1.100.0 (0ef1bc386 2026-11-09)",
+    "binary: rustc",
+    "commit-hash: 0ef1bc386059596dada8fb65b50425aab2ea637a",
+    "commit-date: 2026-11-09",
+    "host: x86_64-unknown-linux-gnu",
+    "release: 1.100.0",
+    "LLVM version: 23.1.5"
+  ],
+  "lock_sha256": "3ff8e6127e13d6427dcd7712d9a97f6aea86a3a7194e150a520bd54361998309",
+  "checks": [
+    {
+      "check": "format",
+      "command": ["cargo", "+1.100.0", "fmt", "--manifest-path", "experiments/ed25519-signing/Cargo.toml", "--", "--check"],
+      "exit_code": 0,
+      "output": "format.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "check": "clippy",
+      "command": [
+        "cargo",
+        "+1.100.0",
+        "clippy",
+        "--manifest-path",
+        "experiments/ed25519-signing/Cargo.toml",
+        "--locked",
+        "--all-targets",
+        "--",
+        "-D",
+        "warnings"
+      ],
+      "exit_code": 0,
+      "output": "clippy.txt",
+      "sha256": "86b1faa208813525e94ae4dacf6eed7e51d65e78ee3027db26d927a89dab313e"
+    },
+    {
+      "check": "tests",
+      "command": ["cargo", "+1.100.0", "test", "--manifest-path", "experiments/ed25519-signing/Cargo.toml", "--locked"],
+      "exit_code": 0,
+      "output": "tests.txt",
+      "sha256": "fa3cc8d6eafbc51c117d05f215c7f96cbf77eead68d318f3f88d3714bad3733c"
+    }
+  ]
+}

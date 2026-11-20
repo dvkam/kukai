@@ -1,0 +1,16 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
+warning: the following packages contain code that will be rejected by a future version of Rust: parse-display-derive v0.4.1
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+     Running tests/quorum.rs (experiments/ed25519-signing/target/debug/build/wallet-ed25519-signing-experiment/faf37bcc1e7c1b30/out/quorum-faf37bcc1e7c1b30)
+
+running 7 tests
+test no_single_participant_can_sign ... ok
+test coordinator_cannot_change_message_after_collecting_signature_shares ... ok
+test every_two_share_combination_can_sign_for_the_same_account ... ok
+test separate_tezos_key_signs_watermarked_digest_without_service ... ok
+test signature_share_cannot_be_replayed_into_fresh_signing_round ... ok
+test user_quorum_signs_without_service_material_and_solana_verifies ... ok
+test share_from_another_key_cannot_complete_the_user_quorum ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.23s
+

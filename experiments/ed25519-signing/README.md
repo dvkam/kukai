@@ -33,7 +33,7 @@ Dependencies are exact direct versions, with transitive versions and registry ch
 
 ## Observed native results
 
-On 20 November 2026, the Linux run with Rust 1.100.0 passed all seven tests, formatting, and Clippy with warnings denied for the experiment. CI repeats these checks on every PR. Its run log records results for that commit.
+On 20 November 2026, the Linux x86_64 run with Rust 1.100.0 passed all seven tests, formatting, and Clippy with warnings denied for the experiment. The [native result record](evidence/native-results.json) identifies the tested source commit, compiler, platform, dependency lock digest, commands, exit codes, and output digests. It links the captured [formatting output](evidence/format.txt), [Clippy output](evidence/clippy.txt), and [test output](evidence/tests.txt). The record does not claim the owner personally reviewed or accepted the results. CI repeats these checks on every PR, with a run log for that commit.
 
 | Case | Observed result |
 | --- | --- |
