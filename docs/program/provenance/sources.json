@@ -1,0 +1,63 @@
+{
+  "retrieved_on": "2026-11-20",
+  "sources": [
+    {
+      "repo": "kukai-wallet/kukai",
+      "sha": "f0fa7222a039012797383fe4a68594e10b92a888",
+      "default_branch": "production",
+      "root_license": "License.md",
+      "declared_license": "Apache-2.0; package.json declares MIT",
+      "file_count": 739,
+      "license_sha256": "4d43a378ba778fda4235212e72399a8ffc0f9e3aedee220fc202dbe5d8556745",
+      "tree_manifest": "kukai-files.csv"
+    },
+    {
+      "repo": "kukai-wallet/kukai-mobile-ios",
+      "sha": "cb8eb9ad8a97addd36c0549d77470183deb1fa31",
+      "default_branch": "main",
+      "root_license": "LICENSE",
+      "declared_license": "Apache-2.0",
+      "file_count": 1378,
+      "license_sha256": "4d43a378ba778fda4235212e72399a8ffc0f9e3aedee220fc202dbe5d8556745",
+      "tree_manifest": "kukai-mobile-ios-files.csv"
+    },
+    {
+      "repo": "kukai-wallet/kukai-core-swift",
+      "sha": "a761e3aee58fdfa20b4f3e71adcd20861e284fad",
+      "default_branch": "main",
+      "root_license": "LICENSE",
+      "declared_license": "MIT",
+      "file_count": 319,
+      "license_sha256": "3c5f377c8b5da98b28ba3a23c15cf17a89097c95085780ef3b93af36ecd8f0e7",
+      "tree_manifest": "kukai-core-swift-files.csv"
+    },
+    {
+      "repo": "kukai-wallet/kukai-crypto-swift",
+      "sha": "7d9059b932a723d8d90e690ab29777ad4f1b7a8d",
+      "default_branch": "main",
+      "root_license": "LICENSE",
+      "declared_license": "MIT",
+      "file_count": 30,
+      "license_sha256": "3c5f377c8b5da98b28ba3a23c15cf17a89097c95085780ef3b93af36ecd8f0e7",
+      "tree_manifest": "kukai-crypto-swift-files.csv"
+    },
+    {
+      "repo": "kukai-wallet/CustomAuth",
+      "sha": "ef401881391614923619b12d5095a79706aaeaec",
+      "default_branch": "kukai",
+      "root_license": null,
+      "declared_license": "NOASSERTION",
+      "file_count": 208,
+      "tree_manifest": "CustomAuth-files.csv"
+    },
+    {
+      "repo": "kukai-wallet/test-dapp",
+      "sha": "a27b72e776d77f41f8632c5e64d7f1e0597f0613",
+      "default_branch": "main",
+      "root_license": null,
+      "declared_license": "NOASSERTION",
+      "file_count": 46,
+      "tree_manifest": "test-dapp-files.csv"
+    }
+  ]
+}
