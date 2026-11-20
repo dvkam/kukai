@@ -33,6 +33,10 @@ for source in json.loads((root / 'sources.json').read_text())['sources']:
 		expected = {(r['path'], r['type'], r['mode'], r['sha']) for r in tree['tree'] if r['type'] != 'tree'}
 	assert actual == expected and len(rows) == len(actual) == source['file_count'], repo
 	assert all(r['file_license'] == 'NOASSERTION' and r['reuse_status'] == 'not-approved' for r in rows)
+	if repo in ['kukai-wallet/CustomAuth', 'kukai-wallet/test-dapp']:
+		package = json.loads(subprocess.check_output(['gh', 'api', f'repos/{repo}/contents/package.json?ref={revision}']))
+		declaration = json.loads(base64.b64decode(package['content'])).get('license')
+		assert declaration == ('MIT' if repo.endswith('/CustomAuth') else None)
 	if source['root_license']:
 		license_path = source['root_license']
 		if repo == 'kukai-wallet/kukai':

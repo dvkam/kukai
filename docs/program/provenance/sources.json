@@ -46,7 +46,7 @@
       "sha": "ef401881391614923619b12d5095a79706aaeaec",
       "default_branch": "kukai",
       "root_license": null,
-      "declared_license": "NOASSERTION",
+      "declared_license": "MIT in package.json; no license file found",
       "file_count": 208,
       "tree_manifest": "CustomAuth-files.csv"
     },

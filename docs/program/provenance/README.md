@@ -12,7 +12,7 @@ Research record for [P0-02](https://github.com/dvkam/kukai/issues/2), retrieved 
 | kukai-wallet/kukai-mobile-ios | `cb8eb9ad8a97addd36c0549d77470183deb1fa31` | Apache-2.0 | 1378 |
 | kukai-wallet/kukai-core-swift | `a761e3aee58fdfa20b4f3e71adcd20861e284fad` | MIT | 319 |
 | kukai-wallet/kukai-crypto-swift | `7d9059b932a723d8d90e690ab29777ad4f1b7a8d` | MIT | 30 |
-| kukai-wallet/CustomAuth | `ef401881391614923619b12d5095a79706aaeaec` | No license file found in the pinned tree | 208 |
+| kukai-wallet/CustomAuth | `ef401881391614923619b12d5095a79706aaeaec` | MIT in package.json, no license file found | 208 |
 | kukai-wallet/test-dapp | `a27b72e776d77f41f8632c5e64d7f1e0597f0613` | No license file found in the pinned tree | 46 |
 
 The [verification procedure](verify.md) reproduces these counts and compares the manifests with the pinned Git trees. Root license evidence is retained verbatim in [notices](notices/). These copies include the Swift libraries' MIT copyright and permission notices. They are evidence for those sources, not a license grant over the new project.
@@ -33,7 +33,7 @@ All findings below belong to `dvkam`. They remain open under issue #2 until sour
 | Swift core `Sources/KukaiCoreSwift/Services/taquito_local_forging.js` | Header references `taquito_local_forging.js.LICENSE.txt`. That sidecar is absent from the pinned tree. | Exclude until the bundle's build inputs and complete notices are recovered. |
 | Swift core `Sources/KukaiCoreSwift/Services/kukai-dex-calculations.js` | Minified bundle contains a `bigInt` implementation and no license header. | Exclude. Identify all bundled inputs before assigning a license. |
 | iOS `Kukai Mobile/Fonts/Figtree-*.ttf` | Four font binaries without font-license evidence in the pinned tree. | Exclude these copies until exact upstream provenance is confirmed. |
-| CustomAuth and test-dapp | No tracked root license at the inspected revisions. test-dapp also bundles fonts. | Reference only. No copying. |
+| CustomAuth and test-dapp | CustomAuth declares MIT in package.json but has no license file. test-dapp has neither a package license declaration nor a root license file, and also bundles fonts. | Reference only. Recover complete grant and notice evidence before considering copying. |
 
 This inspection found specific unresolved files. It is not an exhaustive determination of every file's origin. The `NOASSERTION` status protects against treating the uninspected remainder as cleared. Package-lock files and Swift manifests identify further third-party dependencies that need their own notices when selected.
 
