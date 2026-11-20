@@ -1,0 +1,189 @@
+{
+  "retrieved_on": "2026-11-20",
+  "packages": [
+    {
+      "name": "cggmp24",
+      "version": "0.7.0-alpha.3",
+      "checksum": "c9a4f50f2c7c98676f10857cda178b6eea8468a8f95edba0745c8c1e288ebd25",
+      "source_revision": "d1ec5af47f93a909adc8a16aedd82a175f5b06b1",
+      "repository": "https://github.com/LFDT-Lockness/cggmp21",
+      "license": "MIT OR Apache-2.0",
+      "rust_version": null,
+      "created_at": "2025-12-04T14:54:17.355073Z",
+      "archive_url": "https://static.crates.io/crates/cggmp24/cggmp24-0.7.0-alpha.3.crate"
+    },
+    {
+      "name": "frost-ed25519",
+      "version": "3.0.0",
+      "checksum": "df345f704e41812a3ab238331a393126f76996c176d204296e289efe946c57f0",
+      "source_revision": "2016e44ba4a4757a996300350063b937a2ad33e8",
+      "repository": "https://github.com/ZcashFoundation/frost",
+      "license": "MIT OR Apache-2.0",
+      "rust_version": "1.81",
+      "created_at": "2026-04-23T15:38:36.363149Z",
+      "archive_url": "https://static.crates.io/crates/frost-ed25519/frost-ed25519-3.0.0.crate"
+    },
+    {
+      "name": "frost-core",
+      "version": "3.0.0",
+      "checksum": "81ef2787af391c7e8bedc037a3b9ea03dde803fbd93e778e6bb369547800e5cd",
+      "source_revision": "2016e44ba4a4757a996300350063b937a2ad33e8",
+      "repository": "https://github.com/ZcashFoundation/frost",
+      "license": "MIT OR Apache-2.0",
+      "rust_version": "1.81",
+      "created_at": "2026-04-23T15:32:09.834157Z",
+      "archive_url": "https://static.crates.io/crates/frost-core/frost-core-3.0.0.crate"
+    },
+    {
+      "name": "tsslib",
+      "version": "0.2.17",
+      "checksum": "f1f9cd9567cdd6f50a2a87f2a20d2a40f80e24cf2a486b8e411d2bc2e90bc59f",
+      "source_revision": "999a8ebc16e84fbcbdd2350367eadb3b161266e5",
+      "repository": "https://github.com/KarpelesLab/tsslib-rs",
+      "license": "MIT",
+      "rust_version": "1.95",
+      "created_at": "2026-10-31T10:58:10.131510Z",
+      "archive_url": "https://static.crates.io/crates/tsslib/tsslib-0.2.17.crate"
+    },
+    {
+      "name": "threshold_crypto",
+      "version": "0.4.0",
+      "checksum": "7f708705bce37e765c37a95a8e0221a327c880d5a5a148d522552e8daa85787a",
+      "source_revision": "7709462f2df487ada3bb3243060504b5881f2628",
+      "repository": "https://github.com/poanetwork/threshold_crypto",
+      "license": "MIT/Apache-2.0",
+      "rust_version": null,
+      "created_at": "2020-07-28T17:37:33.216057Z",
+      "archive_url": "https://static.crates.io/crates/threshold_crypto/threshold_crypto-0.4.0.crate"
+    }
+  ],
+  "repository_snapshots": [
+    {
+      "repo": "celo-org/celo-threshold-bls-rs",
+      "sha": "20964e5d745d3e4c8ac103c7ac76b25ef8601b8b",
+      "branch": "main",
+      "retrieved_on": "2026-11-20"
+    },
+    {
+      "repo": "LFDT-Lockness/cggmp21",
+      "sha": "3c9c065c5e1a81be25837afe614571067c18259d",
+      "branch": "cggmp24/m",
+      "retrieved_on": "2026-11-20"
+    },
+    {
+      "repo": "ZcashFoundation/frost",
+      "sha": "0966bd1529aa062ad3b621af99e277f976b1c0f0",
+      "branch": "main",
+      "retrieved_on": "2026-11-20"
+    },
+    {
+      "repo": "ZenGo-X/multi-party-bls",
+      "sha": "304e506f036144746f01270bdf44c92afb65f846",
+      "branch": "main",
+      "retrieved_on": "2026-11-20"
+    },
+    {
+      "repo": "poanetwork/threshold_crypto",
+      "sha": "a7fbfa4522835010b6037fb45388c7b04ee14194",
+      "branch": "master",
+      "retrieved_on": "2026-11-20"
+    },
+    {
+      "repo": "KarpelesLab/tsslib-rs",
+      "sha": "999a8ebc16e84fbcbdd2350367eadb3b161266e5",
+      "branch": "master",
+      "retrieved_on": "2026-11-20"
+    }
+  ],
+  "tool_releases": [
+    {
+      "tag_name": "v0.63.0",
+      "published_at": "2026-11-10T07:00:43Z",
+      "html_url": "https://github.com/apalache-mc/apalache/releases/tag/v0.63.0",
+      "prerelease": false,
+      "tool": "apalache-mc-apalache"
+    },
+    {
+      "tag_name": "v0.14.0",
+      "published_at": "2026-10-12T08:49:08Z",
+      "html_url": "https://github.com/creusot-rs/creusot/releases/tag/v0.14.0",
+      "prerelease": false,
+      "tool": "creusot-rs-creusot"
+    },
+    {
+      "tag_name": "kani-0.68.0",
+      "published_at": "2026-09-16T03:43:14Z",
+      "html_url": "https://github.com/model-checking/kani/releases/tag/kani-0.68.0",
+      "prerelease": false,
+      "tool": "model-checking-kani"
+    },
+    {
+      "tag_name": "v27.0.0-alpha.0.1.1",
+      "published_at": "2026-11-17T03:48:38Z",
+      "html_url": "https://github.com/nodejs/node/releases/tag/v27.0.0-alpha.0.1.1",
+      "prerelease": false,
+      "tool": "nodejs-node"
+    },
+    {
+      "tag_name": "3.25.0",
+      "published_at": "2026-11-12T04:46:48Z",
+      "html_url": "https://github.com/ocaml/dune/releases/tag/3.25.0",
+      "prerelease": false,
+      "tool": "ocaml-dune"
+    },
+    {
+      "tag_name": "5.5.2",
+      "published_at": "2026-10-23T12:35:53Z",
+      "html_url": "https://github.com/ocaml/ocaml/releases/tag/5.5.2",
+      "prerelease": false,
+      "tool": "ocaml-ocaml"
+    },
+    {
+      "tag_name": "v12.21.0",
+      "published_at": "2026-11-13T21:02:22Z",
+      "html_url": "https://github.com/pnpm/pnpm/releases/tag/v12.21.0",
+      "prerelease": false,
+      "tool": "pnpm-pnpm"
+    },
+    {
+      "tag_name": "1.100.0",
+      "published_at": "2026-11-12T18:19:42Z",
+      "html_url": "https://github.com/rust-lang/rust/releases/tag/1.100.0",
+      "prerelease": false,
+      "tool": "rust-lang-rust"
+    },
+    {
+      "tag_name": "swift-6.4.2-RELEASE",
+      "published_at": "2026-10-30T02:42:23Z",
+      "html_url": "https://github.com/swiftlang/swift/releases/tag/swift-6.4.2-RELEASE",
+      "prerelease": false,
+      "tool": "swiftlang-swift"
+    },
+    {
+      "tag_name": "1.12.0",
+      "published_at": "2026-03-07T13:21:25Z",
+      "html_url": "https://github.com/tamarin-prover/tamarin-prover/releases/tag/1.12.0",
+      "prerelease": false,
+      "tool": "tamarin-prover-tamarin-prover"
+    },
+    {
+      "tag_name": "v1.7.4",
+      "published_at": "2024-08-05T20:16:41Z",
+      "html_url": "https://github.com/tlaplus/tlaplus/releases/tag/v1.7.4",
+      "prerelease": false,
+      "tool": "tlaplus-tlaplus"
+    },
+    {
+      "tag_name": "release/0.2026.11.02.8bf68ee",
+      "published_at": "2026-11-02T04:44:20Z",
+      "html_url": "https://github.com/verus-lang/verus/releases/tag/release/0.2026.11.02.8bf68ee",
+      "prerelease": false,
+      "tool": "verus-lang-verus"
+    }
+  ],
+  "proof_tool_sources": {
+    "opam_revision": "ee6d1bde9494ed71412cec9e645d1171bbdcef16",
+    "cameleer_revision": "d9899b8e87680acc1611d91937c515b54ced1e0b",
+    "cameleer_gospel_pin": "c20125aeb2154b3853e0e5411c4548f568541096"
+  }
+}
