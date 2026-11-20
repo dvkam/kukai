@@ -4,6 +4,7 @@ These records define the program and its execution status.
 
 - [Program plan v0.5.1](program-plan-v0.5.1.md) preserves the uploaded planning baseline byte for byte.
 - [Solo PoC scope](poc-scope.md) records the current unfunded execution decision.
+- [Merge policy](merge-policy.md) requires green GitHub CI and an interrogate round for every future PR.
 - [Charter](charter.md) records accepted scope, exclusions, research gaps, and decision authority.
 - [Owner register](owners.md) assigns the 33 open questions and 27 risks to `dvkam`.
 - [Decision record](decisions.md) separates accepted decisions from proposals.

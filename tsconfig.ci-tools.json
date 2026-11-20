@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "target": "ES2022",
+    "module": "commonjs",
+    "types": ["node"],
+    "skipLibCheck": true
+  },
+  "files": ["tests/check-karma-policy.cjs"]
+}

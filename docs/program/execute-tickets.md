@@ -23,3 +23,5 @@ Suggested labels are `phase:0` through `phase:3`, `kind:decision`, `kind:researc
 Use GitHub Projects for status and milestones for G0 through G3 if needed. These are recommendations. No labels, milestones, or project were created during issue publication. Check existing repository conventions before adding them.
 
 Gate tickets are review records, not parent issues for their prerequisites. Add a program tracking issue if useful, and link all drafts to it without duplicating the plan.
+
+Before merging any implementation or research PR, follow the [merge policy](merge-policy.md). Green GitHub CI and an interrogate round are required even for the solo PoC.

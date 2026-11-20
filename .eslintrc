@@ -1,24 +1,25 @@
 {
   "root": true,
-  "ignorePatterns": [
-    "projects/**/*"
-  ],
+  "ignorePatterns": ["projects/**/*"],
   "overrides": [
     {
-      "files": [
-        "*.ts"
-      ],
+      "files": ["*.ts"],
       "parserOptions": {
-        "project": [
-          "tsconfig.json",
-          "e2e/tsconfig.json"
-        ],
+        "project": ["tsconfig.json", "e2e/tsconfig.json"],
         "createDefaultProgram": true
       },
-      "extends": [
-        "plugin:prettier/recommended",
-        "plugin:@angular-eslint/template/process-inline-templates"
-      ]
+      "extends": ["plugin:prettier/recommended", "plugin:@angular-eslint/template/process-inline-templates"]
+    },
+    {
+      "files": ["tests/*.cjs"],
+      "env": {
+        "node": true,
+        "es2022": true
+      },
+      "extends": ["eslint:recommended"],
+      "parserOptions": {
+        "ecmaVersion": 2022
+      }
     }
   ]
 }

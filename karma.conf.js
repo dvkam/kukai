@@ -27,6 +27,10 @@ module.exports = function (config) {
       fixWebpackSourcePaths: true
     },
     customLaunchers: {
+      ChromeHeadlessCI: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox', '--disable-dev-shm-usage']
+      },
       chrome_1: {
         //give it whatever name you want
         base: 'Chrome',
@@ -34,6 +38,7 @@ module.exports = function (config) {
       }
     },
     reporters: ['mocha'],
+    failOnSkippedTests: true,
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,

@@ -52,3 +52,7 @@ Thumbs.db
 
 # Local dev secrets
 /src/dev-config.js
+
+# Python tooling
+__pycache__/
+.ruff_cache/

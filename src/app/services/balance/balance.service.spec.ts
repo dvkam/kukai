@@ -1,108 +1,87 @@
-// suite unit-test frameworks
-import { TestBed } from '@angular/core/testing';
-import { HttpTestingController } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+// Modified for dvkam: test the current balance update API without network dependencies.
+import { BalanceService } from './balance.service';
+import { WalletService } from '../wallet/wallet.service';
+import { TzrateService } from '../tzrate/tzrate.service';
+import { OperationService } from '../operation/operation.service';
+import { ImplicitAccount, OriginatedAccount, WatchWallet } from '../wallet/wallet';
 
-// class mocks
-import { http_imports, translate_imports, balancesrv_providers, rx } from '../../../../spec/helpers/service.helper';
-import { BalanceService, WalletService, OperationService } from '../../../../spec/helpers/service.helper';
-import { WalletServiceStub } from '../../../../spec/mocks/wallet.mock';
-import { Wallet } from '../wallet/wallet';
-
-// class dependencies
-/**
- * Suite: BalanceService
- * @todo: remove console.log spy, mock operation service calls entirely. it should never be tested.
- * @todo: review the logic in behavior used in tests.
- */
 describe('[ BalanceService ]', () => {
-  // class under inspection
   let service: BalanceService;
-
-  // class dependencies
-  let walletsrv;
-  let operationsrv: OperationService;
-  let httpMock: HttpTestingController;
+  let walletService: jasmine.SpyObj<WalletService>;
+  let tzrateService: jasmine.SpyObj<TzrateService>;
+  let account: ImplicitAccount;
+  const balances = { balance: 10, stakedBalance: 3, unstakedBalance: 2, availableBalance: 5 };
 
   beforeEach(() => {
-    // WalletService mock
-    TestBed.configureTestingModule({
-      imports: [http_imports, translate_imports, RouterTestingModule],
-      providers: [balancesrv_providers]
-    });
-
-    service = TestBed.inject(BalanceService);
-    walletsrv = TestBed.inject(WalletService);
-    operationsrv = TestBed.inject(OperationService);
-    httpMock = TestBed.inject(HttpTestingController);
-
-    // create mock empty full wallet
-    walletsrv.wallet = new WalletServiceStub().emptyWallet(1);
-
-    // configure spies
+    walletService = jasmine.createSpyObj<WalletService>('WalletService', ['storeWallet']);
+    walletService.wallet = new WatchWallet();
+    account = new ImplicitAccount('tz1-test-account', 'test-public-key');
+    walletService.wallet.implicitAccounts.push(account);
+    tzrateService = jasmine.createSpyObj<TzrateService>('TzrateService', ['updateFiatBalances']);
+    const operationService = jasmine.createSpyObj<OperationService>('OperationService', ['getBalance']);
+    service = new BalanceService(walletService, tzrateService, operationService);
   });
 
-  afterEach(() => {
-    httpMock.verify();
+  it('updates account balances, the total, fiat values, and storage', () => {
+    service.updateAccountBalance(account, balances);
+
+    expect(account.balanceXTZ).toBe(10);
+    expect(account.stakedBalance).toBe(3);
+    expect(account.unstakedBalance).toBe(2);
+    expect(account.availableBalance).toBe(5);
+    expect(walletService.wallet.totalBalanceXTZ).toBe(10);
+    expect(tzrateService.updateFiatBalances).toHaveBeenCalledTimes(1);
+    expect(walletService.storeWallet).toHaveBeenCalledTimes(1);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('does not persist or recalculate unchanged balances', () => {
+    service.updateAccountBalance(account, balances);
+    walletService.storeWallet.calls.reset();
+    tzrateService.updateFiatBalances.calls.reset();
+
+    service.updateAccountBalance(account, { ...balances });
+
+    expect(walletService.storeWallet).not.toHaveBeenCalled();
+    expect(tzrateService.updateFiatBalances).not.toHaveBeenCalled();
   });
 
-  it('should call getbalanceall once', () => {
-    spyOn(service, 'getBalanceAll');
-    service.getBalanceAll();
-    expect(service.getBalanceAll).toHaveBeenCalledTimes(1);
+  it('persists staking changes when the total balance stays the same', () => {
+    service.updateAccountBalance(account, balances);
+    walletService.storeWallet.calls.reset();
+
+    service.updateAccountBalance(account, { ...balances, stakedBalance: 4, availableBalance: 4 });
+
+    expect(account.stakedBalance).toBe(4);
+    expect(account.availableBalance).toBe(4);
+    expect(walletService.wallet.totalBalanceXTZ).toBe(10);
+    expect(walletService.storeWallet).toHaveBeenCalledTimes(1);
   });
 
-  it('should call attempt to update account balance 3 times', () => {
-    spyOn(service, 'getAccountBalance');
-    service.getBalanceAll();
-    expect(service.getAccountBalance).toHaveBeenCalledTimes(3);
+  it('includes originated accounts and ignores unknown balances in the total', () => {
+    account.balanceXTZ = 7;
+    const originated = new OriginatedAccount('KT1-test-account', account.pkh, account.pk);
+    originated.balanceXTZ = 3;
+    account.originatedAccounts.push(originated);
+    walletService.wallet.implicitAccounts.push(new ImplicitAccount('tz1-unknown', 'test-public-key'));
+
+    service.updateTotalBalance();
+
+    expect(walletService.wallet.totalBalanceXTZ).toBe(10);
   });
 
-  it('should update an account balance to 10', () => {
-    const acc = walletsrv.wallet.implicitAccounts[0];
-    spyOn(console, 'log');
-    spyOn(operationsrv, 'getBalance').and.callFake(function () {
-      return rx.Observable.of({
-        success: true,
-        payload: { balance: 10 }
-      });
-    });
+  it('keeps the total unknown until an account has a known balance', () => {
+    service.updateTotalBalance();
+    expect(walletService.wallet.totalBalanceXTZ).toBeNull();
 
-    service.getAccountBalance(acc);
-
-    // expect(console.log).toHaveBeenCalledWith('for ' + pkh);
-    expect(walletsrv.wallet.implicitAccounts[0].balanceXTZ).toEqual(10);
+    account.balanceXTZ = 0;
+    service.updateTotalBalance();
+    expect(walletService.wallet.totalBalanceXTZ).toBe(0);
   });
 
-  /** Failing on 1.3.0 update
-	it('should handle error on failed request', () => {
-		pkh = accounts[1].pkh;
-		let index = 1;
-		spyOn(console,'log');
-		//spyOn(operationsrv,'getBalance').and.callFake(function() { return of({	success: true, payload: { balance: 10 } });	});
-		service.getAccountBalance(1);
-		httpMock.expectOne(nodeurl + '/chains/main/blocks/head/context/contracts/' + pkh + '/balance').error(new ErrorEvent('network error'));
-		expect(console.log).toHaveBeenCalledWith('Balance Error: "Unknown Error"');
-	}); */
+  it('ignores an absent account', () => {
+    service.updateAccountBalance(null, balances);
 
-  /** Failing on 1.3.0 update
-	it('should update the wallet total balance', () => {
-
-		spyOn(console,'log');
-		service.getBalanceAll();
-
-		let req;
-
-		for(let i = 0; i < walletsrv.wallet.accounts.length; i++) {
-			httpMock.expectOne(nodeurl + '/chains/main/blocks/head/context/contracts/' + walletsrv.wallet.accounts[i].pkh + '/balance')
-				.flush(10);
-		}
-
-		expect(walletsrv.wallet.balance.balanceXTZ).toEqual(30);
-	})
-	*/
+    expect(walletService.storeWallet).not.toHaveBeenCalled();
+    expect(tzrateService.updateFiatBalances).not.toHaveBeenCalled();
+  });
 });
