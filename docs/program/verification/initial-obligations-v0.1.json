@@ -1,0 +1,129 @@
+{
+  "source": "program-plan-v0.5.1.md",
+  "source_sha256": "8d3c20806b3dc566811d6f464c6c6bcd76fc8d38bb4aea8fd0a3d0b471c1ddf6",
+  "status": "Frozen source snapshot for PoC planning; independent review incomplete; no models or proofs run",
+  "obligations": [
+    {
+      "id": "1",
+      "property": "Every signature released by the signer service corresponds to an authorized request: □(Released(r) ⇒ Authorized(r)), with Authorized, Released, transaction identity and freshness defined precisely",
+      "paths": "S",
+      "assumptions": "A-crypto, A-signer",
+      "residual": "A compromised signer plus a device share can sign (R-03, R-22); obligation 8 bounds what the signer alone can do"
+    },
+    {
+      "id": "2",
+      "property": "A compromised social account alone can neither authorize a signature nor complete a recovery",
+      "paths": "S, R",
+      "assumptions": "A-crypto, A-factor",
+      "residual": "Without A-factor, see obligation 14"
+    },
+    {
+      "id": "3",
+      "property": "Share privacy",
+      "paths": "All",
+      "assumptions": "An assumption from the published proofs, not proved by us",
+      "residual": ""
+    },
+    {
+      "id": "4",
+      "property": "Signing sessions cannot be replayed or confused with another transaction",
+      "paths": "S",
+      "assumptions": "A-crypto, and A-client or A-signer",
+      "residual": "Both compromised: covered by obligation 1's residual"
+    },
+    {
+      "id": "5",
+      "property": "Revocation cutoff, per signing protocol: a revocation recorded before the service irreversibly releases its signing material stops that signature, and no session from a revoked device or an earlier device generation starts. A signature assembled before the cutoff stays valid on-chain, and the models state that. Presignatures made before a revocation are destroyed by it. The race between revocation and release is modelled.",
+      "paths": "S only. Path X has no service message, so no revocation can stop it (obligations 9 and 14).",
+      "assumptions": "A-crypto, A-signer",
+      "residual": "A compromised signer ignores revocation: L2 or L3 (section 6)"
+    },
+    {
+      "id": "6",
+      "property": "Recovery. (a) The service attempts notification on every enrolled device and every independent channel, and records the attempts; delivery is not required. (b) No recovery completes before the recovery delay ends. (c) An objection from an enrolled device moves the recovery into one dispute state, which needs an additional factor and a longer delay; further objections neither restart nor extend it. Provided the user holds the additional factor and the thief does not, a thief with only a stolen device can delay recovery by at most the dispute delay. (d) With the device lost or destroyed, recovery completes after the delay. Values are Q-33. Lost, destroyed, stolen and intermittently connected devices, repeated objections, and a user without the additional factor are separate test scenarios.",
+      "paths": "R",
+      "assumptions": "(a) to (c): A-signer, A-factor. (d): A-fair as well.",
+      "residual": "A compromised signer together with a stolen recovery factor skips the delay (R-04). A user who lost the additional factor can be blocked by a thief with the device, which is stated to the user."
+    },
+    {
+      "id": "7",
+      "property": "Chain, destination and amount cannot change after the user approves them",
+      "paths": "S, X",
+      "assumptions": "A-crypto, A-client",
+      "residual": "A malicious client shows one thing and signs another (R-22); obligation 15(b) is the second check"
+    },
+    {
+      "id": "8",
+      "property": "A compromised coordinator and signer together, without the user-held shares or factors, cannot sign or recover",
+      "paths": "S, R",
+      "assumptions": "A-crypto, A-factor",
+      "residual": "Without A-factor, see obligation 14"
+    },
+    {
+      "id": "9",
+      "property": "Recovery independence: no party that holds or can reach the service share can also reach the recovery share or the factor that unlocks it",
+      "paths": "R, X",
+      "assumptions": "A-factor",
+      "residual": "Design review and Tamarin; the residual is obligation 14's"
+    },
+    {
+      "id": "10",
+      "property": "DKG and signing messages relayed by the coordinator are delivered by authenticated broadcast, so a compromised coordinator cannot show different messages to different parties. Otherwise this is stated as a trust assumption with its consequence.",
+      "paths": "S, DKG",
+      "assumptions": "A-crypto",
+      "residual": ""
+    },
+    {
+      "id": "11",
+      "property": "The address a client shows comes from the DKG transcript that client took part in",
+      "paths": "DKG",
+      "assumptions": "A-client",
+      "residual": "A malicious client can show an attacker's address (R-22)"
+    },
+    {
+      "id": "12",
+      "property": "(a) Authentication revocation (L1): a revoked device cannot start a service-assisted session. It does not invalidate the device's share material. (b) Share replacement (L2): after a refresh or reshare, old shares do not combine with current ones. The models include an attacker who stole shares before the change. (c) Migration (L3) protects only the assets and authorities that were moved.",
+      "paths": "(a) S. (b) S, R, X. (c) X or S.",
+      "assumptions": "(a) A-signer. (b) A-crypto, A-erase.",
+      "residual": "(a) Old shares still sign wherever a quorum can be formed without the service. (b) Without A-erase, old shares stay usable, and only L3 helps."
+    },
+    {
+      "id": "13",
+      "property": "An agent cannot extend its own permissions or bypass policy (Phase 7)",
+      "paths": "S",
+      "assumptions": "A-signer, A-client",
+      "residual": ""
+    },
+    {
+      "id": "14",
+      "property": "One cloud account is never enough: an attacker controlling a single recoverable account (an Apple ID, a Google account) cannot both pass social authentication and unlock a user-held share or backup",
+      "paths": "S, R, X",
+      "assumptions": "A-crypto, and the pairing rules from Q-29",
+      "residual": "A pairing that Q-29 allows by mistake: found by the Phase 2 pairing tests"
+    },
+    {
+      "id": "15",
+      "property": "(a) A signature is released only for the digest the approving client displayed: chain ID, account, payload bytes, simulation context, rendering version. (b) Above the DEC-026 limit, only if the enrolled iOS device approved the same digest.",
+      "paths": "(a) S, X. (b) S.",
+      "assumptions": "(a) A-crypto, A-client. (b) A-crypto, A-signer, unless the Q-01 design makes iOS structurally required.",
+      "residual": "(a) A malicious web release can display one thing and sign another, up to the limit. (b) A malicious web release plus a compromised signer bypasses the iOS confirmation (R-22)."
+    },
+    {
+      "id": "16",
+      "property": "Exit: with every service we run unavailable and no third party involved, the user's shares form a complete signing quorum. They suffice to sign, to export every exportable key, and to move every transferable asset and supported authority (DEC-025). A liveness property, demonstrated end to end at G3 with the DEC-025 exceptions listed.",
+      "paths": "X",
+      "assumptions": "A-crypto, A-factor, A-fair, A-chain",
+      "residual": "Without A-chain, exit waits until a node or the chain is reachable"
+    },
+    {
+      "id": "17",
+      "property": "Backup freshness: a restored backup never brings back nonces, presignatures or session state, and the device generation only increases",
+      "paths": "R",
+      "assumptions": "Device side: A-client. Generation check: A-signer.",
+      "residual": "A compromised signer accepts an old generation; the backup still holds no session state"
+    }
+  ],
+  "explicit_nonwaivable": ["1", "2", "4", "5", "6(b)", "6(c)", "7", "8", "9", "12(a)", "12(b)", "14", "15(a)", "15(b)", "17"],
+  "recorded_on": "2026-11-20",
+  "accountable_owner": "dvkam"
+}

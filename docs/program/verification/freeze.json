@@ -1,0 +1,7 @@
+{
+  "id": "P0-06-initial-v0.1",
+  "file": "initial-obligations-v0.1.json",
+  "sha256": "632ce9e1d28c34ef9f38752a56ab522366aa8f1c992700e7fa0a4bbc81bf5143",
+  "source_sha256": "8d3c20806b3dc566811d6f464c6c6bcd76fc8d38bb4aea8fd0a3d0b471c1ddf6",
+  "acceptance": "Source snapshot only. No architecture proposal, proof, or production gate is accepted by this record."
+}

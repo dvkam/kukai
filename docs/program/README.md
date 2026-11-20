@@ -10,6 +10,7 @@ These records define the program and its execution status.
 - [Decision record](decisions.md) separates accepted decisions from proposals.
 - [Provenance inventory](provenance/README.md) pins inherited sources and records the PoC reuse boundary.
 - [Capability survey](capabilities/README.md) records cryptographic APIs, audit limits, build evidence, and toolchain conflicts.
+- [Initial verification obligations](verification/README.md) preserve the source properties and propose review and evidence rules.
 - [Phase 0 to 3 tickets](tickets/README.md) record the decision and feasibility backlog.
 - [GitHub issue index](tickets/github-issues.md) links the 32 published tickets.
 
