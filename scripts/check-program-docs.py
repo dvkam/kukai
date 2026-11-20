@@ -8,6 +8,34 @@ ROOT = Path(__file__).resolve().parents[1]
 PROGRAM = ROOT / 'docs/program'
 
 
+
+def check_obligation_snapshot(baseline):
+  directory = PROGRAM / 'verification'
+  freeze = json.loads((directory / 'freeze.json').read_text())
+  path = (directory / freeze['file']).resolve()
+  if not path.is_relative_to(directory.resolve()):
+    raise ValueError('Obligation snapshot must remain inside its record directory')
+  raw = path.read_bytes()
+  if hashlib.sha256(raw).hexdigest() != freeze['sha256']:
+    raise ValueError('Frozen obligation snapshot digest changed')
+  snapshot = json.loads(raw)
+  digest = hashlib.sha256(baseline.read_bytes()).hexdigest()
+  if snapshot['source'] != baseline.name or snapshot['source_sha256'] != digest or freeze['source_sha256'] != digest:
+    raise ValueError('Obligation snapshot source differs from the preserved baseline')
+  source = baseline.read_text()
+  rows = []
+  for line in source.splitlines():
+    if re.match(r'^\| (?:[1-9]|1[0-7]) \|', line):
+      cells = [cell.strip() for cell in line.split('|')[1:-1]]
+      if len(cells) == 5:
+        rows.append(dict(zip(['id', 'property', 'paths', 'assumptions', 'residual'], cells)))
+  if snapshot['obligations'] != rows or [row['id'] for row in rows] != [str(number) for number in range(1, 18)]:
+    raise ValueError('Obligation snapshot differs from the complete source statements')
+  clause = re.search(r'That covers obligations (.*?), each under its stated assumptions', source)
+  if clause is None or snapshot['explicit_nonwaivable'] != re.findall(r'\b\d+(?:\([a-z]\))?', clause.group(1)):
+    raise ValueError('Explicit non-waivable obligation set changed')
+
+
 def main():
   baseline = PROGRAM / 'program-plan-v0.5.1.md'
   expected = '8d3c20806b3dc566811d6f464c6c6bcd76fc8d38bb4aea8fd0a3d0b471c1ddf6'
@@ -42,7 +70,8 @@ def main():
       raise ValueError('Retained build log must be inside its evidence directory')
     if result['exit_code'] != 0 or not log.exists() or 'Finished' not in log.read_text():
       raise ValueError(f'Invalid retained build result: {result["package"]} {result["target"]}')
-  print('Program baseline, ownership, local file links, and retained build logs pass')
+  check_obligation_snapshot(baseline)
+  print('Program baseline, ownership, local links, build logs, and obligation snapshot pass')
 
 
 if __name__ == '__main__':
