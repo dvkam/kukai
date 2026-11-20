@@ -7,8 +7,8 @@ Apply this procedure to PoC and baseline verification work. Keep the evidence ca
 1. Assign a stable property ID and preserve its source obligation or subclause.
 2. Write its normative statement, preconditions, state transitions, covered paths, attacker powers, and trust assumptions.
 3. Classify each formula as safety, liveness, or an external assumption. Split mixed formulas. Unresolved classification blocks acceptance.
-4. Record the gate, tool/version, expected evidence, model file, implementation reference, known limits, and reviewer. Missing references remain explicitly unfilled.
-5. Freeze the model-specific list before writing the model. Record refinements as a reviewed change with old/new formulas, reasons, counterexamples, and affected gates. Never delete a difficult property silently.
+4. Record the gate, tool and version, expected evidence, model file, implementation reference, known limits, and reviewer. Missing references remain explicitly unfilled.
+5. Freeze the model-specific list before writing the model. Record refinements as a reviewed change with old and new formulas, reasons, counterexamples, and affected gates. Never delete a difficult property silently.
 
 ## Interpret results
 
@@ -21,7 +21,7 @@ Use these result categories.
 | Proved under stated assumptions | A proof artifact establishes the specified property in the exact model and proof scope. Record every trusted component. |
 | Counterexample within assumptions | The guarantee fails. Change the design or guarantee and reopen the relevant gate. Never waive it. |
 | Incomplete, unverified | Timeout, unsupported expression, or incomplete proof. A mandatory safety gate remains blocked. |
-| Accepted exception, unverified | The owner accepted an eligible incomplete liveness/performance result with a risk, closing date, and follow-up. This is never called verified. |
+| Accepted exception, unverified | The owner accepted an eligible incomplete liveness or performance result with a risk, closing date, and follow-up. This is never called verified. |
 | Expected residual demonstrated | An attacker breaks a named assumption and produces the predeclared residual. This does not prove the guarantee with that assumption removed. |
 | Recorded-trace conformance passed | The supplied executions conform to the specified transition mapping. Unrecorded executions remain unproved. |
 
@@ -39,7 +39,7 @@ If tools disagree about the same property under the same assumptions, retain bot
 
 ## Validate implementation traces
 
-Define an event schema before recording traces. Each event needs a component ID, local logical clock, request/session identity, chain/account context where applicable, event type, and nonsecret state references. A logical clock gives local order; it does not by itself define a total order across processes.
+Define an event schema before recording traces. Each event needs a component ID, local logical clock, request and session identity, chain and account context where applicable, event type, and nonsecret state references. A logical clock gives local order. It does not by itself define a total order across processes.
 
 Maintain a mapping from each event type to a model action, including its guard, state updates, and treatment of concurrent events. Map all events recorded by the conformance and adversarial suites. An unmapped event, impossible transition, or unexplained gap fails that trace's validation. Protect private data and never log shares, recovery factors, tokens, nonces, or presignatures.
 
@@ -47,6 +47,6 @@ Report recorded-trace results separately from state-space exploration and proof 
 
 ## Freeze and accept
 
-Preserve `initial-obligations-v0.1.json` as the source snapshot. Add a new version and a change record for refinements. A content digest identifies the snapshot; it is not a security approval or a mechanism that prevents an authorized repository edit.
+Preserve `initial-obligations-v0.1.json` as the source snapshot. Add a new version and a change record for refinements. A content digest identifies the snapshot. It is not a security approval or a mechanism that prevents an authorized repository edit.
 
 `dvkam` is the current human PoC reviewer. Agent reviews can find defects and check evidence, but cannot fill the baseline's independent security-review role. Keep P0-06 and the relevant production gates open until their acceptance conditions are met. Record the final reviewer and outcome explicitly.
