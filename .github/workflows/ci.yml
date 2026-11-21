@@ -37,6 +37,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run test:ci
       - run: npm run test:ci-policy
+      - run: npx eslint experiments/browser-prf/probe.js && npx tsc --project experiments/browser-prf/tsconfig.json
 
   program:
     name: PoC lint, typecheck, tests, and records
@@ -55,10 +56,11 @@ jobs:
         with:
           node-version: 24.22.1
       - run: python -m pip install -r requirements-ci.txt
-      - run: ruff check experiments/library-build-check/run.py scripts/check-program-docs.py tests
+      - run: ruff check experiments/library-build-check/run.py scripts/check-program-docs.py experiments/browser-prf/run.py tests
       - run: pyright
       - run: python -m unittest discover -s tests -v
       - run: python scripts/check-program-docs.py
+      - run: python experiments/browser-prf/run.py
 
   crypto-builds:
     name: Pinned crypto native and WASM builds
