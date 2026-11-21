@@ -79,3 +79,6 @@ jobs:
       - run: cargo +1.100.0 fmt --manifest-path experiments/secp256k1-signing/Cargo.toml -- --check
       - run: cargo +1.100.0 clippy --release --manifest-path experiments/secp256k1-signing/Cargo.toml --locked --all-targets -- -D warnings
       - run: cargo +1.100.0 test --release --manifest-path experiments/secp256k1-signing/Cargo.toml --locked -- --nocapture
+      - run: cargo +1.100.0 fmt --manifest-path experiments/tz4-screen/Cargo.toml -- --check
+      - run: cargo +1.100.0 clippy --manifest-path experiments/tz4-screen/Cargo.toml --locked --all-targets -- -D warnings
+      - run: cargo +1.100.0 test --manifest-path experiments/tz4-screen/Cargo.toml --locked

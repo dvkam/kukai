@@ -1,0 +1,11 @@
+[package]
+name = "tz4-candidate-screen"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[dev-dependencies]
+blst = "=0.3.17"
+hex = "=0.4.3"
+rand = "=0.7.3"
+threshold_crypto = "=0.4.0"
