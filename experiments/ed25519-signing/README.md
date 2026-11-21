@@ -51,6 +51,6 @@ These checks exercise the chain libraries' verification APIs, not independent cr
 
 ## Remaining evidence
 
-Issue #14 stays open. Refresh, repair, participant replacement, retained stolen shares across generations, encrypted offline recovery, interrupted refresh, reference iPhone measurements, and browser runtime measurements still need experiments. Key reconstruction does not produce an Ed25519 seed. This experiment does not export a wallet seed or test an import format.
+Issue #14 stays open. The [native refresh and repair cases](lifecycle.md) cover in-memory changes to the test group. Participant replacement with a new identity, durable multi-device commit, encrypted offline recovery, reference iPhone measurements, and browser runtime measurements still need experiments. Key reconstruction does not produce an Ed25519 seed. This experiment does not export a wallet seed or test an import format.
 
 The G3 exit drill still requires an independent tool with every project service blocked, supported asset migration, permission handling, and chain availability. Removing one key package in a single-process test does not complete that drill. Protocol-specific revocation cutoffs, recovery disputes, approval binding, and formal obligations remain separate work.
