@@ -20,3 +20,5 @@ python experiments/browser-prf/run.py
 ```
 
 The runner uses CHROME_BIN when set and otherwise locates a system browser. Each assertion uses a new challenge. Production authentication still needs relying-party validation of the WebAuthn response, enrollment and recovery policy, and restart and backup testing on reference devices.
+
+On 21 November 2026, Chromium 156.0.8078.79 on Linux x86_64 passed the three observations above. The account pairing and device cases remain unrun. The agent collected the evidence for owner and specialist review. [Run record](evidence/run.json) · [Browser output](evidence/virtual-authenticator.txt)

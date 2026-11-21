@@ -1,0 +1,3 @@
+Chromium 156.0.8078.79
+Authenticator PRF=True: restored with same salt and rejected changed salt
+Authenticator PRF=False: refused: no PRF output
