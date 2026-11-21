@@ -1,5 +1,5 @@
 {
-  "tested_commit": "83bbdd98325bd3078cc96ea3ec2ebc0d6d0b2493",
+  "tested_commit": "26be8aa1ac377eeb828b674f8cbfd8823f91eefd",
   "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
   "toolchain": "1.100.0",
   "author": "Codex",
@@ -15,13 +15,14 @@
       "command": ["cargo", "+1.100.0", "clippy", "--all-targets", "--locked", "--", "-D", "warnings"],
       "exit_code": 0,
       "output": "clippy.txt",
-      "sha256": "6c8c035745792ba7cd10b8cf803de4fc991f7067e0fe9ddf0594682428ea3750"
+      "sha256": "a501510cb1f4e580191d6ebd4e8d879110709d481ea41976bc5c4704c4fd675d"
     },
     {
       "command": ["cargo", "+1.100.0", "test", "--locked"],
       "exit_code": 0,
       "output": "tests.txt",
-      "sha256": "926588f06950f4c29642c328955e4494b3f0b44542d96f031f03d6f2dd72a140"
+      "sha256": "ed9b7f8ead81e8df8c72dca7617970f35b440905ad2c59024fb0f38fc28acd13"
     }
-  ]
+  ],
+  "working_directory": "experiments/ed25519-signing"
 }
