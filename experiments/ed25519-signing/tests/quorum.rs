@@ -1,3 +1,5 @@
+#[path = "quorum/lifecycle.rs"]
+mod lifecycle;
 mod support;
 
 use std::collections::BTreeMap;

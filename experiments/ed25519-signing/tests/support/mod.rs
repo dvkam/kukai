@@ -18,11 +18,29 @@ pub struct Group {
 pub type SignatureShares = BTreeMap<frost::Identifier, frost::round2::SignatureShare>;
 
 pub fn dkg() -> Group {
+  ceremony(None, None).unwrap()
+}
+
+// Drop one private round-two delivery to model an interrupted refresh.
+pub fn refresh(
+  old: &Group,
+  dropped: Option<(frost::Identifier, frost::Identifier)>,
+) -> Result<Group, frost::Error> {
+  ceremony(Some(old), dropped)
+}
+
+fn ceremony(
+  old: Option<&Group>,
+  dropped: Option<(frost::Identifier, frost::Identifier)>,
+) -> Result<Group, frost::Error> {
   let mut secrets = BTreeMap::new();
   let mut broadcasts = BTreeMap::new();
   for number in 1u16..=3 {
     let id = number.try_into().unwrap();
-    let (secret, broadcast) = frost::keys::dkg::part1(id, 3, 2, OsRng).unwrap();
+    let (secret, broadcast) = match old {
+      None => frost::keys::dkg::part1(id, 3, 2, OsRng),
+      Some(_) => frost::keys::refresh::refresh_dkg_part1(id, 3, 2, OsRng),
+    }?;
     secrets.insert(id, secret);
     broadcasts.insert(id, broadcast);
   }
@@ -36,10 +54,16 @@ pub fn dkg() -> Group {
       .filter(|(sender, _)| **sender != id)
       .map(|(sender, package)| (*sender, package.clone()))
       .collect();
-    let (secret, outgoing) = frost::keys::dkg::part2(secret, &received).unwrap();
+    let (secret, outgoing) = match old {
+      None => frost::keys::dkg::part2(secret, &received),
+      Some(_) => frost::keys::refresh::refresh_dkg_part2(secret, &received),
+    }?;
     round1_inputs.insert(id, received);
     round2_secrets.insert(id, secret);
     for (recipient, package) in outgoing {
+      if dropped == Some((id, recipient)) {
+        continue;
+      }
       deliveries
         .entry(recipient)
         .or_insert_with(BTreeMap::new)
@@ -50,8 +74,16 @@ pub fn dkg() -> Group {
   let mut shares = BTreeMap::new();
   let mut agreed_public = None;
   for (id, secret) in round2_secrets {
-    let (key, public) =
-      frost::keys::dkg::part3(&secret, &round1_inputs[&id], &deliveries[&id]).unwrap();
+    let (key, public) = match old {
+      None => frost::keys::dkg::part3(&secret, &round1_inputs[&id], &deliveries[&id]),
+      Some(group) => frost::keys::refresh::refresh_dkg_shares(
+        &secret,
+        &round1_inputs[&id],
+        &deliveries[&id],
+        group.public.clone(),
+        group.shares[&id].clone(),
+      ),
+    }?;
     if let Some(previous) = &agreed_public {
       assert_eq!(previous, &public, "participants disagree on DKG output");
     } else {
@@ -59,10 +91,10 @@ pub fn dkg() -> Group {
     }
     shares.insert(id, key);
   }
-  Group {
+  Ok(Group {
     shares,
     public: agreed_public.unwrap(),
-  }
+  })
 }
 
 pub fn sign(
