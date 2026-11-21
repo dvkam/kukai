@@ -32,10 +32,12 @@ A1 has three signing pairs. Device plus service supports normal service-assisted
 | Service signer and coordinator | Without user material they cannot reach quorum or complete recovery. Trace access to backups and provider recovery accounts, including shared administrator roles. |
 | Social identity alone | Neither signing nor recovery completes. If the same account also unlocks a share under the proposed pairing, record that pairing as unsafe. |
 | Web release alone | Treat its display as compromised. With an honest signer, require independent iOS confirmation bound to the same digest for high exposure and permission changes. |
-| Web release and signer | If the web path and service possess a signing quorum, a service spending limit cannot bind it. Check the residual for the selected custody design. Two signatures on the release log provide evidence for detection. |
+| Web release and signer | If the web path and service possess a signing quorum, a service spending limit cannot bind it. Check the residual for the selected custody design. The proposed release process requires two people to sign the release with separate hardware keys and publishes its hash in an append-only log. |
 | Device alone, then device plus recovery factor and accessible backup | Test revocation of service-assisted sessions first. If the attacker obtains a complete exit quorum, it can sign without service approval. L1 cannot stop that path. |
 | Recovery share alone, then service plus unlocked recovery share | Under A1 the first set is below quorum. The second can sign. If service control alone provides access to both, the candidate fails recovery independence. |
 | RPC or data provider alone | Return a stale simulation or altered asset metadata. Verify the binding to the approved context and the specified refusal behavior before signing. |
+
+Exercise four web release failures independently: compromised hosting or CDN, stolen deployment credentials, a malicious dependency update, and a compromised release process. Record whether control of deployment also gives access to source or signer infrastructure. Compare the delivered build with the independently obtained signed release and its logged hash.
 
 ## Review status
 
