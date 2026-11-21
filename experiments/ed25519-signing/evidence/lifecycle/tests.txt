@@ -1,0 +1,21 @@
+   Compiling wallet-ed25519-signing-experiment v0.1.0 (/tmp/kukai-14r/experiments/ed25519-signing)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.53s
+warning: the following packages contain code that will be rejected by a future version of Rust: parse-display-derive v0.4.1
+note: to see what the problems were, use the option `--future-incompat-report`, or run `cargo report future-incompatibilities --id 1`
+     Running tests/quorum.rs (target/debug/build/wallet-ed25519-signing-experiment/faf37bcc1e7c1b30/out/quorum-faf37bcc1e7c1b30)
+
+running 11 tests
+test coordinator_cannot_change_message_after_collecting_signature_shares ... ok
+test every_two_share_combination_can_sign_for_the_same_account ... ok
+test lifecycle::interrupted_refresh_leaves_the_original_quorum_available_for_retry ... ok
+test lifecycle::repairing_a_lost_device_share_restores_signing_without_revoking_a_copy ... ok
+test lifecycle::refreshed_recovery_backup_restores_a_user_quorum ... ok
+test lifecycle::refresh_preserves_the_account_and_separates_share_generations ... ok
+test no_single_participant_can_sign ... ok
+test user_quorum_signs_without_service_material_and_solana_verifies ... ok
+test signature_share_cannot_be_replayed_into_fresh_signing_round ... ok
+test separate_tezos_key_signs_watermarked_digest_without_service ... ok
+test share_from_another_key_cannot_complete_the_user_quorum ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.61s
+

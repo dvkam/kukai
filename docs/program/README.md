@@ -10,6 +10,7 @@ These records define the program and its execution status.
 - [Decision record](decisions.md) separates accepted decisions from proposals.
 - [Provenance inventory](provenance/README.md) pins inherited sources and records the PoC reuse boundary.
 - [Capability survey](capabilities/README.md) records cryptographic APIs, audit limits, build evidence, and toolchain conflicts.
+- [Custody threat model and shared experiment cases](threat-model/README.md) map candidate paths, attackers and expected results.
 - [Initial verification obligations](verification/README.md) preserve the source properties and propose review and evidence rules.
 - [Ed25519 signing experiment](../../experiments/ed25519-signing/README.md) checks native user-quorum signing through Solana and Tezos verifier libraries.
 - [secp256k1 signing experiment](../../experiments/secp256k1-signing/README.md) checks native user-quorum signing and reconstruction with Ethereum and Base transaction formats.
