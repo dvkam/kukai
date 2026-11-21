@@ -1,0 +1,20 @@
+Linux 6.18.57 x86_64
+rustc 1.100.0 (0ef1bc386 2026-11-09)
+binary: rustc
+commit-hash: 0ef1bc386059596dada8fb65b50425aab2ea637a
+commit-date: 2026-11-09
+host: x86_64-unknown-linux-gnu
+release: 1.100.0
+LLVM version: 23.1.5
+dd41d43d7cb584b395b3f2358b4a3979579626631b24b41c8e2ef0c3b49f15bf  Cargo.lock
+75470d85700174bdf71ba08ebd3a6000eaeee3e4bac7f533629c86097e291814  fixtures/pop_g2.txt
+79884d4ac084f512df7cec6959ac13e2d6a2469ab7ef3cb12eda52a0e203a46f  fixtures/sig_g2_pop.txt
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running tests/screen.rs (target/debug/build/tz4-candidate-screen/8d6ce89779dcc8d1/out/screen-8d6ce89779dcc8d1)
+
+running 2 tests
+test octez_signature_and_possession_vectors_require_their_respective_domains ... ok
+test default_threshold_crypto_signatures_parse_but_fail_the_octez_domains ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.38s
+

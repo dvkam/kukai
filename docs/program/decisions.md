@@ -30,3 +30,5 @@ Every baseline item labelled Proposal remains proposed. This index groups those 
 | Section 8 property lists, trust boundaries, verification reports, and proof obligations | P0-06 prepares the initial register, issue #6. P2-01 freezes the model-specific obligations, issue #12. P2-10 supplies proof evidence, issue #21. |
 
 The section 8 safety requirements constrain these proposals. Neither a proposal's status nor an approved liveness exception can waive a mandatory safety property. The [question register](owners.md#questions) routes every open choice to its closing ticket. Any new proposal needs a dated decision entry under the [charter's acceptance rules](charter.md#accountability-and-acceptance).
+
+The [P2-05 candidate screen](../../experiments/tz4-screen/README.md) recommends deferring owned tz4 accounts under POC-001. Q-28 awaits the owner's decision and specialist review.

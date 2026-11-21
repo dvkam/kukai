@@ -1,0 +1,9 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.04s
+     Running tests/screen.rs (target/debug/build/tz4-candidate-screen/8d6ce89779dcc8d1/out/screen-8d6ce89779dcc8d1)
+
+running 2 tests
+test octez_signature_and_possession_vectors_require_their_respective_domains ... ok
+test default_threshold_crypto_signatures_parse_but_fail_the_octez_domains ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.39s
+
