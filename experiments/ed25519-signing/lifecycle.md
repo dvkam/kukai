@@ -14,3 +14,5 @@ Repair restores the original share's authority. Refresh requires delivery of upd
 The interrupted run publishes the group only after all participants complete in the local process. Durable state, crashes after one real device commits, backup encryption, authenticated transport, replacement enrollment, erasure and the G3 service outage drill remain open. The owner and specialist reviewers retain the custody and admission decisions.
 
 Run the existing Rust commands from the [experiment instructions](README.md#run-the-checks). The complete suite includes seven signing cases and four lifecycle cases. Filter by `lifecycle` to run just these four.
+
+On 21 November 2026 all four lifecycle cases and the seven existing signing tests passed on Linux x86_64. Formatting and Clippy passed. The run record pins the executable source, compiler, commands and output hashes. [Run record](evidence/lifecycle/run.json) · [Test output](evidence/lifecycle/tests.txt)

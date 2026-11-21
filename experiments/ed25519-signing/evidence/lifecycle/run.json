@@ -1,0 +1,27 @@
+{
+  "tested_commit": "83bbdd98325bd3078cc96ea3ec2ebc0d6d0b2493",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "toolchain": "1.100.0",
+  "author": "Codex",
+  "lock_sha256": "3ff8e6127e13d6427dcd7712d9a97f6aea86a3a7194e150a520bd54361998309",
+  "checks": [
+    {
+      "command": ["cargo", "+1.100.0", "fmt", "--", "--check"],
+      "exit_code": 0,
+      "output": "format.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": ["cargo", "+1.100.0", "clippy", "--all-targets", "--locked", "--", "-D", "warnings"],
+      "exit_code": 0,
+      "output": "clippy.txt",
+      "sha256": "6c8c035745792ba7cd10b8cf803de4fc991f7067e0fe9ddf0594682428ea3750"
+    },
+    {
+      "command": ["cargo", "+1.100.0", "test", "--locked"],
+      "exit_code": 0,
+      "output": "tests.txt",
+      "sha256": "926588f06950f4c29642c328955e4494b3f0b44542d96f031f03d6f2dd72a140"
+    }
+  ]
+}
