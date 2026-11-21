@@ -44,7 +44,7 @@ async function exercisePRF(expectedSupport) {
   const first = await getKey(salt, credential.rawId);
   if (!enabled) {
     if (first !== null) throw Error('Unexpected wrapping key from unsupported authenticator');
-    return 'refused: no PRF output';
+    return 'refused: no usable PRF output';
   }
   if (!first) throw Error('PRF enabled without usable output');
   const repeated = await getKey(salt, credential.rawId);

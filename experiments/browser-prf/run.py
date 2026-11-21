@@ -31,7 +31,7 @@ def main() -> None:
                 "isUserVerified": True, "hasPrf": supported,
             }})
             verdict = page.evaluate("(async (supported) => {" + PROBE.read_text() + "\nreturn exercisePRF(supported); })", supported)
-            expected = "restored with same credential and salt; refused changed salt and changed credential" if supported else "refused: no PRF output"
+            expected = "restored with same credential and salt; refused changed salt and changed credential" if supported else "refused: no usable PRF output"
             if verdict != expected:
                 raise AssertionError(f"Unexpected PRF verdict for supported={supported}")
             print(f"Authenticator PRF={supported}: {verdict}")
