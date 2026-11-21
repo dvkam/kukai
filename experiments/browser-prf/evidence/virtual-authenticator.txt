@@ -1,3 +1,3 @@
 Chromium 156.0.8078.79
-Authenticator PRF=True: restored with same salt and rejected changed salt
+Authenticator PRF=True: restored with same credential and salt; refused changed salt and changed credential
 Authenticator PRF=False: refused: no PRF output
