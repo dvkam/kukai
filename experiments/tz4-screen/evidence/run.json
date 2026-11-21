@@ -1,0 +1,26 @@
+{
+  "author": "Codex",
+  "tested_commit": "d52272b66e1ec9ae4e29746e5c4ae0e2dda19012",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "setup": "rustup toolchain install 1.100.0 --profile minimal --component rustfmt --component clippy",
+  "checks": [
+    {
+      "command": ["cargo", "+1.100.0", "fmt", "--", "--check"],
+      "exit_code": 0,
+      "file": "format.txt",
+      "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": ["cargo", "+1.100.0", "clippy", "--locked", "--all-targets", "--", "-D", "warnings"],
+      "exit_code": 0,
+      "file": "clippy.txt",
+      "output_sha256": "ee1d3fffa2022e962e63e0dbe4d35c9c198450a20c29fc09030f635dbb38bfcd"
+    },
+    {
+      "command": ["cargo", "+1.100.0", "test", "--locked"],
+      "exit_code": 0,
+      "file": "tests.txt",
+      "output_sha256": "2ae5c59b163920694e3e4f5f543de82df62da606333936e6b3b2ac34664b84ea"
+    }
+  ]
+}
