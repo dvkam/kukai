@@ -59,3 +59,5 @@ The [reproducible library build check](../../../experiments/library-build-check/
 The [recorded run](build-evidence/results.json) retains the exact commands, compiler, host, exit codes, and adjacent logs. These are `cargo check` results. They do not run a signature, link a browser application, measure latency, validate entropy, or test a physical iPhone. The original application remains unchanged. Runtime, curve compatibility, recovery, compromise response, and exit are unrun.
 
 [Toolchain constraints](toolchains.md) distinguish declared compatibility from measured builds. The [experiment record template](experiment-template.md) defines the evidence required for subsequent feasibility work.
+
+The [browser PRF experiment](../../../experiments/browser-prf/README.md) checks supported and unsupported virtual authenticators and the wrapping-key boundary for issue #13.

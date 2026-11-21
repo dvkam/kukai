@@ -11,6 +11,12 @@
       "extends": ["plugin:prettier/recommended", "plugin:@angular-eslint/template/process-inline-templates"]
     },
     {
+      "files": ["experiments/browser-prf/probe.js"],
+      "env": {"browser": true, "es2022": true},
+      "extends": ["eslint:recommended"],
+      "parserOptions": {"ecmaVersion": 2022}
+    },
+    {
       "files": ["tests/*.cjs"],
       "env": {
         "node": true,
