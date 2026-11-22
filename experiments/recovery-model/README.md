@@ -14,7 +14,7 @@ The example uses logical ticks 0 through 8, a base deadline of 2 and a dispute d
 | Ignore the extended deadline | The service completes a disputed request at the base deadline. REC6BTime detects it. | Mutation detected · [trace](evidence/ignore_dispute_delay.txt) |
 | Ignore the extra factor | A disputed request completes without the factor. REC6CFactor detects it. | Mutation detected · [trace](evidence/skip_factor.txt) |
 
-The runner checks for the named invariant and a counterexample trace on each expected failure. The two witness cases refute the claim that the corresponding completion is unreachable. They establish that those paths exist within the finite model. They give no deadline by which a claimant will actually complete.
+The runner checks the named invariant and the final state of every witness and counterexample. The baseline must exhaust the reviewed graph of 143 distinct states. The default replay checks the retained inputs and logs against their recorded digests before running TLC. The two witness cases refute the claim that the corresponding completion is unreachable. They establish that those paths exist within the finite model. They give no deadline by which a claimant will actually complete.
 
 From the repository root, use Python 3.12 and Java 21. The runner downloads the checksum-pinned TLA+ tools release v1.7.4. An existing copy supplied with `--jar` must match the same digest. To retain fresh logs, pass a new directory with `--logs`.
 

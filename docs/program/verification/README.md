@@ -4,7 +4,7 @@ Research progress for [P0-06](https://github.com/dvkam/kukai/issues/6), recorded
 
 The [v0.1 snapshot](initial-obligations-v0.1.json) preserves all 17 baseline obligations, their path expressions, assumptions, residual statements, and explicitly listed non-waivable subproperties. [freeze.json](freeze.json) records its content digest. This freezes the source record before model work. It does not accept the baseline's proposed architecture, complete an independent review, or prove a property.
 
-No model has run. No property is verified. Independent security review remains unfilled under POC-001, so the baseline ticket and G0 remain open. PoC model preparation can use this record while keeping every unresolved definition visible.
+The recovery timing experiment below has a bounded TLC result. The baseline properties still await the proofs and reviews listed here. Independent security review remains unfilled under POC-001, so the baseline ticket and G0 remain open. PoC model preparation can use this record while keeping every unresolved definition visible.
 
 ## Paths and assumptions
 
