@@ -1,5 +1,5 @@
 {
-  "tested_commit": "8c4bea2163560bf9215376120da93337feb7895b",
+  "tested_commit": "36fd20bf4e20b04f925e452ddb2ac80171ba25ae",
   "date_utc": "2026-11-22",
   "author": "Codex",
   "working_directory": "repository root",
@@ -11,7 +11,7 @@
   "wasm_bindgen": "0.2.108",
   "cargo_lock_sha256": "2666415109b8cefd65ccd804c5922ff2479b1411f866b5d88c8a5e9f7c01f6bd",
   "files": {
-    "build.txt": "d197e967203df0f130ec3cf0d4d86d7704fbf6928cdb3d3099d21fa41d99ddf2",
-    "samples.json": "2229c2c5a50015c0a7c3e300760069ca16595bd55d0cbacaaf6368c931eb2791"
+    "build.txt": "a1f3c39bb81727275cb62369c39d3476568cdca9c58014e4ca817e5acb1b2323",
+    "samples.json": "f664144c7a1e0f8b5f861f455f3f18bba89fbfdfce55110a4112c3c99c6122bc"
   }
 }
