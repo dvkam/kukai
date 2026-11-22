@@ -1,12 +1,12 @@
 {
   "case_id": "RECOVER",
-  "run_id": "RECOVER-1d419573-8a6b-406c-8b7a-8a3292b2f973",
+  "run_id": "RECOVER-1ecb2172-df97-454a-8ea5-c3ec42771418",
   "date_utc": "2026-11-22",
   "author": "Codex",
-  "tested_commit": "d65aac98c6eb9fbac3441eec7f3ee384cf455e27",
+  "tested_commit": "efcbbf87ed5312b3e79268de16cf3d1f86d1ea37",
   "property_freeze": "18735a97a095c2004af1dd4533f77b497166cf4a",
   "working_directory": "repository root",
-  "command": "python experiments/recovery-model/check.py --logs experiments/recovery-model/evidence",
+  "command": "python experiments/recovery-model/check.py --jar /tmp/nov22-tla2tools.jar --logs /tmp/nov22-final-record",
   "exit_code": 0,
   "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
   "cpu_model": "AMD EPYC 9V74 80-Core Processor",
@@ -14,12 +14,18 @@
   "java": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
   "tlc_jar_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
   "files": {
-    "baseline.txt": "e04cfdae62190dc09aa6b2c295c61db3f0f87ceca777baff4b605605a781319d",
-    "dispute_witness.txt": "cb71bac77efe63582b24ecd6e62c30518e2fe7b2f5dfc6810bd62fb3ca81cacd",
-    "ignore_dispute_delay.txt": "3920a85a354d51dcba6e44771c3cb1af14cddfada4cdbd5a1bf51c8cb6270e29",
-    "ordinary_witness.txt": "da3e7781e3922d99a924e11a29cb532f394e9bd36752c37d7675185c369ed9f8",
-    "restart_dispute.txt": "105ced22bc398e7398e8649b13457d9f0d125fa722ddc508777b5a17aac5744b",
-    "skip_delay.txt": "79065917418417a0f3497c9fa8c42862dcee6b62a83f98d1a0dae2184336607d",
-    "skip_factor.txt": "b4e2b74e7024446c3b1abf0723892e60b71eef30869ab3e691a6dbeac632241f"
+    "baseline.txt": "7b63585dce21e52549085a1eb256e6e2d119dbc185287b820a481067d1aa9c4f",
+    "dispute_witness.txt": "d8ae0f01295a8cf6a13d04185dcddb9e607fa6eb48697795ca0523f5e8f81428",
+    "ignore_dispute_delay.txt": "5c85db95c0be148c64a3035b4faf121950eaad9fd20f958330d92c373530e892",
+    "ordinary_witness.txt": "f3949ba31c3dadf16e488fb51b255e75f8a1107a56c20d27f432f272aa4689b0",
+    "restart_dispute.txt": "ae45c3edb4d124767325d668c6ea3bfcbc792f5b2c15c8bdfc0cdc2f451469fa",
+    "skip_delay.txt": "9639fccb6ad45878002469e8ec454158252fd94d0a673ef2d394c55df05fa0db",
+    "skip_factor.txt": "72d1980d670fa2c51320aa64378b8f9538fc1701a85644150e44074b1a5bb04c"
+  },
+  "inputs": {
+    "properties.md": "44b846587f79f4c83d827402266f7436a8540b1ab3f9f024ceabc18d34f06ee0",
+    "Recovery.tla": "aa1ee6d4fa0dfc83708935c345ef32ace914cda59c7b32e35e4147e6ec3b2347",
+    "Recovery.cfg": "90e65b95674c42d96f5062fdd0c6b195797dee50e4368fdf7d008bbfb5e460da",
+    "check.py": "272a8184d78b844691835c758d3952fea9e31dd9ef1402001c5e32bca6019bef"
   }
 }

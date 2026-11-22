@@ -1,14 +1,14 @@
 TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
-Running breadth-first search Model-Checking with fp 0 and seed 1 with 1 worker on 4 cores with 245MB heap and 64MB offheap memory [pid: 38018] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
-Parsing file /tmp/tmp1la0btgl/restart_dispute/Recovery.tla
-Parsing file /tmp/tmp1la0btgl/restart_dispute/Integers.tla
-Parsing file /tmp/tmp1la0btgl/restart_dispute/Naturals.tla
+Running breadth-first search Model-Checking with fp 0 and seed 1 with 1 worker on 4 cores with 245MB heap and 64MB offheap memory [pid: 41087] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /tmp/tmp57v3xk2i/restart_dispute/Recovery.tla
+Parsing file /tmp/tmp57v3xk2i/restart_dispute/Integers.tla
+Parsing file /tmp/tmp57v3xk2i/restart_dispute/Naturals.tla
 Semantic processing of module Naturals
 Semantic processing of module Integers
 Semantic processing of module Recovery
-Starting... (2026-11-22 19:54:24)
+Starting... (2026-11-22 19:57:45)
 Computing initial states...
-Finished computing initial states: 2 distinct states generated at 2026-11-22 19:54:24.
+Finished computing initial states: 2 distinct states generated at 2026-11-22 19:57:45.
 Error: Invariant REC6COnce is violated.
 Error: The behavior up to this point is:
 State 1: <Initial predicate>
@@ -46,4 +46,4 @@ State 4: <Object line 16, col 11 to line 22, col 54 of module Recovery>
 21 states generated, 18 distinct states found, 8 states left on queue.
 The depth of the complete state graph search is 4.
 The average outdegree of the complete state graph is 2 (minimum is 1, the maximum 3 and the 95th percentile is 3).
-Finished in 00s at (2026-11-22 19:54:24)
+Finished in 00s at (2026-11-22 19:57:45)
