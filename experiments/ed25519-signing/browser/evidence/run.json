@@ -1,0 +1,17 @@
+{
+  "tested_commit": "fa9d9ec68e2636cec65bab663e30718ef5ac4cf4",
+  "date_utc": "2026-11-22",
+  "author": "Codex",
+  "working_directory": "repository root",
+  "command": "bash experiments/ed25519-signing/browser/check.sh",
+  "exit_code": 0,
+  "rustc": "rustc 1.100.0 (0ef1bc386 2026-11-09)\nbinary: rustc\ncommit-hash: 0ef1bc386059596dada8fb65b50425aab2ea637a\ncommit-date: 2026-11-09\nhost: x86_64-unknown-linux-gnu\nrelease: 1.100.0\nLLVM version: 23.1.5",
+  "python": "3.12.14",
+  "playwright": "1.62.0",
+  "wasm_bindgen": "0.2.108",
+  "cargo_lock_sha256": "2666415109b8cefd65ccd804c5922ff2479b1411f866b5d88c8a5e9f7c01f6bd",
+  "files": {
+    "build.txt": "a1917abee713f354475531439e0e21601b39d463a97bcb31d7e3c2a266a32d5a",
+    "samples.json": "585f0f1313a0c9d2b4093b221e6b97e53813b5d7ed33aac26fa2cdd781ba77a5"
+  }
+}

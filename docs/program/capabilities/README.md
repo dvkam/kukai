@@ -56,8 +56,10 @@ No BLS candidate has demonstrated Octez-compatible signature serialization, grou
 
 The [reproducible library build check](../../../experiments/library-build-check/README.md) checks checksum-pinned FROST 3.0.0 and CGGMP24 alpha.3 sources using retained dependency locks. CGGMP24 enables `curve-secp256k1`. Rust 1.100.0 checks both libraries on Linux x86_64 and `wasm32-unknown-unknown` successfully.
 
-The [recorded run](build-evidence/results.json) retains the exact commands, compiler, host, exit codes, and adjacent logs. These are `cargo check` results. They do not run a signature, link a browser application, measure latency, validate entropy, or test a physical iPhone. The original application remains unchanged. Runtime, curve compatibility, recovery, compromise response, and exit are unrun.
+The [recorded run](build-evidence/results.json) retains the exact commands, compiler, host, exit codes, and adjacent logs. These are `cargo check` results. They do not run a signature, link a browser application, measure latency, validate entropy, or test a physical iPhone. The original application remains unchanged. The individual experiments below record subsequent runtime and recovery results.
 
 [Toolchain constraints](toolchains.md) distinguish declared compatibility from measured builds. The [experiment record template](experiment-template.md) defines the evidence required for subsequent feasibility work.
 
 The [browser PRF experiment](../../../experiments/browser-prf/README.md) checks supported and unsupported virtual authenticators and the wrapping-key boundary for issue #13.
+
+The [Ed25519 browser experiment](../../../experiments/ed25519-signing/browser/README.md) runs key generation and user-quorum signing in Chromium WebAssembly.

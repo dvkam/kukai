@@ -1,5 +1,12 @@
 {
-  "include": ["experiments/library-build-check/run.py", "scripts/check-program-docs.py", "tests", "experiments/web_limits", "experiments/browser-prf/run.py"],
+  "include": [
+    "experiments/library-build-check/run.py",
+    "scripts/check-program-docs.py",
+    "tests",
+    "experiments/web_limits",
+    "experiments/browser-prf/run.py",
+    "experiments/ed25519-signing/browser/run.py"
+  ],
   "typeCheckingMode": "basic",
   "pythonVersion": "3.12"
 }

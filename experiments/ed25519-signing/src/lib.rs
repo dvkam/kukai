@@ -124,3 +124,6 @@ pub fn signature_shares(
   }
   Ok((package, signature_shares))
 }
+
+#[cfg(target_arch = "wasm32")]
+mod browser;
