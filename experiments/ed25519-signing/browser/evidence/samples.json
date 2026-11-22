@@ -1,0 +1,40 @@
+{
+  "chromium": "156.0.8078.79",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "arch": "x86_64",
+  "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+  "samples": [
+    {
+      "solana_dkg_ms": 48.5,
+      "solana_sign_ms": 13.5,
+      "tezos_dkg_ms": 23.300000000046566,
+      "tezos_sign_ms": 1.5
+    },
+    {
+      "solana_dkg_ms": 15.399999999906868,
+      "solana_sign_ms": 1.6000000000931323,
+      "tezos_dkg_ms": 22.899999999906868,
+      "tezos_sign_ms": 1.400000000023283
+    },
+    {
+      "solana_dkg_ms": 36.40000000002328,
+      "solana_sign_ms": 1.400000000023283,
+      "tezos_dkg_ms": 14.099999999976717,
+      "tezos_sign_ms": 5.399999999906868
+    },
+    {
+      "solana_dkg_ms": 6.600000000093132,
+      "solana_sign_ms": 5.400000000023283,
+      "tezos_dkg_ms": 10.199999999953434,
+      "tezos_sign_ms": 1.599999999976717
+    },
+    {
+      "solana_dkg_ms": 6.200000000069849,
+      "solana_sign_ms": 5.5,
+      "tezos_dkg_ms": 32.39999999990687,
+      "tezos_sign_ms": 1.5
+    }
+  ],
+  "entropy_failure": "sample aborted",
+  "unexpected_page_requests": 0
+}
