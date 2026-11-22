@@ -1,0 +1,49 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 0 and seed 1 with 1 worker on 4 cores with 245MB heap and 64MB offheap memory [pid: 41035] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /tmp/tmp57v3xk2i/ordinary_witness/Recovery.tla
+Parsing file /tmp/tmp57v3xk2i/ordinary_witness/Integers.tla
+Parsing file /tmp/tmp57v3xk2i/ordinary_witness/Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Recovery
+Starting... (2026-11-22 19:57:43)
+Computing initial states...
+Finished computing initial states: 2 distinct states generated at 2026-11-22 19:57:43.
+Error: Invariant NoOrdinaryCompletion is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ now = 0
+/\ firstObjection = -1
+/\ hasFactor = FALSE
+/\ disputed = FALSE
+/\ completedAt = -1
+/\ deadline = 2
+
+State 2: <Tick line 12, col 9 to line 14, col 83 of module Recovery>
+/\ now = 1
+/\ firstObjection = -1
+/\ hasFactor = FALSE
+/\ disputed = FALSE
+/\ completedAt = -1
+/\ deadline = 2
+
+State 3: <Tick line 12, col 9 to line 14, col 83 of module Recovery>
+/\ now = 2
+/\ firstObjection = -1
+/\ hasFactor = FALSE
+/\ disputed = FALSE
+/\ completedAt = -1
+/\ deadline = 2
+
+State 4: <Complete line 24, col 13 to line 28, col 79 of module Recovery>
+/\ now = 2
+/\ firstObjection = -1
+/\ hasFactor = FALSE
+/\ disputed = FALSE
+/\ completedAt = 2
+/\ deadline = 2
+
+17 states generated, 15 distinct states found, 7 states left on queue.
+The depth of the complete state graph search is 4.
+The average outdegree of the complete state graph is 2 (minimum is 1, the maximum 2 and the 95th percentile is 2).
+Finished in 00s at (2026-11-22 19:57:43)

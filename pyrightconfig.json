@@ -1,6 +1,7 @@
 {
   "include": [
     "experiments/library-build-check/run.py",
+    "experiments/recovery-model/check.py",
     "scripts/check-program-docs.py",
     "tests",
     "experiments/web_limits",
