@@ -1,6 +1,6 @@
 # Ed25519 signing experiment
 
-This is native PoC work for [issue #14](https://github.com/dvkam/kukai/issues/14), under [POC-001](../../docs/program/poc-scope.md). It exercises published FROST APIs with temporary test keys. It does not select a custody design or admit a curve for production.
+This is PoC work for [issue #14](https://github.com/dvkam/kukai/issues/14), under [POC-001](../../docs/program/poc-scope.md). It exercises published FROST APIs with temporary test keys. It does not select a custody design or admit a curve for production.
 
 ## Scope and prerequisites
 
@@ -54,3 +54,5 @@ These checks exercise the chain libraries' verification APIs, not independent cr
 Issue #14 stays open. The [native refresh and repair cases](lifecycle.md) cover in-memory changes to the test group. Participant replacement with a new identity, durable multi-device commit, encrypted offline recovery, reference iPhone measurements, and browser runtime measurements still need experiments. Key reconstruction does not produce an Ed25519 seed. This experiment does not export a wallet seed or test an import format.
 
 The G3 exit drill still requires an independent tool with every project service blocked, supported asset migration, permission handling, and chain availability. Removing one key package in a single-process test does not complete that drill. Protocol-specific revocation cutoffs, recovery disputes, approval binding, and formal obligations remain separate work.
+
+The [Chromium WebAssembly run](browser/README.md) records key generation and signing with the two user shares for both chains. The native lifecycle tests have separate coverage.

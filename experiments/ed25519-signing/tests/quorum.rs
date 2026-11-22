@@ -1,6 +1,6 @@
 #[path = "quorum/lifecycle.rs"]
 mod lifecycle;
-mod support;
+use wallet_ed25519_signing_experiment as support;
 
 use std::collections::BTreeMap;
 
