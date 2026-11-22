@@ -1,0 +1,14 @@
+test_abrupt_worker_exit_after_each_commit (test_web_reservations.WebReservationTests.test_abrupt_worker_exit_after_each_commit) ... ok
+test_both_arrival_orders_count_pending_reservations (test_web_reservations.WebReservationTests.test_both_arrival_orders_count_pending_reservations) ... ok
+test_concurrent_devices_share_one_budget (test_web_reservations.WebReservationTests.test_concurrent_devices_share_one_budget) ... ok
+test_malformed_amounts_and_large_base_unit_values (test_web_reservations.WebReservationTests.test_malformed_amounts_and_large_base_unit_values) ... ok
+test_only_one_competing_worker_can_start_signing (test_web_reservations.WebReservationTests.test_only_one_competing_worker_can_start_signing) ... ok
+test_restart_preserves_held_and_charged_amounts (test_web_reservations.WebReservationTests.test_restart_preserves_held_and_charged_amounts) ... ok
+test_retries_and_cancellation_bind_the_original_intent (test_web_reservations.WebReservationTests.test_retries_and_cancellation_bind_the_original_intent) ... ok
+test_split_transfers_and_permission_changes (test_web_reservations.WebReservationTests.test_split_transfers_and_permission_changes) ... ok
+test_stale_service_clock_cannot_backdate_signing_after_restart (test_web_reservations.WebReservationTests.test_stale_service_clock_cannot_backdate_signing_after_restart) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.649s
+
+OK
