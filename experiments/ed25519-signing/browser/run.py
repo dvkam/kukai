@@ -18,6 +18,10 @@ def main(package: Path) -> None:
     chrome = os.environ.get("CHROME_BIN") or shutil.which("chromium") or shutil.which("google-chrome")
     if not chrome:
         raise RuntimeError("Set CHROME_BIN to the Chrome or Chromium executable")
+    cpu_model = next(
+        (line.partition(":")[2].strip() for line in Path("/proc/cpuinfo").read_text().splitlines()
+         if line.partition(":")[0].strip() == "model name"), "undisclosed by host"
+    )
     unexpected: list[str] = []
 
     def serve(route: Route) -> None:
@@ -68,6 +72,7 @@ def main(package: Path) -> None:
             raise AssertionError(f"Unexpected page requests: {unexpected}")
         print(json.dumps({
             "chromium": browser.version, "platform": platform.platform(), "arch": platform.machine(),
+            "cpu_model": cpu_model,
             "samples": samples, "entropy_failure": "sample aborted", "unexpected_page_requests": len(unexpected),
         }, indent=2))
         context.close()
