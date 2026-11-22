@@ -1,0 +1,25 @@
+{
+  "case_id": "RECOVER",
+  "run_id": "RECOVER-1d419573-8a6b-406c-8b7a-8a3292b2f973",
+  "date_utc": "2026-11-22",
+  "author": "Codex",
+  "tested_commit": "d65aac98c6eb9fbac3441eec7f3ee384cf455e27",
+  "property_freeze": "18735a97a095c2004af1dd4533f77b497166cf4a",
+  "working_directory": "repository root",
+  "command": "python experiments/recovery-model/check.py --logs experiments/recovery-model/evidence",
+  "exit_code": 0,
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "cpu_model": "AMD EPYC 9V74 80-Core Processor",
+  "python": "3.12.14",
+  "java": "openjdk version \"21.0.13\" 2026-10-20\nOpenJDK Runtime Environment (build 21.0.13+9-1-deb13u2-Debian)\nOpenJDK 64-Bit Server VM (build 21.0.13+9-1-deb13u2-Debian, mixed mode, sharing)",
+  "tlc_jar_sha256": "936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88",
+  "files": {
+    "baseline.txt": "e04cfdae62190dc09aa6b2c295c61db3f0f87ceca777baff4b605605a781319d",
+    "dispute_witness.txt": "cb71bac77efe63582b24ecd6e62c30518e2fe7b2f5dfc6810bd62fb3ca81cacd",
+    "ignore_dispute_delay.txt": "3920a85a354d51dcba6e44771c3cb1af14cddfada4cdbd5a1bf51c8cb6270e29",
+    "ordinary_witness.txt": "da3e7781e3922d99a924e11a29cb532f394e9bd36752c37d7675185c369ed9f8",
+    "restart_dispute.txt": "105ced22bc398e7398e8649b13457d9f0d125fa722ddc508777b5a17aac5744b",
+    "skip_delay.txt": "79065917418417a0f3497c9fa8c42862dcee6b62a83f98d1a0dae2184336607d",
+    "skip_factor.txt": "b4e2b74e7024446c3b1abf0723892e60b71eef30869ab3e691a6dbeac632241f"
+  }
+}

@@ -1,0 +1,32 @@
+TLC2 Version 2.19 of 08 August 2024 (rev: 5a47802)
+Running breadth-first search Model-Checking with fp 0 and seed 1 with 1 worker on 4 cores with 245MB heap and 64MB offheap memory [pid: 38045] (Linux 6.18.57 amd64, Debian 21.0.13 x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /tmp/tmp1la0btgl/skip_delay/Recovery.tla
+Parsing file /tmp/tmp1la0btgl/skip_delay/Integers.tla
+Parsing file /tmp/tmp1la0btgl/skip_delay/Naturals.tla
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Recovery
+Starting... (2026-11-22 19:54:25)
+Computing initial states...
+Finished computing initial states: 2 distinct states generated at 2026-11-22 19:54:25.
+Error: Invariant REC6BTime is violated.
+Error: The behavior up to this point is:
+State 1: <Initial predicate>
+/\ now = 0
+/\ firstObjection = -1
+/\ hasFactor = FALSE
+/\ disputed = FALSE
+/\ completedAt = -1
+/\ deadline = 2
+
+State 2: <Complete line 24, col 13 to line 28, col 79 of module Recovery>
+/\ now = 0
+/\ firstObjection = -1
+/\ hasFactor = FALSE
+/\ disputed = FALSE
+/\ completedAt = 0
+/\ deadline = 2
+
+5 states generated, 5 distinct states found, 3 states left on queue.
+The depth of the complete state graph search is 2.
+Finished in 00s at (2026-11-22 19:54:25)
