@@ -1,5 +1,5 @@
 {
-  "tested_commit": "c1617219566c045971b338ce2b01d085e6766957",
+  "tested_commit": "9f44ade127de41559bafaf2d51dd9bc012afe1fc",
   "date_utc": "2026-11-22",
   "author": "Codex",
   "python": "3.12.14",
@@ -10,5 +10,7 @@
   "command": "python -m unittest discover -s tests -p test_web_reservations.py -v",
   "exit_code": 0,
   "output": "tests.txt",
-  "sha256": "5822900e3cf87d5ccc5ae542cf7cf95462b26b958ed62d07788f01247504c607"
+  "sha256": "cf6812004adf601428f3d57677cd218962bc802a52258cc2707b20fb9364befe",
+  "case_id": "LIMIT",
+  "run_id": "LIMIT-c7c5b1b5-df45-4558-b182-6e784e8887e5"
 }
