@@ -59,3 +59,5 @@ P2-01 owns these definitions, with `dvkam` accountable.
 - Decide how each full-proof obligation will be discharged. TLC's bounded exploration and a verifier timeout cannot stand in for an unbounded proof.
 
 The [review policy](review-policy.md) defines result status, mutation checks, trace mapping, and change control. The [snapshot check](verify.md) reproduces source coverage and digest integrity.
+
+The [bounded recovery timing model](../../../experiments/recovery-model/README.md) checks the PoC deadline and dispute-factor properties derived from obligations 6(b) and 6(c).
