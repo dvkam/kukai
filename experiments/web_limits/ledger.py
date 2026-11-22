@@ -32,7 +32,7 @@ class Ledger:
             db.execute("""CREATE TABLE IF NOT EXISTS requests (
                 account TEXT NOT NULL, request_id TEXT NOT NULL, payload BLOB NOT NULL,
                 units INTEGER NOT NULL CHECK(units > 0), state TEXT NOT NULL
-                CHECK(state IN ('reserved', 'charged', 'cancelled')), charged_at INTEGER,
+                CHECK(state IN ('reserved', 'signing', 'charged', 'cancelled')), charged_at INTEGER,
                 PRIMARY KEY(account, request_id),
                 CHECK ((state = 'charged') = (charged_at IS NOT NULL))
             ) STRICT""")
@@ -52,7 +52,6 @@ class Ledger:
         if not changed:
             raise ValueError("service clock moved backwards")
 
-
     def reserve(self, intent: Intent, *, now: int) -> str:
         if intent.kind in PERMISSIONS:
             return "needs_ios"
@@ -70,7 +69,7 @@ class Ledger:
                     return "conflict"
                 return "reserved" if prior[2] == "reserved" else "already_used"
             used = db.execute("""SELECT COALESCE(SUM(units), 0) FROM requests WHERE account=?
-                AND (state='reserved' OR (state='charged' AND charged_at > ?))""",
+                AND (state IN ('reserved', 'signing') OR (state='charged' AND charged_at > ?))""",
                               (intent.account, now - WINDOW)).fetchone()[0]
             if intent.units > LIMIT - used:
                 return "needs_ios"
@@ -79,13 +78,23 @@ class Ledger:
             return "reserved"
 
     def begin_signing(self, intent: Intent, *, now: int) -> bool:
-        """Commit the charge before the caller may enter a signing protocol."""
+        """Claim the request once. Keep counting it until the signer confirms completion."""
+        if not intent.valid_transfer():
+            return False
+        with closing(sqlite3.connect(self.path)) as db, db:
+            self._begin_at(db, now)
+            return db.execute("""UPDATE requests SET state='signing'
+                WHERE account=? AND request_id=? AND units=? AND payload=? AND state='reserved'""",
+                              (intent.account, intent.request_id, intent.units, intent.payload)).rowcount == 1
+
+    def finish_signing(self, intent: Intent, *, now: int) -> bool:
+        """Record completion after the final signing handoff, even if the worker paused."""
         if not intent.valid_transfer():
             return False
         with closing(sqlite3.connect(self.path)) as db, db:
             self._begin_at(db, now)
             return db.execute("""UPDATE requests SET state='charged', charged_at=?
-                WHERE account=? AND request_id=? AND units=? AND payload=? AND state='reserved'""",
+                WHERE account=? AND request_id=? AND units=? AND payload=? AND state='signing'""",
                               (now, intent.account, intent.request_id, intent.units, intent.payload)).rowcount == 1
 
     def cancel(self, intent: Intent) -> bool:

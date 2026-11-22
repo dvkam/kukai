@@ -14,8 +14,10 @@ def stop_after_commit(path, intent, charge):
     ledger = Ledger(path)
     if ledger.reserve(intent, now=0) != "reserved":
         raise AssertionError("Worker could not reserve")
-    if charge and not ledger.begin_signing(intent, now=1):
-        raise AssertionError("Worker could not charge")
+    if charge in ("signing", "charged") and not ledger.begin_signing(intent, now=1):
+        raise AssertionError("Worker could not start")
+    if charge == "charged" and not ledger.finish_signing(intent, now=2):
+        raise AssertionError("Worker could not finish")
     os._exit(17)
 
 
@@ -57,9 +59,12 @@ class WebReservationTests(unittest.TestCase):
         restarted = Ledger(self.path)
         self.assertFalse(restarted.begin_signing(self.first, now=201))
         self.assertFalse(restarted.cancel(self.first))
-        self.assertEqual(restarted.reserve(self.second, now=259), "needs_ios")
-        self.assertEqual(restarted.reserve(self.second, now=260), "reserved")
-        self.assertEqual(restarted.reserve(self.first, now=261), "already_used")
+        self.assertEqual(restarted.reserve(self.second, now=800), "needs_ios")
+        self.assertTrue(restarted.finish_signing(self.first, now=800))
+        self.assertFalse(restarted.finish_signing(self.first, now=801))
+        self.assertEqual(restarted.reserve(self.second, now=859), "needs_ios")
+        self.assertEqual(restarted.reserve(self.second, now=860), "reserved")
+        self.assertEqual(restarted.reserve(self.first, now=861), "already_used")
 
     def test_retries_and_cancellation_bind_the_original_intent(self):
         self.assertEqual(self.ledger.reserve(self.first, now=0), "reserved")
@@ -69,6 +74,7 @@ class WebReservationTests(unittest.TestCase):
             self.assertFalse(self.ledger.begin_signing(changed, now=1))
             self.assertFalse(self.ledger.cancel(changed))
         self.assertEqual(self.ledger.reserve(replace(self.first, units=1), now=1), "conflict")
+        self.assertFalse(self.ledger.finish_signing(self.first, now=1))
         self.assertTrue(self.ledger.cancel(self.first))
         self.assertFalse(self.ledger.begin_signing(self.first, now=1))
         self.assertEqual(self.ledger.reserve(self.first, now=1), "already_used")
@@ -78,6 +84,7 @@ class WebReservationTests(unittest.TestCase):
             part = replace(self.first, request_id=str(index), units=25)
             self.assertEqual(self.ledger.reserve(part, now=index), "reserved")
             self.assertTrue(self.ledger.begin_signing(part, now=index))
+            self.assertTrue(self.ledger.finish_signing(part, now=index))
         self.assertEqual(self.ledger.reserve(replace(self.first, units=1), now=4), "needs_ios")
         for kind in ("approval", "permit", "operator", "delegation", "eip7702"):
             permission = replace(self.first, account="fresh", kind=kind, units=0)
@@ -91,7 +98,7 @@ class WebReservationTests(unittest.TestCase):
         self.assertEqual(self.ledger.reserve(replace(self.first, units=2**256 - 1), now=0), "needs_ios")
 
     def test_abrupt_worker_exit_after_each_commit(self):
-        for charge in (False, True):
+        for charge in ("reserved", "signing", "charged"):
             intent = replace(self.first, account=f"crash-{charge}")
             path = self.path.with_name(f"crash-{charge}.sqlite")
             worker = multiprocessing.get_context("spawn").Process(
@@ -100,8 +107,9 @@ class WebReservationTests(unittest.TestCase):
             worker.join(timeout=10)
             self.assertEqual(worker.exitcode, 17)
             reopened = Ledger(path)
-            self.assertEqual(reopened.reserve(replace(self.second, account=intent.account), now=2), "needs_ios")
-            self.assertEqual(reopened.begin_signing(intent, now=2), not charge)
+            self.assertEqual(reopened.reserve(replace(self.second, account=intent.account), now=4), "needs_ios")
+            self.assertEqual(reopened.begin_signing(intent, now=4), charge == "reserved")
+            self.assertEqual(reopened.finish_signing(intent, now=5), charge != "charged")
 
     def test_only_one_competing_worker_can_start_signing(self):
         self.assertEqual(self.ledger.reserve(self.first, now=0), "reserved")
@@ -121,5 +129,17 @@ class WebReservationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "backwards"):
             restarted.begin_signing(self.first, now=70)
         self.assertTrue(restarted.begin_signing(self.first, now=150))
+        self.assertTrue(restarted.finish_signing(self.first, now=150))
         self.assertEqual(restarted.reserve(self.second, now=209), "needs_ios")
         self.assertEqual(restarted.reserve(self.second, now=210), "reserved")
+
+    def test_completion_requires_the_claimed_intent_after_a_worker_stall(self):
+        self.assertEqual(self.ledger.reserve(self.first, now=0), "reserved")
+        self.assertTrue(self.ledger.begin_signing(self.first, now=1))
+        restarted = Ledger(self.path)
+        self.assertFalse(restarted.finish_signing(replace(self.first, payload=b"other"), now=3600))
+        self.assertFalse(restarted.cancel(self.first))
+        self.assertEqual(restarted.reserve(self.second, now=3600), "needs_ios")
+        self.assertTrue(restarted.finish_signing(self.first, now=3600))
+        self.assertEqual(restarted.reserve(self.second, now=3659), "needs_ios")
+        self.assertEqual(restarted.reserve(self.second, now=3660), "reserved")
