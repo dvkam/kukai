@@ -53,3 +53,9 @@ class TokenAmountTests(unittest.TestCase):
             self.assertEqual(self.result(1, precision).verdict, "refuse")
         for amount in [-1, True, 2**256]:
             self.assertEqual(self.result(amount, 6).verdict, "refuse")
+
+    def test_offchain_precision_types_cannot_alias_integers(self):
+        self.asset = replace(self.asset, standard="FA2")
+        for bad in [True, 1.0, "1"]:
+            self.assertEqual(self.result(4, 1, "offchain", decimals=bad).verdict, "refuse")
+            self.assertEqual(self.result(4, bad, "offchain", decimals=bad).verdict, "refuse")

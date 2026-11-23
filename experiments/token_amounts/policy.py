@@ -52,7 +52,9 @@ def token_amount(asset: Asset, units: int, block: str, primary: Read, second: Re
             return Display(raw, "refuse", "unknown metadata source")
         if read.source == "absent" and read.decimals is not None:
             return Display(raw, "refuse", "inconsistent absent result")
-        if read.source == "onchain" and (type(read.decimals) is not int or not 0 <= read.decimals <= 255):
+        if read.decimals is not None and (type(read.decimals) is not int or not 0 <= read.decimals <= 255):
+            return Display(raw, "refuse", "malformed decimals")
+        if read.source == "onchain" and read.decimals is None:
             return Display(raw, "refuse", "invalid on-chain decimals")
     if (primary.source, primary.decimals) != (second.source, second.decimals):
         return Display(raw, "refuse", "providers disagree")
