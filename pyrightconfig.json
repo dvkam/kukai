@@ -6,6 +6,7 @@
     "scripts/check-program-docs.py",
     "tests",
     "experiments/web_limits",
+    "experiments/token_amounts",
     "experiments/browser-prf/run.py",
     "experiments/ed25519-signing/browser/run.py"
   ],
