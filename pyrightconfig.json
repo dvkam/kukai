@@ -2,6 +2,7 @@
   "include": [
     "experiments/library-build-check/run.py",
     "experiments/recovery-model/check.py",
+    "experiments/ed25519-signing/exit/check.py",
     "scripts/check-program-docs.py",
     "tests",
     "experiments/web_limits",
