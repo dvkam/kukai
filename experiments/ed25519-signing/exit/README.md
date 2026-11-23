@@ -29,3 +29,5 @@ unshare --user --map-root-user --net -- python experiments/ed25519-signing/exit/
 ```
 
 Hosted CI creates the network namespace and drops to the runner's UID and GID before the Python runner starts. The signing case uses only prebuilt binaries. An unavailable namespace or a failed control fails the job.
+
+Both user quorums signed and the independent verifier accepted both results. All four invalid input sets refused without emitting signature bytes. Changing the challenge invalidated each valid signature. Only loopback was visible and the external route check failed as expected. [Per-case results](evidence/result.json) · [Run record](evidence/run.json)
