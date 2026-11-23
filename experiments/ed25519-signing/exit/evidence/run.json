@@ -11,5 +11,5 @@
   "working_directory": "repository root",
   "command": "unshare --user --map-root-user --net -- /workspace/toolchains/ci-python/bin/python experiments/ed25519-signing/exit/check.py /tmp/n23-exit-build/debug/examples 4026531833",
   "exit_code": 0,
-  "result_sha256": "10327f589a8db44eb0fb9d18fe74930b78dd5e4e4f9f0c7fe56b737d03faaaf5"
+  "result_sha256": "617b2daf6a960ee7abb5a9aa5e9820590314b9a10a1ecc5daadbe5c064bd66a7"
 }
