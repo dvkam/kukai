@@ -1,0 +1,15 @@
+{
+  "case_id": "EXIT",
+  "run_id": "36d189b9-ab18-4390-a2b5-2583d834fe4f",
+  "date_utc": "2026-11-23",
+  "tested_commit": "dd320b5d8b656926e9b67feadb14bc9033d4d2d8",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "python": "Python 3.12.14",
+  "rust": "1.100.0",
+  "cargo_lock_sha256": "2666415109b8cefd65ccd804c5922ff2479b1411f866b5d88c8a5e9f7c01f6bd",
+  "working_directory": "repository root",
+  "command": "unshare --user --map-root-user --net -- /workspace/toolchains/ci-python/bin/python experiments/ed25519-signing/exit/check.py /tmp/n23-exit-build/debug/examples 4026531833",
+  "exit_code": 0,
+  "result_sha256": "617b2daf6a960ee7abb5a9aa5e9820590314b9a10a1ecc5daadbe5c064bd66a7"
+}

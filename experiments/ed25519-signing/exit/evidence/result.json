@@ -1,0 +1,14 @@
+{
+  "interfaces": ["lo"],
+  "external_ipv4_route": "unreachable",
+  "distinct_namespace": true,
+  "signer_sha256": "78802ca934cdd248e797b2698b39f0c3d4f5d3d7087f57df47022e9ffc545e8c",
+  "cases": {
+    "original": "verified; changed challenge rejected",
+    "after_refresh": "verified; changed challenge rejected",
+    "stale_recovery": "refused",
+    "one_share": "refused",
+    "wrong_account": "refused",
+    "swapped_roles": "refused"
+  }
+}

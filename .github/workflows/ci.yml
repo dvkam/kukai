@@ -56,8 +56,8 @@ jobs:
         with:
           node-version: 24.22.1
       - run: python -m pip install -r requirements-ci.txt
-      - run: ruff check experiments/web_limits experiments/library-build-check/run.py scripts/check-program-docs.py experiments/browser-prf/run.py experiments/ed25519-signing/browser/run.py tests
-      - run: ruff check experiments/recovery-model/check.py
+      - run: ruff check experiments/token_amounts experiments/web_limits experiments/library-build-check/run.py scripts/check-program-docs.py experiments/browser-prf/run.py experiments/ed25519-signing/browser/run.py tests
+      - run: ruff check experiments/recovery-model/check.py experiments/ed25519-signing/exit/check.py
       - run: pyright
       - run: python -m unittest discover -s tests -v
       - run: python scripts/check-program-docs.py
@@ -89,6 +89,12 @@ jobs:
       - run: cargo +1.100.0 test --manifest-path experiments/ed25519-signing/Cargo.toml --locked
       - run: python -m pip install -r requirements-ci.txt
       - run: bash experiments/ed25519-signing/browser/check.sh
+      - name: Test retained Ed25519 shares without network access
+        run: |
+          cargo +1.100.0 build --locked --examples --manifest-path experiments/ed25519-signing/Cargo.toml
+          parent_net=$(stat -Lc %i /proc/self/ns/net)
+          sudo unshare --net --setgid "$(id -g)" --setuid "$(id -u)" -- "$(command -v python)" \
+            experiments/ed25519-signing/exit/check.py experiments/ed25519-signing/target/debug/examples "$parent_net"
       - run: cargo +1.100.0 fmt --manifest-path experiments/secp256k1-signing/Cargo.toml -- --check
       - run: cargo +1.100.0 clippy --release --manifest-path experiments/secp256k1-signing/Cargo.toml --locked --all-targets -- -D warnings
       - run: cargo +1.100.0 test --release --manifest-path experiments/secp256k1-signing/Cargo.toml --locked -- --nocapture
