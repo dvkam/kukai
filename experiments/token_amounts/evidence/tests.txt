@@ -1,0 +1,11 @@
+test_absent_erc20_uses_only_an_asset_specific_raw_cap (test_token_amounts.TokenAmountTests.test_absent_erc20_uses_only_an_asset_specific_raw_cap) ... ok
+test_exact_rendering (test_token_amounts.TokenAmountTests.test_exact_rendering) ... ok
+test_malformed_values (test_token_amounts.TokenAmountTests.test_malformed_values) ... ok
+test_offchain_precision_types_cannot_alias_integers (test_token_amounts.TokenAmountTests.test_offchain_precision_types_cannot_alias_integers) ... ok
+test_provider_context_and_consistency (test_token_amounts.TokenAmountTests.test_provider_context_and_consistency) ... ok
+test_standard_specific_sources (test_token_amounts.TokenAmountTests.test_standard_specific_sources) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.001s
+
+OK
