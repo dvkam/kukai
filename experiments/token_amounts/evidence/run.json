@@ -1,0 +1,12 @@
+{
+  "case_id": "AMOUNT",
+  "run_id": "46c740d3-6039-4b61-a2e0-610d7bf8e0e5",
+  "tested_commit": "5cd56cbd6f068ae64b7cddd5f2814ca583a1805d",
+  "python": "3.12.14",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "command": "python -m unittest discover -s tests -p test_token_amounts.py -v",
+  "working_directory": "repository root",
+  "exit_code": 0,
+  "sha256": "f054dfa0e13e6367ff04446549b77b87a8470bd29f916a694b9dca2df1fd5d12"
+}
