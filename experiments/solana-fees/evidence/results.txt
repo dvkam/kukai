@@ -1,0 +1,4 @@
+self-paid TransactionErrorFieldless.AccountNotFound
+missing signature 0 TransactionErrorFieldless.SignatureFailure
+missing signature 1 TransactionErrorFieldless.SignatureFailure
+{"fee_lamports": 10000, "token_balances_before": [100, 0], "token_balances_after": [75, 25], "owner_lamports": 0}

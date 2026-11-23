@@ -62,6 +62,13 @@ jobs:
       - run: python -m unittest discover -s tests -v
       - run: python scripts/check-program-docs.py
       - run: python experiments/browser-prf/run.py
+      - name: Check Solana fee payment with a zero-SOL token owner
+        run: |
+          python -m venv "${RUNNER_TEMP}/solana-fees"
+          "${RUNNER_TEMP}/solana-fees/bin/python" -m pip install --only-binary=:all: --require-hashes -r experiments/solana-fees/requirements-linux-x86_64.txt
+          ruff check experiments/solana-fees/check.py
+          pyright --pythonpath "${RUNNER_TEMP}/solana-fees/bin/python" experiments/solana-fees/check.py
+          "${RUNNER_TEMP}/solana-fees/bin/python" experiments/solana-fees/check.py
       - run: python experiments/recovery-model/check.py
 
   crypto-builds:

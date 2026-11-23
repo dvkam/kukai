@@ -1,0 +1,15 @@
+{
+  "case_id": "SOLANA-FIRST-FEE",
+  "run_id": "61965fa5-4e8e-49bd-ac87-2700480d9174",
+  "date_utc": "2026-11-23",
+  "tested_commit": "fec3ea0526ec562f3c1e1673f1a777817e157ea1",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "cpu": "AMD EPYC 9V74 80-Core Processor",
+  "python": "3.12.14",
+  "solders": "0.26.0",
+  "dependency_lock_sha256": "aac26767b0e0cb3c4ecab1c647b9ac1e5a7e0ca436ec370b7f11c39dbc85cdbd",
+  "working_directory": "repository root",
+  "command": "/tmp/n23-svm-env/bin/python experiments/solana-fees/check.py",
+  "exit_code": 0,
+  "output_sha256": "b905a3dddcf4758db15dec8e3b5a472984c72347386c1ae898cd7e13684306f0"
+}
