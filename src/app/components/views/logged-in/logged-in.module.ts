@@ -1,3 +1,4 @@
+import { TriggerPanelDirective } from '../../ui/dropdown/trigger-panel.directive';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -95,7 +96,7 @@ import { SessionSelectDropdownComponent } from '../../ui/dropdown/session-select
     SessionSelectComponent,
     SessionSelectDropdownComponent
   ],
-  imports: [CommonModule, LoggedInRoutingModule, HttpClientModule, FormsModule],
+  imports: [TriggerPanelDirective, CommonModule, LoggedInRoutingModule, HttpClientModule, FormsModule],
   exports: [
     BuyComponent,
     BuyModalComponent,

@@ -18,6 +18,38 @@ $border-color: v.$border-color;
   width: 4.5rem;
   height: 4.5rem;
 
+  --menu-focus-ring: #{v.$base-blue-color};
+
+  & :is(a, button):focus-visible {
+    outline: 2px solid var(--menu-focus-ring);
+    outline-offset: -2px;
+  }
+
+  & button, & a {
+    font: inherit;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  & button {
+    border: 0;
+    background: transparent;
+    padding: 0;
+  }
+
+  & .menu-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    border-radius: inherit;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
   & .dropdown-content {
     cursor: initial;
     display: none;
@@ -29,8 +61,10 @@ $border-color: v.$border-color;
     z-index: 1000;
     border-top: 2px solid $color-lightened-6;
     box-shadow: v.$box-shadow-dark;
+    max-height: calc(100dvh - 10rem);
     height: 100vh;
-    overflow: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 
     & > .button {
       align-items: center;
@@ -70,7 +104,7 @@ $border-color: v.$border-color;
       }
     }
 
-    & > div:not(.account-content) {
+    & > :is(a, button) {
       @include m.multiply("font-size", 2);
       padding: 1rem 2rem;
       border-bottom: 2px solid $border-color;
@@ -85,7 +119,7 @@ $border-color: v.$border-color;
         width: 1.75rem;
       }
     }
-    & > div.delegation {
+    & > .delegation {
       border-top: $border-width solid $color-lightened-6;
       text-align: center;
       padding: 1rem 2rem;
