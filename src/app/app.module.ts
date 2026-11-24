@@ -1,3 +1,4 @@
+import { TriggerPanelDirective } from './components/ui/dropdown/trigger-panel.directive';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -134,6 +135,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     ErrorHandlingService
   ],
   imports: [
+    TriggerPanelDirective,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,

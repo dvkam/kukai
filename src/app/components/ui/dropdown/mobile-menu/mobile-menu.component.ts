@@ -1,5 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { NavigationStart, Router } from '@angular/router';
 import { WalletService } from '../../../../services/wallet/wallet.service';
 import { Account } from '../../../../services/wallet/wallet';
 import { DropdownComponent } from '../dropdown.component';
@@ -9,7 +9,8 @@ import { MessageService } from '../../../../services/message/message.service';
 import { LookupService } from '../../../../services/lookup/lookup.service';
 import { SubjectService } from '../../../../services/subject/subject.service';
 import { ModalComponent } from '../../../../components/modals/modal.component';
-import { take } from 'rxjs/operators';
+import { filter } from 'rxjs/operators';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UnlockableService } from '../../../../services/unlockable/unlockable.service';
 import { CONSTANTS as _CONSTANTS } from '../../../../../environments/environment';
 
@@ -19,6 +20,7 @@ import { CONSTANTS as _CONSTANTS } from '../../../../../environments/environment
   styleUrls: ['../../../../../scss/components/ui/dropdown/mobile-menu.component.scss']
 })
 export class MobileMenuDropdownComponent extends DropdownComponent implements OnInit {
+  @ViewChild('panelTrigger') private panelTrigger: ElementRef<HTMLButtonElement>;
   @Input() activeAccount: Account;
   @Input() delegateName;
   @Input() newAccount;
@@ -35,14 +37,21 @@ export class MobileMenuDropdownComponent extends DropdownComponent implements On
     public unlockableService: UnlockableService
   ) {
     super();
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationStart),
+        takeUntilDestroyed()
+      )
+      .subscribe(() => (this.isOpen = false));
   }
 
   ngOnInit(): void {}
-  toggleDropdown(): void {
-    if (window.innerHeight < document.body.scrollHeight) {
-      document.body.style.overflow = 'hidden';
+  @HostListener('document:keydown.escape')
+  closeOnEscape(): void {
+    if (this.isOpen) {
+      this.isOpen = false;
+      this.panelTrigger.nativeElement.focus();
     }
-    this.isOpen = !this.isOpen;
   }
   copy(): void {
     copy(this.activeAccount.address);

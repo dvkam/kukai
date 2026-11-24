@@ -1,3 +1,10 @@
+@use './abstracts/variables' as v;
 @import './abstracts/__abstracts-dir';
 @import './base/__base-dir';
 @import './vendor/__vendor-dir';
+
+@media (max-width: v.$layout-break-5) {
+  body:has(app-ui-mobile-menu .hamburger-dropdown.expanded) {
+    overflow: hidden;
+  }
+}
