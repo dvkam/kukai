@@ -29,7 +29,12 @@ describe('New wallet seed disclosure', () => {
     expect(isRendered()).toBeFalse();
 
     for (const hide of [
-      () => toggle.click(),
+      () => {
+        toggle.dispatchEvent(new PointerEvent('pointerleave', { bubbles: true, pointerType: 'touch' }));
+        fixture.detectChanges();
+        expect(isRendered()).toBeTrue();
+        toggle.click();
+      },
       () => toggle.dispatchEvent(new FocusEvent('focusout', { bubbles: true })),
       () => window.dispatchEvent(new Event('blur'))
     ]) {

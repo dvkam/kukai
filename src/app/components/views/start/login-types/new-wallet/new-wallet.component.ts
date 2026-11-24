@@ -191,6 +191,11 @@ export class NewWalletComponent implements OnInit {
     else this.seedVisible = true;
   }
 
+  onSeedPointerLeave(event: PointerEvent): void {
+    // Touch generates pointerleave before click even when the finger stays over the button.
+    if (event.pointerType === 'mouse') this.hideSeed();
+  }
+
   onSeedFocusOut(event: FocusEvent): void {
     const group = event.currentTarget as HTMLElement;
     if (!(event.relatedTarget instanceof Node) || !group.contains(event.relatedTarget)) this.hideSeed();

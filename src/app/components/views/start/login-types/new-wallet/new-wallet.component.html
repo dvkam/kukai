@@ -8,7 +8,7 @@
         words are
         the
         master key of your wallet accounts and any value they hold.</p>
-      <div class="whitebox seed-backup" (pointerleave)="hideSeed()" (focusout)="onSeedFocusOut($event)"
+      <div class="whitebox seed-backup" (pointerleave)="onSeedPointerLeave($event)" (focusout)="onSeedFocusOut($event)"
         (keydown.escape)="hideSeed(); seedToggle.focus()" (mouseup)="checkSelection($event)" (touchend)="checkSelection($event)">
         <button #seedToggle type="button" class="seed-toggle" [attr.aria-expanded]="seedVisible" aria-controls="backup-words"
           (click)="toggleSeed()">{{ seedVisible ? 'Hide seed words' : 'Reveal seed words' }}</button>
