@@ -31,6 +31,8 @@ Use the IDs in issue #55 to record a fixing PR, tested revision, reviewer and re
 | U11, medium | Enable reduced motion before first load. The Accept button still has a 750 ms fade. | Both agreement actions should be readable and usable immediately in reduced motion. Check a fresh visit in both modes. See `agreement.component.scss`. |
 | U12, medium | With external requests blocked, open a new wallet, visit Settings and return. After 31 seconds Recent Activity still says "Loading activity..." without retry. | Distinguish loading, confirmed empty, stale and unreachable. Recover on retry without changing account. See `account-view/activity/activity.component.html`. |
 
+Two further keyboard checks failed on the same forms. In Fundraiser import, focus Email, press Tab and type a dummy password. The password field stays read-only and empty. Clicking it enables entry. Retest U3 through password entry and remove the pointer-only unlock in `mnemonic-import.component.ts`. On /connect-ledger, the "Custom derivation path" switch exposes only text in the accessibility tree, leaving the path disabled. Use a named switch with keyboard operation and check the same Advanced component on seed import. These cases are part of U3 in the tracker.
+
 Two controls did provide a way forward. Fundraiser activation rejected a blank address. Back returned to the Fundraiser method. Send Preview rejected an empty recipient in the local account. These checks cover invalid input. No transaction was signed or broadcast.
 
 ## Interaction and motion handover
