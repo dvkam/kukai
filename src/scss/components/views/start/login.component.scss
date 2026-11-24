@@ -106,8 +106,7 @@ $base-background-color: v.$base-background-color;
         @include m.multiply("font-size", 1.25);
       }
       & .description,
-      & .whitebox,
-      & .seed-blur {
+      & .whitebox {
         @include m.multiply("font-size", 2);
         text-align: center;
         color: $base-font-color;
@@ -154,30 +153,17 @@ $base-background-color: v.$base-background-color;
           text-transform: none;
         }
 
-        & .seed-blur,
-        & .seed-blur span {
-          @include m.multiply("font-size", 1.5);
+        & .seed-toggle {
           color: $base-blue-color;
-          font-weight: 500;
-          margin: 0;
-        }
-
-        & .seed-blur {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          justify-content: center;
+          background: $base-end-color;
+          border: 1px solid currentColor;
           border-radius: v.$border-radius;
-          background-color: #fff;
+          padding: 0.75em 1.25em;
+          cursor: pointer;
         }
 
-        @supports ((-webkit-backdrop-filter: none) or (backdrop-filter: none)) {
-          & .seed-blur {
-            background-color: rgba(0, 0, 0, 0);
-            backdrop-filter: blur(15px);
-          }
+        & #backup-words:not([hidden]) {
+          margin-top: 1em;
         }
       }
 

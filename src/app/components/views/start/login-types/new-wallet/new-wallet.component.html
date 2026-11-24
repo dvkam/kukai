@@ -8,18 +8,17 @@
         words are
         the
         master key of your wallet accounts and any value they hold.</p>
-      <div class="whitebox" (mouseout)="mouseOut($event)" (touchstart)="$event.stopPropagation(); this.hideBlur = true;"
-        (touchend)="checkSelection($event)" (click)="$event.stopPropagation()" (mouseup)="checkSelection($event)">
-        {{ MNEMONIC.string }}<div *ngIf="!hideBlur" class="flex-row seed-blur"
-          (click)="$event.stopPropagation(); this.hideBlur = true;">
-          <span>CLICK HERE TO REVEAL YOUR SEED WORDS</span>
-        </div>
+      <div class="whitebox seed-backup" (pointerleave)="hideSeed()" (focusout)="hideSeed()"
+        (keydown.escape)="hideSeed()" (mouseup)="checkSelection($event)" (touchend)="checkSelection($event)">
+        <button type="button" class="seed-toggle" [attr.aria-expanded]="seedVisible" aria-controls="backup-words"
+          (click)="toggleSeed()">{{ seedVisible ? 'Hide seed words' : 'Reveal seed words' }}</button>
+        <div id="backup-words" [hidden]="!seedVisible"><span *ngIf="seedVisible">{{ MNEMONIC.string }}</span></div>
       </div>
       <p class="description red">
         <span *ngIf="isSelectedMnemonic" style="margin-top: -4rem" class="warning red">
           WARNING: Copying the seed words to your clipboard can result in sensitive leakage. The clipboard is a shared
           resource that can be monitored by other web pages or browser extensions.<br />
-        </span> Be sure sure to back it up (seed words), write it down, and keep it incredibly safe.
+        </span> Write down your seed words in order and store them somewhere safe.
       </p>
       <button class="button next" (click)="verifyView()">Next</button>
     </div>
