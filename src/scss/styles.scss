@@ -5,6 +5,6 @@
 
 @media (max-width: v.$layout-break-5) {
   body:has(app-ui-mobile-menu .hamburger-dropdown.expanded) {
-    overflow: hidden;
+    overflow-y: hidden !important;
   }
 }

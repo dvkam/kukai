@@ -28,6 +28,7 @@ export class MobileMenuDropdownComponent extends DropdownComponent implements On
   readonly CONSTANTS = _CONSTANTS;
 
   constructor(
+    private readonly host: ElementRef<HTMLElement>,
     public router: Router,
     public walletService: WalletService,
     public lookupService: LookupService,
@@ -48,9 +49,18 @@ export class MobileMenuDropdownComponent extends DropdownComponent implements On
   ngOnInit(): void {}
   @HostListener('document:keydown.escape')
   closeOnEscape(): void {
-    if (this.isOpen) {
+    if (this.isOpen) this.returnToTrigger();
+  }
+
+  returnToTrigger(): void {
+    this.isOpen = false;
+    this.panelTrigger.nativeElement.focus();
+  }
+
+  @HostListener('focusout', ['$event'])
+  onFocusOut(event: FocusEvent): void {
+    if (this.isOpen && event.relatedTarget instanceof Node && !this.host.nativeElement.contains(event.relatedTarget)) {
       this.isOpen = false;
-      this.panelTrigger.nativeElement.focus();
     }
   }
   copy(): void {

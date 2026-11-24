@@ -21,15 +21,14 @@ export class TriggerPanelDirective implements OnChanges, OnDestroy {
     }
 
     if (this.motion) {
+      this.alignOrigin();
       this.motion.reverse();
       return;
     }
 
     // Keep the panel measurable through exit. The template's expanded class owns its resting display.
     panel.style.display = 'flex';
-    const bounds = panel.getBoundingClientRect();
-    const trigger = this.walletPanelTrigger.getBoundingClientRect();
-    panel.style.transformOrigin = `${trigger.left + trigger.width / 2 - bounds.left}px ${trigger.top + trigger.height / 2 - bounds.top}px`;
+    this.alignOrigin();
     const frames = [
       { transform: 'scale(0.96)', opacity: 0 },
       { transform: 'scale(1)', opacity: 1 }
@@ -41,6 +40,8 @@ export class TriggerPanelDirective implements OnChanges, OnDestroy {
       fill: 'both'
     });
     this.motion = motion;
+    window.addEventListener('resize', this.alignOrigin);
+    window.addEventListener('scroll', this.alignOrigin, true);
     motion.onfinish = () => {
       if (this.motion === motion) this.clearMotion();
     };
@@ -50,7 +51,20 @@ export class TriggerPanelDirective implements OnChanges, OnDestroy {
     this.clearMotion();
   }
 
+  private readonly alignOrigin = (): void => {
+    const panel = this.host.nativeElement;
+    const effect = this.motion?.effect as KeyframeEffect | undefined;
+    // Measure the resting box even if the transition reverses halfway through a scale.
+    if (effect) effect.target = null;
+    const bounds = panel.getBoundingClientRect();
+    const trigger = this.walletPanelTrigger.getBoundingClientRect();
+    panel.style.transformOrigin = `${trigger.left + trigger.width / 2 - bounds.left}px ${trigger.top + trigger.height / 2 - bounds.top}px`;
+    if (effect) effect.target = panel;
+  };
+
   private clearMotion(): void {
+    window.removeEventListener('resize', this.alignOrigin);
+    window.removeEventListener('scroll', this.alignOrigin, true);
     this.motion?.cancel();
     this.motion = undefined;
     this.host.nativeElement.style.removeProperty('display');

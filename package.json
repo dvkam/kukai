@@ -16,7 +16,7 @@
     "generate-rpc-errors-file": "tsx scripts/generate-rpc-errors-file.ts",
     "prepare": "husky install",
     "postinstall": "node patch.js",
-    "typecheck": "tsc --noEmit -p src/tsconfig.app.json && tsc --noEmit -p src/tsconfig.spec.json && tsc -p tsconfig.ci-tools.json && ngc -p tests/tsconfig.panel-contract.json",
+    "typecheck": "tsc --noEmit -p src/tsconfig.app.json && tsc --noEmit -p src/tsconfig.spec.json && tsc -p tsconfig.ci-tools.json && ngc -p tests/tsconfig.panel-contract.json && node tests/check-panel-templates.mjs",
     "test:ci": "ng test --watch=false --browsers=ChromeHeadlessCI --progress=false",
     "test:ci-policy": "node tests/check-karma-policy.cjs"
   },

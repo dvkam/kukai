@@ -3,13 +3,13 @@
     aria-controls="wallet-navigation-panel" (click)="toggleDropdown()"><img class="icon-db" alt="" src="../../../../assets/img/hamburger.svg" /></button>
   <div *ngIf="router.url.indexOf('/account/') === 0" id="wallet-navigation-panel" class="flex-column mobile dropdown-content" [walletPanelTrigger]="panelTrigger" [panelOpen]="isOpen">
     <div class="flex-row-wrap account-content">
-      <button type="button" class="flex-column button" (click)="unlockableService.toggleFeature('theme', 'dark');toggleDropdown()">
+      <button type="button" class="flex-column button" (click)="unlockableService.toggleFeature('theme', 'dark');returnToTrigger()">
         <div class="wrapper">
           <img alt="" class="icon" [src]="this.unlockableService?.unlockables?.theme === 'dark' ? 'assets/img/light_mode_blue.svg' : 'assets/img/dark_mode_blue.svg'" />
         </div>
         <span>THEME</span>
       </button>
-      <button type="button" *ngIf="router.url.indexOf('/account/') === 0" class="flex-column button" (click)="copy();toggleDropdown()">
+      <button type="button" *ngIf="router.url.indexOf('/account/') === 0" class="flex-column button" (click)="copy();returnToTrigger()">
         <div class="wrapper">
           <img alt="" class="icon" src="../../../../assets/img/copy-blue.svg" />
         </div>

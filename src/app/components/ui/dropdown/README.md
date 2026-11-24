@@ -8,4 +8,4 @@ Mobile navigation uses a named button with an expanded state, links for destinat
 
 The inherited wallet review tracks the outstanding dialogs, disclosures and tooltips. [UX review](https://github.com/dvkam/kukai/issues/55)
 
-The strict Angular template target compiles the example in trigger-panel.directive.spec.ts. Omitting panelOpen or binding a string to it fails that target. Production menu templates are linted incrementally, starting with mobile navigation.
+The strict Angular template target compiles the example in trigger-panel.directive.spec.ts. Omitting panelOpen or binding a string to it fails that target. The same command checks the input types in every external component template using walletPanelTrigger. It compiles an invalid consumer and requires the expected boolean-input diagnostic. Mobile navigation also runs the template accessibility lint rules.
