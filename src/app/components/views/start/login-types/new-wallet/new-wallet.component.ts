@@ -191,6 +191,11 @@ export class NewWalletComponent implements OnInit {
     else this.seedVisible = true;
   }
 
+  onSeedFocusOut(event: FocusEvent): void {
+    const group = event.currentTarget as HTMLElement;
+    if (!(event.relatedTarget instanceof Node) || !group.contains(event.relatedTarget)) this.hideSeed();
+  }
+
   @HostListener('window:blur')
   hideSeed(): void {
     if (this.seedVisible) {

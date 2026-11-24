@@ -37,6 +37,9 @@ describe('New wallet seed disclosure', () => {
       fixture.detectChanges();
       expect(isRendered()).toBeTrue();
       expect(toggle.getAttribute('aria-expanded')).toBe('true');
+      toggle.dispatchEvent(new FocusEvent('focusout', { bubbles: true, relatedTarget: el.querySelector('#backup-words') }));
+      fixture.detectChanges();
+      expect(isRendered()).toBeTrue();
       hide();
       fixture.detectChanges();
       expect(isRendered()).toBeFalse();
