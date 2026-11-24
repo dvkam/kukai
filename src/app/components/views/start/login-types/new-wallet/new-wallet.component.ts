@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, HostBinding } from '@angular/core';
+import { Component, OnInit, Input, HostBinding, HostListener } from '@angular/core';
 import { WalletService } from '../../../../../services/wallet/wallet.service';
 import { StorableWalletType } from '../../../../../interfaces';
 import { MessageService } from '../../../../../services/message/message.service';
@@ -19,7 +19,7 @@ export class NewWalletComponent implements OnInit {
   @Input() pwd1 = '';
   @Input() pwd2 = '';
   @Input() userMnemonic = '';
-  hideBlur = false;
+  seedVisible = false;
   isSelectedMnemonic = false;
   pwdStrength = '';
   ekfDownloaded = false;
@@ -115,6 +115,7 @@ export class NewWalletComponent implements OnInit {
     }
   }
   verifyView(): void {
+    this.hideSeed();
     if (this.MNEMONIC.verify.length) {
       this.activePanel++;
     } else {
@@ -185,11 +186,34 @@ export class NewWalletComponent implements OnInit {
     this.exportService.downloadWallet(this.data);
     this.ekfDownloaded = true;
   }
-  mouseOut(e): void {
-    e.stopPropagation();
-    this.hideBlur = false;
-    window.getSelection()?.removeAllRanges();
+  toggleSeed(): void {
+    if (this.seedVisible) this.hideSeed();
+    else this.seedVisible = true;
   }
+
+  onSeedPointerLeave(event: PointerEvent): void {
+    // Touch generates pointerleave before click even when the finger stays over the button.
+    if (event.pointerType === 'mouse') this.hideSeed();
+  }
+
+  onSeedFocusOut(event: FocusEvent): void {
+    const group = event.currentTarget as HTMLElement;
+    if (!(event.relatedTarget instanceof Node) || !group.contains(event.relatedTarget)) this.hideSeed();
+  }
+
+  @HostListener('window:blur')
+  hideSeed(): void {
+    if (this.seedVisible) {
+      this.seedVisible = false;
+      window.getSelection()?.removeAllRanges();
+    }
+  }
+
+  @HostListener('document:visibilitychange')
+  onVisibilityChange(): void {
+    if (document.hidden) this.hideSeed();
+  }
+
   checkSelection(ev): void {
     ev.stopPropagation();
     if (this.isTextSelected()) {
