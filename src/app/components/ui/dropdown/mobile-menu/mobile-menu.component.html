@@ -1,33 +1,34 @@
 <div class="hamburger-dropdown" [class.expanded]="isOpen" [id]="ecmpId">
-  <img class="button icon-db" src="../../../../assets/img/hamburger.svg" (click)="toggleDropdown()" />
-  <div *ngIf="router.url.indexOf('/account/') === 0" class="flex-column mobile dropdown-content">
+  <button #panelTrigger type="button" class="menu-trigger" aria-label="Wallet navigation" [attr.aria-expanded]="isOpen"
+    aria-controls="wallet-navigation-panel" (click)="toggleDropdown()"><img class="icon-db" alt="" src="../../../../assets/img/hamburger.svg" /></button>
+  <div *ngIf="router.url.indexOf('/account/') === 0" id="wallet-navigation-panel" class="flex-column mobile dropdown-content" [walletPanelTrigger]="panelTrigger" [panelOpen]="isOpen">
     <div class="flex-row-wrap account-content">
-      <div class="flex-column button" (click)="unlockableService.toggleFeature('theme', 'dark');toggleDropdown()">
+      <button type="button" class="flex-column button" (click)="unlockableService.toggleFeature('theme', 'dark');returnToTrigger()">
         <div class="wrapper">
-          <img class="icon" [src]="this.unlockableService?.unlockables?.theme === 'dark' ? 'assets/img/light_mode_blue.svg' : 'assets/img/dark_mode_blue.svg'" />
+          <img alt="" class="icon" [src]="this.unlockableService?.unlockables?.theme === 'dark' ? 'assets/img/light_mode_blue.svg' : 'assets/img/dark_mode_blue.svg'" />
         </div>
         <span>THEME</span>
-      </div>
-      <div *ngIf="router.url.indexOf('/account/') === 0" class="flex-column button" (click)="copy();toggleDropdown()">
+      </button>
+      <button type="button" *ngIf="router.url.indexOf('/account/') === 0" class="flex-column button" (click)="copy();returnToTrigger()">
         <div class="wrapper">
-          <img class="icon" src="../../../../assets/img/copy-blue.svg" />
+          <img alt="" class="icon" src="../../../../assets/img/copy-blue.svg" />
         </div>
         <span>COPY</span>
-      </div>
-      <div class="flex-column button" (click)="receive();toggleDropdown()">
+      </button>
+      <button type="button" class="flex-column button" (click)="receive();toggleDropdown()">
         <div class="wrapper">
-          <img class="icon" src="../../../../assets/img/qr-blue.svg" />
+          <img alt="" class="icon" src="../../../../assets/img/qr-blue.svg" />
         </div>
         <span>QR</span>
-      </div>
-      <div *ngIf="walletService.isHdWallet() || walletService.isLedgerWallet()" class="flex-column button" (click)="newAccount();toggleDropdown()">
+      </button>
+      <button type="button" *ngIf="walletService.isHdWallet() || walletService.isLedgerWallet()" class="flex-column button" (click)="newAccount();toggleDropdown()">
         <div class="wrapper">
-          <img class="icon" src="../../../../assets/img/add-blue.svg" />
+          <img alt="" class="icon" src="../../../../assets/img/add-blue.svg" />
         </div>
         <span>ADD</span>
-      </div>
+      </button>
     </div>
-    <div *ngIf="!CONSTANTS.TEZOS_X" class="flex-row button delegation" routerLink="/account/{{activeAccount?.address}}/stakers"
+    <a *ngIf="!CONSTANTS.TEZOS_X" class="flex-row button delegation" routerLink="/account/{{activeAccount?.address}}/stakers"
       (click)="toggleDropdown()">
       <div *ngIf="!activeAccount?.delegate" class="flex-row">
         <span class="flex-row">DELEGATING:</span><span class="choose">NOT
@@ -38,24 +39,24 @@
         <span class="flex-row address">{{ delegateName
           }}</span>
       </div>
-    </div>
+    </a>
 
-    <div class="flex-row button" [routerLink]="'/account/' + activeAccount?.address + '/settings'" (click)="toggleDropdown()">
-      <span>SETTINGS</span><img class="icon settings" src="../../../../assets/img/cog.svg" style="width: 2.75rem" />
-    </div>
-    <div class="flex-row button" (click)="logout();toggleDropdown()">
-      <span>LOGOUT</span><img class="icon" src="../../../../assets/img/sign-out-alt.svg" style="width: 2.5rem" />
-    </div>
+    <a class="flex-row button" [routerLink]="'/account/' + activeAccount?.address + '/settings'" (click)="toggleDropdown()">
+      <span>SETTINGS</span><img alt="" class="icon settings" src="../../../../assets/img/cog.svg" style="width: 2.75rem" />
+    </a>
+    <button type="button" class="flex-row button" (click)="logout();toggleDropdown()">
+      <span>LOGOUT</span><img alt="" class="icon" src="../../../../assets/img/sign-out-alt.svg" style="width: 2.5rem" />
+    </button>
   </div>
-  <div *ngIf="router.url.indexOf('/account/') !== 0" class="flex-column mobile dropdown-content">
-    <div routerLink="/import/" class="flex-row button" (click)="toggleDropdown()">
+  <div *ngIf="router.url.indexOf('/account/') !== 0" id="wallet-navigation-panel" class="flex-column mobile dropdown-content" [walletPanelTrigger]="panelTrigger" [panelOpen]="isOpen">
+    <a routerLink="/import/" class="flex-row button" (click)="toggleDropdown()">
       <span>Import Wallet</span>
-    </div>
-    <div routerLink="/new-wallet/" class="flex-row button" (click)="toggleDropdown()">
+    </a>
+    <a routerLink="/new-wallet/" class="flex-row button" (click)="toggleDropdown()">
       <span>Create New Wallet</span>
-    </div>
-    <div routerLink="/connect-ledger/" class="flex-row button" (click)="toggleDropdown()">
+    </a>
+    <a routerLink="/connect-ledger/" class="flex-row button" (click)="toggleDropdown()">
       <span>Connect Ledger</span>
-    </div>
+    </a>
   </div>
 </div>
