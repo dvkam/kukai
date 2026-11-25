@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, EventEmitter, HostListener, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { WalletService } from '../../../../services/wallet/wallet.service';
 import { Account } from '../../../../services/wallet/wallet';
@@ -9,7 +9,8 @@ import { MessageService } from '../../../../services/message/message.service';
 import { LookupService } from '../../../../services/lookup/lookup.service';
 import { SubjectService } from '../../../../services/subject/subject.service';
 import { ModalComponent } from '../../../../components/modals/modal.component';
-import { filter } from 'rxjs/operators';
+import { fromEvent } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UnlockableService } from '../../../../services/unlockable/unlockable.service';
 import { CONSTANTS as _CONSTANTS } from '../../../../../environments/environment';
@@ -20,6 +21,7 @@ import { CONSTANTS as _CONSTANTS } from '../../../../../environments/environment
   styleUrls: ['../../../../../scss/components/ui/dropdown/mobile-menu.component.scss']
 })
 export class MobileMenuDropdownComponent extends DropdownComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
   @ViewChild('panelTrigger') private panelTrigger: ElementRef<HTMLButtonElement>;
   @Input() activeAccount: Account;
   @Input() delegateName;
@@ -55,6 +57,34 @@ export class MobileMenuDropdownComponent extends DropdownComponent implements On
   returnToTrigger(): void {
     this.isOpen = false;
     this.panelTrigger.nativeElement.focus();
+  }
+
+  followCreateWallet(event: MouseEvent): void {
+    this.returnToTrigger();
+    if (event.detail === 0 || !this.isUnmodifiedPrimaryClick(event)) return;
+
+    const { clientX, clientY, detail } = event;
+    const document = this.host.nativeElement.ownerDocument;
+    // The menu can uncover Back under the pointer while the browser is still counting clicks.
+    fromEvent<MouseEvent>(document, 'click', { capture: true })
+      .pipe(take(1), takeUntilDestroyed(this.destroyRef))
+      .subscribe((nextClick) => {
+        if (
+          nextClick.detail === detail + 1 &&
+          this.isUnmodifiedPrimaryClick(nextClick) &&
+          nextClick.clientX === clientX &&
+          nextClick.clientY === clientY &&
+          nextClick.target instanceof Element &&
+          nextClick.target.closest('a[data-new-wallet-back]')
+        ) {
+          nextClick.preventDefault();
+          nextClick.stopPropagation();
+        }
+      });
+  }
+
+  private isUnmodifiedPrimaryClick(event: MouseEvent): boolean {
+    return event.button === 0 && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey;
   }
 
   get navigationTrigger(): HTMLButtonElement {

@@ -1,7 +1,7 @@
 <form autocomplete="off">
   <div class="flex-column card">
-    <a routerLink="/"><button class="flex-row back"><img
-          src="../../../../../assets/img/left-arrow.svg">BACK</button></a>
+    <a routerLink="/" class="flex-row back" data-new-wallet-back><img
+        src="../../../../../assets/img/left-arrow.svg" alt="">BACK</a>
     <div *ngIf="activePanel==1" class="flex-column body">
       <h1>Back up your seed</h1>
       <p class="description">When you create a new wallet, new Tezos Recovery (Seed) Words are generated.<br />Your seed

@@ -49,6 +49,14 @@ $base-background-color: v.$base-background-color;
           margin: 0 1rem 0 0;
         }
       }
+
+      &[data-new-wallet-back] {
+        letter-spacing: 0.06em;
+
+        &:hover {
+          filter: saturate(1.5);
+        }
+      }
     }
 
     & .body {
@@ -520,7 +528,7 @@ $base-background-color: v.$base-background-color;
     font-size: max(1rem, 14px);
   }
 
-  .back-link:focus-visible,
+  a.back:focus-visible,
   .import-options button:focus-visible,
   .import-form :is(button, input, textarea):focus-visible {
     outline: 2px solid v.$base-blue-color;
