@@ -1,34 +1,32 @@
-<div #viewRef class="flex-column list">
-  <a *ngFor="let account of list" class="flex-row option" [class.selected]="account?.address === current?.address"
-    routerLink="/account/{{account?.address}}{{postfix}}" (click)="closeModal()">
-    <div class="flex-column left">
-      <ng-container *ngIf="getUsername(account?.address)">
-        <div class="flex-row alias"><img class="logo" src="../../../../assets/img/{{ getVerifier() }}-logo.svg" /><span
-            class="name">{{
-            getUsername(account?.address) }}</span><img class="copy" src="../../../../assets/img/copy-icon.svg"
-            (click)="this.copy($event, account?.address); false" /></div>
-        <span class="addr">{{
-          !isMobile ? account?.address : account?.shortAddress() }}</span>
+<div #viewport class="account-viewport">
+  <ul *ngIf="accounts.length; else empty" class="accounts" role="list">
+    <li *ngFor="let account of accounts; trackBy: trackAccount" class="account-row" [class.selected]="account.address === current?.address">
+      <ng-container *ngIf="{name: getUsername(account.address)} as alias">
+        <a class="account-link" [routerLink]="accountCommands(account.address)" queryParamsHandling="preserve" [preserveFragment]="true"
+          [attr.aria-current]="account.address === current?.address ? 'page' : null" (click)="chooseAccount($event)">
+          <span class="identity">
+            <span *ngIf="alias.name" class="alias"><img class="logo" [src]="'assets/img/' + verifier + '-logo.svg'" alt="" />{{ alias.name }}</span>
+            <span #address class="address">{{ account.address }}</span>
+          </span>
+          <span class="balances">
+            <span>{{ tez(account.balanceXTZ) | number:'1.0-6' | removeComma }} tez</span>
+            <span class="fiat">{{ '$' + ((account.balanceUSD ?? 0) | number:'1.2-2' | removeComma) }}</span>
+          </span>
+        </a>
+        <button type="button" class="copy-address" [attr.aria-label]="'Copy address for ' + (alias.name || account.address)"
+          (click)="copyAddress(account, address)">
+          <img src="assets/img/copy-icon.svg" alt="" />
+        </button>
       </ng-container>
-      <ng-container *ngIf="!getUsername(account?.address)">
-        <div class="flex-row"><span class="addr default">{{
-            !isMobile ? account?.address : account?.shortAddress() }}</span><img class="copy"
-            src="../../../../assets/img/copy-icon.svg" (click)="this.copy($event, account?.address); false" /></div>
-      </ng-container>
-    </div>
-    <div class="flex-column balances">
-      <div class="balance-tez">{{ (getBalance(account) | number: '1.0-6' | removeComma) }} tez</div>
-      <div class="balance-fiat">{{ '$' + (getBalanceFiat(account) | number:'1.2-2' | removeComma)
-        }}</div>
-    </div>
-  </a>
-  <div class="flex-row total-balances">
-    <h3>TOTAL:</h3>
-    <div class="flex-column">
-      <div class="balance-tez">{{ (getTotalBalance() | number: '1.0-6' | removeComma) + ' tez' }}
-      </div>
-      <div class="balance-fiat">{{ '$' + (getTotalFiat() | number:'1.2-2' | removeComma) }}
-      </div>
-    </div>
-  </div>
+    </li>
+  </ul>
+  <ng-template #empty><p class="empty">No accounts available.</p></ng-template>
 </div>
+<div *ngIf="accounts.length" class="total">
+  <strong>Total</strong>
+  <span class="balances">
+    <span>{{ totalTez | number:'1.0-6' | removeComma }} tez</span>
+    <span class="fiat">{{ '$' + (totalFiat | number:'1.2-2' | removeComma) }}</span>
+  </span>
+</div>
+<p class="copy-status" role="status">{{ copyStatus }}</p>

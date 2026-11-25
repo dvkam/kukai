@@ -1,0 +1,55 @@
+@use "../../abstracts/variables" as v;
+
+:host {
+  font-size: max(1rem, 16px);
+}
+
+.invoked-dialog .content {
+  box-sizing: border-box;
+  width: min(calc(100% - 2em), 44em);
+  border: v.$border-width solid v.$border-color-dark-only;
+  border-radius: v.$border-radius;
+}
+
+.top {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  min-height: 4em;
+  padding: 0.5em 1em;
+  border-bottom: v.$border-width solid v.$border-color;
+}
+
+h1 {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+.close {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  display: grid;
+  place-items: center;
+  width: 2.75em;
+  height: 2.75em;
+  border: v.$border-width solid v.$border-color;
+  border-radius: v.$border-radius-hardest;
+  cursor: pointer;
+
+  img {
+    width: 1em;
+    height: 1em;
+    filter: v.$base-filter-brightness-5;
+  }
+}
+
+@media (max-width: v.$layout-break-6) {
+  .invoked-dialog .content {
+    width: 100%;
+  }
+}

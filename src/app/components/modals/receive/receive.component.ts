@@ -2,6 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, ViewChild } from '@angular/co
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NavigationStart, Router } from '@angular/router';
 import * as QRCode from 'qrcode';
+import { InvokedDialog } from '../invoked-dialog';
 import { ModalComponent } from '../modal.component';
 import { TranslateService } from '@ngx-translate/core';
 import { filter } from 'rxjs/operators';
@@ -15,7 +16,11 @@ export interface ReceiveData {
 @Component({
   selector: 'app-receive',
   templateUrl: './receive.component.html',
-  styleUrls: ['../../../../scss/components/modals/modal.scss', '../../../../scss/components/modals/receive.scss']
+  styleUrls: [
+    '../../../../scss/components/modals/modal.scss',
+    '../../../../scss/components/modals/invoked-dialog.scss',
+    '../../../../scss/components/modals/receive.scss'
+  ]
 })
 export class ReceiveComponent extends ModalComponent {
   @ViewChild('dialog', { static: true }) private dialog: ElementRef<HTMLDialogElement>;
@@ -28,8 +33,7 @@ export class ReceiveComponent extends ModalComponent {
   copyStatus = '';
   name = 'receive';
   private invocation?: ReceiveData;
-  private invokerBounds?: DOMRect;
-  private motion?: Animation;
+  private invokedDialog: InvokedDialog;
 
   constructor(private changeDetector: ChangeDetectorRef, private translate: TranslateService, router: Router) {
     super();
@@ -41,35 +45,25 @@ export class ReceiveComponent extends ModalComponent {
       .subscribe(() => this.dismiss(false, false));
   }
 
+  override ngOnInit(): void {
+    this.invokedDialog = new InvokedDialog(this.dialog.nativeElement, this.content.nativeElement);
+  }
+
   override open(data: ReceiveData): void {
-    const from = this.readMotionFrame();
-    this.clearMotion();
     this.invocation = data;
-    this.invokerBounds = data.invoker.getBoundingClientRect();
     this.activeAddress = data.address;
     this.copyStatus = '';
     const canvas = this.canvas.nativeElement;
     QRCode.toCanvas(canvas, this.activeAddress, { errorCorrectionLevel: 'H', color: { light: '#FCFCFC' } }, (error) => (canvas.hidden = !!error));
     this.changeDetector.detectChanges();
-    const dialog = this.dialog.nativeElement;
-    dialog.inert = false;
-    dialog.showModal();
+    this.invokedDialog.open({ invoker: data.invoker, focusAfterClose: [data.invoker, ...data.fallback] });
     this.isOpen = true;
-    if (this.shouldAnimate()) this.animateContent(true, from);
   }
 
-  override close(animate = false): void {
-    const from = this.readMotionFrame();
-    this.clearMotion();
-    const dialog = this.dialog.nativeElement;
-    const animateExit = animate && this.shouldAnimate();
-    // Leave the top layer immediately and paint the inert content through its exit.
-    dialog.classList.toggle('closing', animateExit);
-    dialog.close();
-    dialog.inert = true;
+  override close(animate = false, restoreFocus = false): void {
+    this.invokedDialog?.close({ animate, restoreFocus });
+    this.invocation = undefined;
     this.isOpen = false;
-    if (animateExit) this.animateContent(false, from);
-    else this.releaseInvocation();
   }
 
   override ngOnDestroy(): void {
@@ -127,77 +121,11 @@ export class ReceiveComponent extends ModalComponent {
   }
 
   private dismiss(animate: boolean, restoreFocus = true): void {
-    if (!this.isOpen) {
-      if (!animate) this.clearMotion();
-      return;
-    }
-    const invocation = this.invocation;
-    this.close(animate);
-    if (ModalComponent.currentModel.value.name === this.name) {
+    if (!this.isOpen && animate) return;
+    const wasOpen = this.isOpen;
+    this.close(animate, restoreFocus);
+    if (wasOpen && ModalComponent.currentModel.value.name === this.name) {
       ModalComponent.currentModel.next({ name: '', data: null });
     }
-    if (restoreFocus && invocation) {
-      const { invoker, fallback } = invocation;
-      for (const element of [invoker, ...fallback]) {
-        element?.focus({ preventScroll: true });
-        if (document.activeElement === element) break;
-      }
-    }
-  }
-
-  private shouldAnimate(): boolean {
-    return !!this.content.nativeElement.animate && !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  }
-
-  private readMotionFrame(): Keyframe | undefined {
-    if (!this.motion) return;
-    const { transform, opacity } = getComputedStyle(this.content.nativeElement);
-    return { transform, opacity };
-  }
-
-  private animateContent(opening: boolean, from?: Keyframe): void {
-    const content = this.content.nativeElement;
-    const collapsed = { transform: 'scale(0.96)', opacity: 0 };
-    const expanded = { transform: 'scale(1)', opacity: 1 };
-    this.alignOrigin();
-    const motion = content.animate([from ?? (opening ? collapsed : expanded), opening ? expanded : collapsed], {
-      duration: opening ? 200 : 160,
-      easing: 'cubic-bezier(0.23, 1, 0.32, 1)',
-      fill: 'both'
-    });
-    this.motion = motion;
-    window.addEventListener('resize', this.alignOrigin);
-    window.addEventListener('scroll', this.alignOrigin, true);
-    motion.onfinish = () => {
-      if (this.motion === motion) this.clearMotion();
-    };
-  }
-
-  private readonly alignOrigin = (): void => {
-    const invoker = this.invocation?.invoker;
-    if (!invoker || !this.invokerBounds) return;
-    // The mobile menu hides its QR button as soon as Receive opens.
-    if (invoker.getClientRects().length) this.invokerBounds = invoker.getBoundingClientRect();
-    const trigger = this.invokerBounds;
-    const content = this.content.nativeElement;
-    const effect = this.motion?.effect as KeyframeEffect | undefined;
-    if (effect) effect.target = null;
-    const bounds = content.getBoundingClientRect();
-    content.style.transformOrigin = `${trigger.left + trigger.width / 2 - bounds.left}px ${trigger.top + trigger.height / 2 - bounds.top}px`;
-    if (effect) effect.target = content;
-  };
-
-  private clearMotion(): void {
-    window.removeEventListener('resize', this.alignOrigin);
-    window.removeEventListener('scroll', this.alignOrigin, true);
-    this.motion?.cancel();
-    this.motion = undefined;
-    this.dialog?.nativeElement.classList.remove('closing');
-    if (!this.isOpen) this.releaseInvocation();
-  }
-
-  private releaseInvocation(): void {
-    this.invocation = undefined;
-    this.invokerBounds = undefined;
   }
 }

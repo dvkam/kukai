@@ -4,7 +4,7 @@ import { TorusWallet } from '../../../../services/wallet/wallet';
 import { WalletService } from '../../../../services/wallet/wallet.service';
 import { LookupService } from '../../../../services/lookup/lookup.service';
 import { DropdownComponent } from '../dropdown.component';
-import { ModalComponent } from '../../../modals/modal.component';
+import type { DialogInvocation } from '../../../modals/invoked-dialog';
 import { filter } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
@@ -17,6 +17,7 @@ export class AccountDropdownComponent extends DropdownComponent implements OnIni
   private static nextId = 0;
   override ecmpId = `account-picker-${AccountDropdownComponent.nextId++}`;
   @Output() pickerHidden = new EventEmitter<void>();
+  @Output() showAccounts = new EventEmitter<DialogInvocation>();
   @ViewChild('panelTrigger') private trigger?: ElementRef<HTMLButtonElement>;
   private readonly visibility = new ResizeObserver(() => {
     if (!this.isOpen || this.trigger?.nativeElement.getClientRects().length) return;
@@ -107,7 +108,7 @@ export class AccountDropdownComponent extends DropdownComponent implements OnIni
   }
 
   focusIfVisible(): boolean {
-    const button = this.trigger?.nativeElement;
+    const button = this.pickerTrigger;
     if (!button || button.disabled || !button.getClientRects().length) return false;
     button.focus({ preventScroll: true });
     return document.activeElement === button;
@@ -118,9 +119,14 @@ export class AccountDropdownComponent extends DropdownComponent implements OnIni
     this.trigger?.nativeElement.focus({ preventScroll: true });
   }
 
-  showAll(): void {
+  get pickerTrigger(): HTMLButtonElement | undefined {
+    return this.trigger?.nativeElement;
+  }
+
+  showAll(button: HTMLButtonElement): void {
+    const invokerBounds = button.getBoundingClientRect();
     this.returnToTrigger();
-    ModalComponent.currentModel.next({ name: 'account-list', data: null });
+    this.showAccounts.emit({ invoker: button, invokerBounds, focusAfterClose: [this.pickerTrigger] });
   }
   trackAccount(index: number, account: any) {
     return account?.address ? account.address : index;
