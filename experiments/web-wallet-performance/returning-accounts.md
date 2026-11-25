@@ -2,7 +2,7 @@
 
 The account picker runner opens the production app with a persisted `WatchWallet` in a fresh Chromium context. The fixture has two checksummed Tezos addresses generated without keypairs, zero balances, and empty token and activity lists. The app restores the wallet through its regular storage path. During setup, a valid address outside the wallet and an address with an invalid checksum must both fall back to the first stored account. The runner also checks that Tab reaches the picker.
 
-Run this command from the repository root using the production build and Chromium setup above.
+From the repository root, build the optimized wallet and set up Chromium using the [benchmark setup instructions](README.md#run). Then run the account fixture against that build.
 
 ```sh
 python experiments/web-wallet-performance/account_picker.py "$build_dir/baseline" > "$build_dir/account-picker.json"

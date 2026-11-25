@@ -38,6 +38,7 @@ jobs:
       - run: npm run test:ci
       - run: npm run test:ci-policy
       - run: npm run test:tezos-encoding
+      - run: node --check experiments/web-wallet-performance/measure-account-picker.js
       - name: Verify a retained-quorum Tezos transfer signature without network access
         run: |
           rustup toolchain install 1.100.0 --profile minimal
