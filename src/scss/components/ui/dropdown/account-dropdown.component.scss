@@ -256,7 +256,7 @@ $border-width-dark-only: v.$border-width-dark-only;
 }
 
 :host(app-ui-dropdown-account) {
-  --account-picker-focus-ring: var(--base-blue-color);
+  --account-picker-focus-ring: var(--base-font-color);
 
   button.currentAddress,
   button.show-all {
@@ -279,6 +279,11 @@ $border-width-dark-only: v.$border-width-dark-only;
     border: 0;
     border-radius: 0;
     margin: 0;
+
+    span {
+      color: v.$base-font-color;
+      text-decoration: underline;
+    }
   }
 
   :is(.currentAddress, .option):focus-visible {
