@@ -1,0 +1,21 @@
+{
+  "tested_commit": "159862eee3df1072ae7ae98219cda007ee528ee5",
+  "cargo_lock_sha256": "b4636d88b4f9a934957c304573fecce3fad24cca537624ad97da5152fd91335b",
+  "hosted_namespace": {
+    "workflow_run": 45615444596,
+    "job_url": "https://github.com/dvkam/kukai/actions/runs/45615444596/job/139209513695",
+    "job_conclusion": "success",
+    "step": {
+      "name": "Test retained secp256k1 shares without network access",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 15,
+      "started_at": "2026-11-25T12:41:24Z",
+      "completed_at": "2026-11-25T12:41:24Z"
+    }
+  },
+  "local_unisolated_smoke": {
+    "file": "local-smoke.json",
+    "sha256": "ab753655a715bcbd7e435c815c98c2b2fc88bbe1b273b0cfa47822cb2b8b7ede"
+  }
+}
