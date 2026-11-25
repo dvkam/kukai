@@ -140,6 +140,11 @@ $base-background-color: v.$base-background-color;
         }
       }
 
+      button:focus-visible {
+        outline: 2px solid v.$base-blue-color;
+        outline-offset: 2px;
+      }
+
       & .social {
         justify-content: flex-start;
 
@@ -147,10 +152,7 @@ $base-background-color: v.$base-background-color;
           width: fit-content;
         }
 
-        .facebook,
-        .twitter,
-        .email,
-        .reddit,
+        .provider,
         &>.google img {
           border-radius: v.$border-radius-hardest;
           background-color: $base-end-color;
@@ -162,10 +164,18 @@ $base-background-color: v.$base-background-color;
           }
         }
 
-        .facebook,
-        .twitter,
-        .email,
-        .reddit {
+        .provider {
+          box-sizing: content-box;
+          border: 0;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+
+          img {
+            width: 100%;
+            height: 100%;
+          }
+
           width: 4rem;
           height: 4rem;
           padding: 0.75rem;
@@ -421,10 +431,7 @@ $base-background-color: v.$base-background-color;
               }
             }
 
-            & .facebook,
-            & .twitter,
-            & .email,
-            & .reddit {
+            & .provider {
               width: 4.5rem;
               height: 4.5rem;
               padding: 0.75rem;
