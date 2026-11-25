@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { AccountDropdownComponent } from '../../../ui/dropdown/account/account-dropdown.component';
+import { Component, OnInit, Input, SimpleChanges, OnChanges, OnDestroy, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { WalletService } from '../../../../services/wallet/wallet.service';
 import { Account } from '../../../../services/wallet/wallet';
@@ -28,6 +29,7 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
   @Input() activeAccount: Account;
   @ViewChild('desktopReceive') private desktopReceive?: ElementRef<HTMLButtonElement>;
   @ViewChild(MobileMenuDropdownComponent) private mobileMenu?: MobileMenuDropdownComponent;
+  @ViewChildren(AccountDropdownComponent) private pickers: QueryList<AccountDropdownComponent>;
   accounts: Account[];
   delegateName = '';
   readonly CONSTANTS = _CONSTANTS;
@@ -111,6 +113,10 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
   newAccount(): void {
     ModalComponent.currentModel.next({ name: 'new-implicit', data: null });
   }
+  focusAccountPicker(): void {
+    this.pickers.some((picker) => picker.focusIfVisible());
+  }
+
   receive(invoker: HTMLButtonElement): void {
     if (!this.activeAccount?.address) return;
     ModalComponent.currentModel.next({

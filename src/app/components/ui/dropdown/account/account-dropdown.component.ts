@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TorusWallet } from '../../../../services/wallet/wallet';
 import { WalletService } from '../../../../services/wallet/wallet.service';
@@ -16,12 +16,29 @@ import { Subscription } from 'rxjs';
 export class AccountDropdownComponent extends DropdownComponent implements OnInit, OnChanges, OnDestroy {
   private static nextId = 0;
   override ecmpId = `account-picker-${AccountDropdownComponent.nextId++}`;
+  @Output() pickerHidden = new EventEmitter<void>();
   @ViewChild('panelTrigger') private trigger?: ElementRef<HTMLButtonElement>;
+  private readonly visibility = new ResizeObserver(() => {
+    if (!this.isOpen || this.trigger?.nativeElement.getClientRects().length) return;
+    this.visibility.disconnect();
+    this.zone.run(() => {
+      this.isOpen = false;
+      if (document.activeElement === document.body || this.host.nativeElement.contains(document.activeElement)) {
+        this.pickerHidden.emit();
+      }
+    });
+  });
   postfix = '';
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(public router: Router, public lookupService: LookupService, private walletService: WalletService, private host: ElementRef<HTMLElement>) {
+  constructor(
+    public router: Router,
+    public lookupService: LookupService,
+    private walletService: WalletService,
+    private host: ElementRef<HTMLElement>,
+    private zone: NgZone
+  ) {
     super();
     this.subscriptions.add(
       this.router.events.pipe(filter((evt) => evt instanceof NavigationEnd)).subscribe((r: NavigationEnd) => {
@@ -45,6 +62,7 @@ export class AccountDropdownComponent extends DropdownComponent implements OnIni
   }
 
   ngOnDestroy() {
+    this.visibility.disconnect();
     this.subscriptions.unsubscribe();
   }
 
@@ -81,6 +99,18 @@ export class AccountDropdownComponent extends DropdownComponent implements OnIni
     if (this.isOpen && event.relatedTarget instanceof Node && !this.host.nativeElement.contains(event.relatedTarget)) {
       this.isOpen = false;
     }
+  }
+
+  override toggleDropdown(): void {
+    super.toggleDropdown();
+    if (this.isOpen && this.trigger) this.visibility.observe(this.trigger.nativeElement);
+  }
+
+  focusIfVisible(): boolean {
+    const button = this.trigger?.nativeElement;
+    if (!button || button.disabled || !button.getClientRects().length) return false;
+    button.focus({ preventScroll: true });
+    return document.activeElement === button;
   }
 
   returnToTrigger(): void {

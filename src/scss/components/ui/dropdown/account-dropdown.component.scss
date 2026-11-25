@@ -262,6 +262,8 @@ $border-width-dark-only: v.$border-width-dark-only;
   button.show-all {
     appearance: none;
     font-family: inherit;
+    text-transform: none;
+    letter-spacing: normal;
     color: inherit;
     text-align: start;
   }
