@@ -1,0 +1,5 @@
+self-paid TransactionErrorFieldless.AccountNotFound
+missing signature 0 TransactionErrorFieldless.SignatureFailure
+missing signature 1 TransactionErrorFieldless.SignatureFailure
+{"fee_lamports": 10000, "token_balances_before": [100, 0], "token_balances_after": [75, 25], "owner_lamports": 0}
+{"new_recipient": {"rent_deposit_lamports": 2039280, "fee_per_transaction_lamports": 10000, "first_send_cost_lamports": 2049280, "repeat_send_cost_lamports": 10000, "insufficient_rent_cost_lamports": 10000, "rolled_back_transfer_cost_lamports": 10000, "source_tokens_after": 25, "recipient_tokens_after": 50}}
