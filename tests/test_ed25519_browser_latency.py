@@ -29,6 +29,11 @@ class Ed25519BrowserLatencyTests(unittest.TestCase):
             "p50": 50, "p90": 90, "p95": 95, "p99": 99,
         })
 
+    def test_median_stays_finite_for_two_large_finite_intervals(self):
+        sample = {"timings_ms": dict.fromkeys(runner.SAMPLE_FIELDS, 1e308)}
+        summary = runner.summarize([sample, sample], requested=2)
+        self.assertEqual(summary["metrics"]["tezos_sign_ms"]["median"], 1e308)
+
     def test_invalid_timing_ends_sampling_without_reported_input(self):
         page = Mock()
         page.evaluate.side_effect = [[4, 3, 5, 2], ["unexpected payload", 3, 5, 2]]

@@ -9,7 +9,6 @@ import platform
 import shutil
 from importlib.metadata import version
 from pathlib import Path
-from statistics import median
 
 from playwright.sync_api import Error, Page, Route, WebSocketRoute, sync_playwright
 
@@ -25,9 +24,14 @@ def summarize(samples: list[dict], requested: int) -> dict:
     for field in SAMPLE_FIELDS:
         values = sorted(sample[field] for sample in successful)
         count = len(values)
+        midpoint = None
+        if values:
+            lower = values[(count - 1) // 2]
+            upper = values[count // 2]
+            midpoint = lower + (upper - lower) / 2
         metrics[field] = {
             "min": values[0] if count else None,
-            "median": median(values) if count else None,
+            "median": midpoint,
             "max": values[-1] if count else None,
             **{f"p{p}": values[math.ceil(count * p / 100) - 1] if count else None for p in PERCENTILES},
         }
