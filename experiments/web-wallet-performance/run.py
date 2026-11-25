@@ -12,8 +12,7 @@ from contextlib import ExitStack, contextmanager
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from importlib.metadata import version
 from pathlib import Path
-from statistics import median
-from sys import stderr
+from sys import float_info, stderr
 from threading import Thread
 from urllib.parse import urlsplit
 
@@ -51,6 +50,15 @@ def serve(directory: Path):
         def log_message(self, *_args):
             pass
 
+        def send_head(self):
+            # Serve account deep links as documents. Missing assets still return 404.
+            if (
+                self.headers.get("Sec-Fetch-Mode") == "navigate"
+                and re.fullmatch(r"/account/[A-Za-z0-9]+/?", urlsplit(self.path).path)
+            ):
+                self.path = "/index.html"
+            return super().send_head()
+
     with ThreadingHTTPServer(("127.0.0.1", 0), QuietHandler) as server:
         thread = Thread(target=server.serve_forever)
         thread.start()
@@ -66,9 +74,11 @@ def elapsed(result: object) -> float:
         raise TypeError("Browser timing result is missing or invalid")
     if result.get("error") == "menu-stayed-open":
         raise MenuStayedOpen("Navigation stayed open over the Import form")
+    if "error" in result:
+        raise ValueError(str(result["error"]))
     value = result.get("ms")
-    if not isinstance(value, (int, float)) or not math.isfinite(value) or value <= 0:
-        raise ValueError(result.get("error", f"invalid timing {value!r}"))
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not 0 < value <= float_info.max:
+        raise ValueError(f"invalid timing {value!r}")
     return value
 
 
@@ -159,10 +169,10 @@ def measure(browser: Browser, origin: str, trial: int) -> dict:
     }
 
 
-def summarize(trials: list[dict]) -> dict:
+def summarize(trials: list[dict], steps: tuple[str, ...] = STEPS) -> dict:
     completed = sum(trial["completed"] for trial in trials)
     workflows = {}
-    for step in STEPS:
+    for step in steps:
         attempted = [trial for trial in trials if step in trial["timings_ms"] or step in trial["errors"]]
         values = sorted(trial["timings_ms"][step] for trial in attempted
                         if step in trial["timings_ms"] and not trial["runtime_errors"])
@@ -170,13 +180,18 @@ def summarize(trials: list[dict]) -> dict:
             f"p{percentile}": round(values[math.ceil(len(values) * percentile / 100) - 1], 1)
             if values else None for percentile in PERCENTILES
         }
+        middle = None
+        if values:
+            lower = values[(len(values) - 1) // 2]
+            upper = values[len(values) // 2]
+            middle = round(lower + (upper - lower) / 2, 1)
         workflows[step] = {
             "attempted": len(attempted),
             "samples": len(values),
             "failed": len(attempted) - len(values),
             "skipped": len(trials) - len(attempted),
             "min": round(values[0], 1) if values else None,
-            "median": round(median(values), 1) if values else None,
+            "median": middle,
             "max": round(values[-1], 1) if values else None,
             **percentiles,
         }
