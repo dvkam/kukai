@@ -28,9 +28,11 @@ The backup probe serializes only long-lived key packages into a temporary memory
 
 ## Commands and review
 
-[Run the experiment](verify.md) describes the pinned commands. CI runs the complete native suite, formatting, and Clippy on every PR. The suite uses three test functions. The full signing case shares one parameter-generation run across its related checks to avoid generating unused test keys.
+Pinned commands cover the complete native suite, formatting and Clippy in PR CI. The quorum target has three test functions. Its full signing case shares one parameter-generation run across its related checks to avoid generating unused test keys. [Run the experiment](verify.md)
 
 The experiment exercises complete EIP-1559 transaction encodings with synthetic values and chain IDs 1 and 8453. Alloy decodes the signed bytes and recovers the account. CGGMP24 also checks its own signature. These checks do not establish node acceptance, sufficient account balances, fee validity, Base-specific network rules, or asset migration.
+
+The test-only approval target exercises deterministic review comparison for the native-transfer subset of issue #19. [Approval binding](approval-binding.md)
 
 ## Native results
 
