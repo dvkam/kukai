@@ -13,7 +13,7 @@ The runner exercises synthetic message bytes. Chain-library verification covers 
 
 ## Replay
 
-Use Linux x86_64, Python 3.12, Chrome or Chromium, curl, tar and the Rust toolchain below. Run from the repository root. Set CHROME_BIN for a nonstandard browser path.
+Use Linux x86_64, Python 3.12, Chrome or Chromium, curl, tar and the Rust toolchain below. Run from the repository root. Set `CHROME_BIN` for a nonstandard browser path. Set `WASM_BINDGEN_ARCHIVE` to reuse the release archive. The script verifies the same pinned digest in both cases.
 
 ```sh
 rustup toolchain install 1.100.0 --profile minimal --component clippy --target wasm32-unknown-unknown
@@ -21,6 +21,28 @@ python -m pip install -r requirements-ci.txt
 bash experiments/ed25519-signing/browser/check.sh
 ```
 
-The script verifies the SHA-256 digest of the Linux wasm-bindgen 0.2.108 release, builds the locked Rust dependencies in a fresh target directory, and runs the optimized module with Playwright. The browser supplies fresh randomness for each ceremony. In signing round one, each participant samples fresh nonces and sends commitments. In round two, each participant uses its saved nonces to sign the agreed package. This user-held quorum has no service revocation cutoff. The verifier crates are solana-signature 3.6.0 and tezos_crypto_rs 0.6.0. The runner prints only timings, platform information and control results. [Build and run record](evidence/run.json)
+The script builds the locked Rust dependencies in a fresh target directory and runs the optimized module with Playwright. It records the tool versions and the SHA-256 digests of the lockfile and pre-binding WASM on stderr. The JSON report includes the digests of the JavaScript and WASM bytes served to the browser. The browser supplies fresh randomness for each ceremony. In signing round one, each participant samples fresh nonces and sends commitments. In round two, each participant uses its saved nonces to sign the agreed package. This user-held quorum has no service revocation cutoff. The verifier crates are solana-signature 3.6.0 and tezos_crypto_rs 0.6.0. [Original five-sample build and run record](evidence/run.json)
 
-Five consecutive samples run on the same headless Chromium page on a shared Linux host. The browser's performance clock measures the three-party ceremony and each two-party signing call. Signing covers nonce generation through aggregation, including FROST verification of the aggregate signature. Module loading, service-share removal, Tezos message hashing, serialization of the final signature, chain-library verification and network time are outside the signing interval. The first sample includes first-use costs. These observations leave reference-device percentiles, recovery, secure erasure and independent review open.
+The default smoke runs five sample pairs on the same page. One is the first use of the loaded module, one warms it up, and three contribute to the summary. Run the following command for a longer local measurement after other builds and benchmarks finish.
+
+```sh
+bash experiments/ed25519-signing/browser/check.sh --warmups 5 --samples 200 \
+  > samples.json 2> build.txt
+```
+
+Each sample generates independent Solana and Tezos groups and verifies both signatures and their negative controls through the chain libraries. The report separates module loading and initialization, the first-use sample, the warm-up samples, and raw measured samples. Each timing uses the browser's performance clock. Signing covers nonce generation through aggregation, including FROST verification of the aggregate signature. Service-share removal, Tezos message hashing, signature serialization, chain-library verification and network time fall outside the signing interval.
+
+For each metric, the warm summary reports the median, range and nearest-rank p50, p90, p95 and p99 over successful measured samples. For percentile `p` over `n` timings, take the one-based element at `ceil(n × p / 100)` from the ascending order. A failed sample ends the run and the report counts the remaining measured attempts as skipped. The final entropy control confirms that a browser randomness failure traps in WASM. The report contains timings, platform and build metadata, and verification outcomes. The measurements cover local synthetic ceremonies in headless Chromium on Linux. Reference-device measurements, distributed recovery and secure erasure remain open.
+
+## Recorded latency, November 25, 2026
+
+Chromium 156 on Linux completed all 200 measured sample pairs. One cold pair and five warm-ups appear separately in the raw output. Each pair generated two fresh synthetic threshold keys. All signing roles ran in the same browser process. The entropy control observed one rejected request. The browser made no unexpected requests and reported no page errors. [Raw samples, package hashes and host details](evidence/latency-2026-11-25.json)
+
+| Operation, milliseconds | p50 | p90 | p95 | p99 |
+| --- | ---: | ---: | ---: | ---: |
+| Solana key generation | 6.8 | 11.3 | 15.3 | 24.5 |
+| Solana signing | 1.6 | 2.7 | 3.1 | 6.7 |
+| Tezos key generation | 6.8 | 11.2 | 15.9 | 32.3 |
+| Tezos signing | 1.6 | 2.4 | 2.9 | 6.4 |
+
+These measurements cover the local cryptographic calls. Interactive approval, distributed protocol communication and physical iPhone timings remain open. [Performance tracker](https://github.com/dvkam/kukai/issues/52)

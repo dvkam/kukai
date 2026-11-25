@@ -1,0 +1,1732 @@
+{
+  "chromium": "156.0.8078.79",
+  "python": "3.12.14",
+  "playwright": "1.62.0",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "arch": "x86_64",
+  "cpu_model": "INTEL(R) XEON(R) PLATINUM 8573C",
+  "logical_cpus_available": 5,
+  "cpu_quota": "400000 100000",
+  "cpu_governor": "",
+  "load_average_start": [
+    7.88037109375,
+    5.90673828125,
+    9.45947265625
+  ],
+  "package_sha256": {
+    "quorum.js": "39cd04d23d8486bc45f944ba7800de3f4fdef113610143227f1f90aa81a1d90e",
+    "quorum_bg.wasm": "5860a155fcdb4aef518f7cdcae41eb6283d4db05a81a0c3643f3eb4efb081488"
+  },
+  "module_load_and_init_ms": 151.30000000074506,
+  "cold_first": {
+    "timings_ms": {
+      "solana_dkg_ms": 59,
+      "solana_sign_ms": 6.5,
+      "tezos_dkg_ms": 14.200000001117587,
+      "tezos_sign_ms": 6.900000000372529
+    }
+  },
+  "warmups_requested": 5,
+  "warmups": [
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 22.199999999254942,
+        "solana_sign_ms": 3.699999999254942,
+        "tezos_dkg_ms": 23.300000000745058,
+        "tezos_sign_ms": 4.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 37.90000000037253,
+        "solana_sign_ms": 2.699999999254942,
+        "tezos_dkg_ms": 10.699999999254942,
+        "tezos_sign_ms": 2.799999998882413
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 10.099999999627471,
+        "solana_sign_ms": 3.099999999627471,
+        "tezos_dkg_ms": 11,
+        "tezos_sign_ms": 2.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 12.699999999254942,
+        "solana_sign_ms": 3,
+        "tezos_dkg_ms": 10.099999999627471,
+        "tezos_sign_ms": 7.600000001490116
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.299999998882413,
+        "solana_sign_ms": 2,
+        "tezos_dkg_ms": 7.200000001117587,
+        "tezos_sign_ms": 1.8999999985098839
+      }
+    }
+  ],
+  "samples": [
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 11.299999998882413,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 11.200000001117587,
+        "tezos_sign_ms": 2.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.199999999254942,
+        "solana_sign_ms": 6.5,
+        "tezos_dkg_ms": 11.900000000372529,
+        "tezos_sign_ms": 2.300000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.599999999627471,
+        "solana_sign_ms": 2.599999999627471,
+        "tezos_dkg_ms": 8.300000000745058,
+        "tezos_sign_ms": 2.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 8.099999999627471,
+        "solana_sign_ms": 2.199999999254942,
+        "tezos_dkg_ms": 7.200000001117587,
+        "tezos_sign_ms": 1.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 9.300000000745058,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 9.599999999627471,
+        "tezos_sign_ms": 2.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 9.599999999627471,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 7.800000000745058,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.800000000745058,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 6.400000000372529,
+        "tezos_sign_ms": 1.699999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.400000000372529,
+        "solana_sign_ms": 1.800000000745058,
+        "tezos_dkg_ms": 7.400000000372529,
+        "tezos_sign_ms": 2.899999998509884
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 17.09999999962747,
+        "solana_sign_ms": 3.199999999254942,
+        "tezos_dkg_ms": 13.800000000745058,
+        "tezos_sign_ms": 4.800000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 20.59999999962747,
+        "solana_sign_ms": 4.5,
+        "tezos_dkg_ms": 15.900000000372529,
+        "tezos_sign_ms": 2.199999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 23.600000001490116,
+        "solana_sign_ms": 2.899999998509884,
+        "tezos_dkg_ms": 22,
+        "tezos_sign_ms": 2.800000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 24,
+        "solana_sign_ms": 10.199999999254942,
+        "tezos_dkg_ms": 19.800000000745058,
+        "tezos_sign_ms": 1.6000000014901161
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 22.5,
+        "solana_sign_ms": 6.700000001117587,
+        "tezos_dkg_ms": 18.59999999962747,
+        "tezos_sign_ms": 6.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 20.5,
+        "solana_sign_ms": 6.900000000372529,
+        "tezos_dkg_ms": 17,
+        "tezos_sign_ms": 7.199999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 24.5,
+        "solana_sign_ms": 2.300000000745058,
+        "tezos_dkg_ms": 12.399999998509884,
+        "tezos_sign_ms": 2.199999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.799999998882413,
+        "solana_sign_ms": 5.900000000372529,
+        "tezos_dkg_ms": 7,
+        "tezos_sign_ms": 2.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.100000001490116,
+        "solana_sign_ms": 1.700000001117587,
+        "tezos_dkg_ms": 6.799999998882413,
+        "tezos_sign_ms": 1.3999999985098839
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.700000001117587,
+        "solana_sign_ms": 3.199999999254942,
+        "tezos_dkg_ms": 6.900000000372529,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.599999999627471,
+        "solana_sign_ms": 2.300000000745058,
+        "tezos_dkg_ms": 7.799999998882413,
+        "tezos_sign_ms": 1.699999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.399999998509884,
+        "solana_sign_ms": 1.6000000014901161,
+        "tezos_dkg_ms": 6.5,
+        "tezos_sign_ms": 1.699999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 6.299999998882413,
+        "tezos_sign_ms": 1.699999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.5,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.699999999254942,
+        "tezos_sign_ms": 1.800000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.699999999254942,
+        "solana_sign_ms": 1.3999999985098839,
+        "tezos_dkg_ms": 6.300000000745058,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.5,
+        "solana_sign_ms": 1.700000001117587,
+        "tezos_dkg_ms": 6.699999999254942,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.599999999627471,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.5,
+        "tezos_sign_ms": 1.299999998882413
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.5,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.299999998882413,
+        "tezos_sign_ms": 1.700000001117587
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.5,
+        "solana_sign_ms": 1.300000000745058,
+        "tezos_dkg_ms": 6.199999999254942,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.5,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.099999999627471,
+        "tezos_sign_ms": 1.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 12.799999998882413,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.700000001117587,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.799999998882413,
+        "solana_sign_ms": 1.3999999985098839,
+        "tezos_dkg_ms": 6.5,
+        "tezos_sign_ms": 1.700000001117587
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.5,
+        "solana_sign_ms": 2.099999999627471,
+        "tezos_dkg_ms": 7.699999999254942,
+        "tezos_sign_ms": 1.699999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.800000000745058,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.299999998882413,
+        "tezos_sign_ms": 2.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.599999999627471,
+        "solana_sign_ms": 2.800000000745058,
+        "tezos_dkg_ms": 10.5,
+        "tezos_sign_ms": 2.199999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.700000001117587,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.299999998882413,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.600000001490116,
+        "solana_sign_ms": 1.300000000745058,
+        "tezos_dkg_ms": 6.199999999254942,
+        "tezos_sign_ms": 1.800000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 9.799999998882413,
+        "solana_sign_ms": 1.799999998882413,
+        "tezos_dkg_ms": 6.700000001117587,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.799999998882413,
+        "solana_sign_ms": 1.799999998882413,
+        "tezos_dkg_ms": 6.300000000745058,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.399999998509884,
+        "solana_sign_ms": 2,
+        "tezos_dkg_ms": 6.100000001490116,
+        "tezos_sign_ms": 2.300000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 11.699999999254942,
+        "solana_sign_ms": 2.199999999254942,
+        "tezos_dkg_ms": 11,
+        "tezos_sign_ms": 1.799999998882413
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.799999998882413,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 7.100000001490116,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.700000001117587,
+        "solana_sign_ms": 2.199999999254942,
+        "tezos_dkg_ms": 7.400000000372529,
+        "tezos_sign_ms": 1.8999999985098839
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.199999999254942,
+        "solana_sign_ms": 1.3999999985098839,
+        "tezos_dkg_ms": 6.100000001490116,
+        "tezos_sign_ms": 1.800000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.5,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 7,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.099999999627471,
+        "solana_sign_ms": 1.900000000372529,
+        "tezos_dkg_ms": 6.199999999254942,
+        "tezos_sign_ms": 1.700000001117587
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.699999999254942,
+        "solana_sign_ms": 1.300000000745058,
+        "tezos_dkg_ms": 6.400000000372529,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.199999999254942,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.100000001490116,
+        "tezos_sign_ms": 1.6000000014901161
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.700000001117587,
+        "solana_sign_ms": 2.400000000372529,
+        "tezos_dkg_ms": 7.5,
+        "tezos_sign_ms": 1.700000001117587
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.799999998882413,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 6.800000000745058,
+        "tezos_sign_ms": 1.3999999985098839
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.599999999627471,
+        "solana_sign_ms": 1.699999999254942,
+        "tezos_dkg_ms": 6.200000001117587,
+        "tezos_sign_ms": 1.700000001117587
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 10.599999999627471,
+        "solana_sign_ms": 2.399999998509884,
+        "tezos_dkg_ms": 10.700000001117587,
+        "tezos_sign_ms": 2.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.699999999254942,
+        "solana_sign_ms": 1.699999999254942,
+        "tezos_dkg_ms": 7.400000000372529,
+        "tezos_sign_ms": 2
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 8.199999999254942,
+        "solana_sign_ms": 1.699999999254942,
+        "tezos_dkg_ms": 6.200000001117587,
+        "tezos_sign_ms": 1.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.599999999627471,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 7.900000000372529,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.099999999627471,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.100000001490116,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.099999999627471,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.400000000372529,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 7.099999999627471,
+        "tezos_sign_ms": 1.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.699999999254942,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 5.900000000372529,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.699999999254942,
+        "solana_sign_ms": 1.800000000745058,
+        "tezos_dkg_ms": 6.300000000745058,
+        "tezos_sign_ms": 1.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.400000000372529,
+        "solana_sign_ms": 1.700000001117587,
+        "tezos_dkg_ms": 6.199999999254942,
+        "tezos_sign_ms": 1.6000000014901161
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.300000000745058,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.5,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.600000001490116,
+        "solana_sign_ms": 2,
+        "tezos_dkg_ms": 7,
+        "tezos_sign_ms": 1.3999999985098839
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.899999998509884,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.400000000372529,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.699999999254942,
+        "solana_sign_ms": 2.800000000745058,
+        "tezos_dkg_ms": 11.400000000372529,
+        "tezos_sign_ms": 1.8999999985098839
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 10.100000001490116,
+        "solana_sign_ms": 2.300000000745058,
+        "tezos_dkg_ms": 10.899999998509884,
+        "tezos_sign_ms": 2.299999998882413
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 9.800000000745058,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 7.5,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.600000001490116,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.399999998509884,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.399999998509884,
+        "solana_sign_ms": 2,
+        "tezos_dkg_ms": 7.400000000372529,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.300000000745058,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 7,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.5,
+        "solana_sign_ms": 1.699999999254942,
+        "tezos_dkg_ms": 6.800000000745058,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.799999998882413,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 6.5,
+        "tezos_sign_ms": 1.300000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.600000001490116,
+        "solana_sign_ms": 2,
+        "tezos_dkg_ms": 6.399999998509884,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.299999998882413,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 8,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.299999998882413,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.200000001117587,
+        "tezos_sign_ms": 1.299999998882413
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 11.900000000372529,
+        "solana_sign_ms": 2.099999999627471,
+        "tezos_dkg_ms": 11.800000000745058,
+        "tezos_sign_ms": 2.099999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 9.599999999627471,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 9,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.5,
+        "solana_sign_ms": 1.699999999254942,
+        "tezos_dkg_ms": 6.900000000372529,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.199999999254942,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.900000000372529,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.300000000745058,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 7.699999999254942,
+        "tezos_sign_ms": 1.800000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.5,
+        "solana_sign_ms": 1.900000000372529,
+        "tezos_dkg_ms": 8,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.700000001117587,
+        "solana_sign_ms": 1.300000000745058,
+        "tezos_dkg_ms": 6.299999998882413,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.199999999254942,
+        "solana_sign_ms": 2.699999999254942,
+        "tezos_dkg_ms": 10.300000000745058,
+        "tezos_sign_ms": 2.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.300000000745058,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 6.199999999254942,
+        "tezos_sign_ms": 1.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.599999999627471,
+        "solana_sign_ms": 1.6000000014901161,
+        "tezos_dkg_ms": 7.199999999254942,
+        "tezos_sign_ms": 1.800000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 15.899999998509884,
+        "solana_sign_ms": 3.099999999627471,
+        "tezos_dkg_ms": 11.800000000745058,
+        "tezos_sign_ms": 2.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.799999998882413,
+        "solana_sign_ms": 1.699999999254942,
+        "tezos_dkg_ms": 6.800000000745058,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 11.300000000745058,
+        "solana_sign_ms": 2.700000001117587,
+        "tezos_dkg_ms": 63.399999998509884,
+        "tezos_sign_ms": 2.799999998882413
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 9.100000001490116,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.099999999627471,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.199999999254942,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.900000000372529,
+        "tezos_sign_ms": 1.3999999985098839
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.800000000745058,
+        "solana_sign_ms": 1.300000000745058,
+        "tezos_dkg_ms": 6.599999999627471,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.199999999254942,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.900000000372529,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 7.699999999254942,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.200000001117587,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 6.5,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.299999998882413,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.300000000745058,
+        "tezos_sign_ms": 2.199999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 10.199999999254942,
+        "solana_sign_ms": 1.699999999254942,
+        "tezos_dkg_ms": 6.300000000745058,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.299999998882413,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 7.800000000745058,
+        "tezos_sign_ms": 1.3999999985098839
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.299999998882413,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.400000000372529,
+        "tezos_sign_ms": 1.299999998882413
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.400000000372529,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.5,
+        "tezos_sign_ms": 1.299999998882413
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 8.900000000372529,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.599999999627471,
+        "tezos_sign_ms": 1.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 10.800000000745058,
+        "solana_sign_ms": 2.100000001490116,
+        "tezos_dkg_ms": 9.699999999254942,
+        "tezos_sign_ms": 2.300000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.800000000745058,
+        "solana_sign_ms": 2,
+        "tezos_dkg_ms": 6.5,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.599999999627471,
+        "solana_sign_ms": 1.3999999985098839,
+        "tezos_dkg_ms": 7.100000001490116,
+        "tezos_sign_ms": 1.300000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 8,
+        "solana_sign_ms": 2.099999999627471,
+        "tezos_dkg_ms": 7.199999999254942,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 10.200000001117587,
+        "solana_sign_ms": 1.700000001117587,
+        "tezos_dkg_ms": 10.299999998882413,
+        "tezos_sign_ms": 1.6000000014901161
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.400000000372529,
+        "solana_sign_ms": 2.400000000372529,
+        "tezos_dkg_ms": 9.199999999254942,
+        "tezos_sign_ms": 2.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 8.199999999254942,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 6.099999999627471,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.200000001117587,
+        "solana_sign_ms": 2,
+        "tezos_dkg_ms": 7.699999999254942,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.400000000372529,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.399999998509884,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.900000000372529,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.5,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.199999999254942,
+        "solana_sign_ms": 1.699999999254942,
+        "tezos_dkg_ms": 6.400000000372529,
+        "tezos_sign_ms": 1.300000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.300000000745058,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 6.400000000372529,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.799999998882413,
+        "solana_sign_ms": 1.800000000745058,
+        "tezos_dkg_ms": 8.099999999627471,
+        "tezos_sign_ms": 1.699999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 12.099999999627471,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.699999999254942,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.299999998882413,
+        "solana_sign_ms": 1.299999998882413,
+        "tezos_dkg_ms": 6.100000001490116,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.200000001117587,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.400000000372529,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6,
+        "solana_sign_ms": 1.8999999985098839,
+        "tezos_dkg_ms": 6.5,
+        "tezos_sign_ms": 1.799999998882413
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.099999999627471,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 7.400000000372529,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.400000000372529,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.800000000745058,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.300000000745058,
+        "solana_sign_ms": 2.299999998882413,
+        "tezos_dkg_ms": 6,
+        "tezos_sign_ms": 2.299999998882413
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.400000000372529,
+        "solana_sign_ms": 1.699999999254942,
+        "tezos_dkg_ms": 6.5,
+        "tezos_sign_ms": 2.100000001490116
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 7,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.5,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.700000001117587,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.5,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.799999998882413,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.200000001117587,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.299999998882413,
+        "tezos_sign_ms": 1.300000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.599999999627471,
+        "solana_sign_ms": 2.300000000745058,
+        "tezos_dkg_ms": 7.599999999627471,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.800000000745058,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 8.699999999254942,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.200000001117587,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.199999999254942,
+        "tezos_sign_ms": 1.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 10.200000001117587,
+        "solana_sign_ms": 2.300000000745058,
+        "tezos_dkg_ms": 9.899999998509884,
+        "tezos_sign_ms": 2.200000001117587
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7,
+        "solana_sign_ms": 1.700000001117587,
+        "tezos_dkg_ms": 6.699999999254942,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.200000001117587,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 6.599999999627471,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.200000001117587,
+        "solana_sign_ms": 1.6000000014901161,
+        "tezos_dkg_ms": 6.299999998882413,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.699999999254942,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.300000000745058,
+        "tezos_sign_ms": 1.6000000014901161
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.199999999254942,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.400000000372529,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.300000000745058,
+        "solana_sign_ms": 1.800000000745058,
+        "tezos_dkg_ms": 8.199999999254942,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.199999999254942,
+        "solana_sign_ms": 2,
+        "tezos_dkg_ms": 6.599999999627471,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.700000001117587,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.299999998882413,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.099999999627471,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.200000001117587,
+        "solana_sign_ms": 1.300000000745058,
+        "tezos_dkg_ms": 6,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.099999999627471,
+        "solana_sign_ms": 1.299999998882413,
+        "tezos_dkg_ms": 7,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 9.900000000372529,
+        "solana_sign_ms": 2.300000000745058,
+        "tezos_dkg_ms": 11,
+        "tezos_sign_ms": 2.099999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.300000000745058,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.199999999254942,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.5,
+        "solana_sign_ms": 1.799999998882413,
+        "tezos_dkg_ms": 6.099999999627471,
+        "tezos_sign_ms": 1.6000000014901161
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.399999998509884,
+        "solana_sign_ms": 2.5,
+        "tezos_dkg_ms": 7.900000000372529,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6,
+        "tezos_sign_ms": 1.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7,
+        "solana_sign_ms": 2.299999998882413,
+        "tezos_dkg_ms": 6.400000000372529,
+        "tezos_sign_ms": 1.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.200000001117587,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.900000000372529,
+        "tezos_sign_ms": 1.3999999985098839
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.799999998882413,
+        "solana_sign_ms": 1.6000000014901161,
+        "tezos_dkg_ms": 6.599999999627471,
+        "tezos_sign_ms": 1.6000000014901161
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.299999998882413,
+        "solana_sign_ms": 1.3999999985098839,
+        "tezos_dkg_ms": 8.700000001117587,
+        "tezos_sign_ms": 1.300000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.400000000372529,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 6.199999999254942,
+        "tezos_sign_ms": 2
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.800000000745058,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.099999999627471,
+        "tezos_sign_ms": 1.300000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.699999999254942,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.200000001117587,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 8,
+        "solana_sign_ms": 3,
+        "tezos_dkg_ms": 10.900000000372529,
+        "tezos_sign_ms": 3.099999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 10.599999999627471,
+        "solana_sign_ms": 1.699999999254942,
+        "tezos_dkg_ms": 8.900000000372529,
+        "tezos_sign_ms": 1.6000000014901161
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.100000001490116,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.299999998882413,
+        "tezos_sign_ms": 1.699999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.099999999627471,
+        "solana_sign_ms": 1.799999998882413,
+        "tezos_dkg_ms": 6.5,
+        "tezos_sign_ms": 1.3999999985098839
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.400000000372529,
+        "solana_sign_ms": 3,
+        "tezos_dkg_ms": 7,
+        "tezos_sign_ms": 2.699999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.699999999254942,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 6.300000000745058,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 13.100000001490116,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.299999998882413,
+        "tezos_sign_ms": 1.3999999985098839
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.300000000745058,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.099999999627471,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.800000000745058,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.800000000745058,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 8.599999999627471,
+        "solana_sign_ms": 2.400000000372529,
+        "tezos_dkg_ms": 7.599999999627471,
+        "tezos_sign_ms": 2.600000001490116
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.100000001490116,
+        "solana_sign_ms": 2.799999998882413,
+        "tezos_dkg_ms": 10.5,
+        "tezos_sign_ms": 2.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 10.099999999627471,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 7.599999999627471,
+        "tezos_sign_ms": 2.100000001490116
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 9.800000000745058,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 7,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.299999998882413,
+        "solana_sign_ms": 1.300000000745058,
+        "tezos_dkg_ms": 6.300000000745058,
+        "tezos_sign_ms": 1.299999998882413
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.800000000745058,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 6.5,
+        "tezos_sign_ms": 1.699999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.599999999627471,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 7.199999999254942,
+        "tezos_sign_ms": 1.3999999985098839
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.400000000372529,
+        "solana_sign_ms": 1.300000000745058,
+        "tezos_dkg_ms": 6.200000001117587,
+        "tezos_sign_ms": 1.3999999985098839
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.900000000372529,
+        "solana_sign_ms": 1.800000000745058,
+        "tezos_dkg_ms": 7,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.299999998882413,
+        "solana_sign_ms": 1.6000000014901161,
+        "tezos_dkg_ms": 6.099999999627471,
+        "tezos_sign_ms": 1.300000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.5,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 8.400000000372529,
+        "tezos_sign_ms": 1.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 11,
+        "solana_sign_ms": 3.199999999254942,
+        "tezos_dkg_ms": 6.200000001117587,
+        "tezos_sign_ms": 2.299999998882413
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.100000001490116,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 6.399999998509884,
+        "tezos_sign_ms": 1.3999999985098839
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.300000000745058,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 7,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.099999999627471,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.699999999254942,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.200000001117587,
+        "solana_sign_ms": 1.900000000372529,
+        "tezos_dkg_ms": 6.899999998509884,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.300000000745058,
+        "solana_sign_ms": 1.900000000372529,
+        "tezos_dkg_ms": 7.199999999254942,
+        "tezos_sign_ms": 3.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 10.600000001490116,
+        "solana_sign_ms": 2.199999999254942,
+        "tezos_dkg_ms": 10.099999999627471,
+        "tezos_sign_ms": 2.200000001117587
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 8.100000001490116,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.099999999627471,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.699999999254942,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 7,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 9,
+        "solana_sign_ms": 2.400000000372529,
+        "tezos_dkg_ms": 10.099999999627471,
+        "tezos_sign_ms": 2.099999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 10.200000001117587,
+        "solana_sign_ms": 2.299999998882413,
+        "tezos_dkg_ms": 10.099999999627471,
+        "tezos_sign_ms": 2.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 10.199999999254942,
+        "solana_sign_ms": 2.400000000372529,
+        "tezos_dkg_ms": 10.700000001117587,
+        "tezos_sign_ms": 2.199999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 24.800000000745058,
+        "solana_sign_ms": 2.200000001117587,
+        "tezos_dkg_ms": 32.29999999888241,
+        "tezos_sign_ms": 2.699999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 28.90000000037253,
+        "solana_sign_ms": 2.300000000745058,
+        "tezos_dkg_ms": 77.59999999962747,
+        "tezos_sign_ms": 2.300000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 15.300000000745058,
+        "solana_sign_ms": 3.5,
+        "tezos_dkg_ms": 12,
+        "tezos_sign_ms": 6.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 13.800000000745058,
+        "solana_sign_ms": 2.299999998882413,
+        "tezos_dkg_ms": 28.59999999962747,
+        "tezos_sign_ms": 3.699999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 13.099999999627471,
+        "solana_sign_ms": 2.699999999254942,
+        "tezos_dkg_ms": 13.300000000745058,
+        "tezos_sign_ms": 2.199999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 12.300000000745058,
+        "solana_sign_ms": 2.300000000745058,
+        "tezos_dkg_ms": 26.09999999962747,
+        "tezos_sign_ms": 2.299999998882413
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 10.400000000372529,
+        "solana_sign_ms": 2.699999999254942,
+        "tezos_dkg_ms": 10.199999999254942,
+        "tezos_sign_ms": 2.900000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 11.400000000372529,
+        "solana_sign_ms": 2.5,
+        "tezos_dkg_ms": 11.5,
+        "tezos_sign_ms": 2.299999998882413
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7,
+        "solana_sign_ms": 2.300000000745058,
+        "tezos_dkg_ms": 27,
+        "tezos_sign_ms": 2.300000000745058
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 10.5,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 11,
+        "tezos_sign_ms": 1.599999999627471
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 11.199999999254942,
+        "solana_sign_ms": 1.900000000372529,
+        "tezos_dkg_ms": 7.5,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7.099999999627471,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.800000000745058,
+        "tezos_sign_ms": 1.299999998882413
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6,
+        "solana_sign_ms": 1.400000000372529,
+        "tezos_dkg_ms": 6.199999999254942,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.800000000745058,
+        "solana_sign_ms": 1.599999999627471,
+        "tezos_dkg_ms": 6.199999999254942,
+        "tezos_sign_ms": 1.5
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 7,
+        "solana_sign_ms": 1.699999999254942,
+        "tezos_dkg_ms": 6.400000000372529,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.400000000372529,
+        "solana_sign_ms": 1.700000001117587,
+        "tezos_dkg_ms": 6.299999998882413,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.099999999627471,
+        "solana_sign_ms": 1.300000000745058,
+        "tezos_dkg_ms": 6,
+        "tezos_sign_ms": 1.699999999254942
+      }
+    },
+    {
+      "timings_ms": {
+        "solana_dkg_ms": 6.600000001490116,
+        "solana_sign_ms": 1.5,
+        "tezos_dkg_ms": 6.399999998509884,
+        "tezos_sign_ms": 1.400000000372529
+      }
+    }
+  ],
+  "entropy_failure": {
+    "passed": true,
+    "requests": 1
+  },
+  "unexpected_page_requests": 0,
+  "page_errors": 0,
+  "percentile_method": "nearest rank, sorted[ceil(n * p / 100) - 1]",
+  "load_average_end": [
+    7.04296875,
+    5.7939453125,
+    9.38427734375
+  ],
+  "warm_summary": {
+    "requested": 200,
+    "attempted": 200,
+    "passed": 200,
+    "failed": 0,
+    "skipped": 0,
+    "metrics": {
+      "solana_dkg_ms": {
+        "min": 6,
+        "median": 6.800000000745058,
+        "max": 28.90000000037253,
+        "p50": 6.800000000745058,
+        "p90": 11.300000000745058,
+        "p95": 15.300000000745058,
+        "p99": 24.5
+      },
+      "solana_sign_ms": {
+        "min": 1.299999998882413,
+        "median": 1.599999999627471,
+        "max": 10.199999999254942,
+        "p50": 1.599999999627471,
+        "p90": 2.699999999254942,
+        "p95": 3.099999999627471,
+        "p99": 6.700000001117587
+      },
+      "tezos_dkg_ms": {
+        "min": 5.900000000372529,
+        "median": 6.800000000745058,
+        "max": 77.59999999962747,
+        "p50": 6.800000000745058,
+        "p90": 11.200000001117587,
+        "p95": 15.900000000372529,
+        "p99": 32.29999999888241
+      },
+      "tezos_sign_ms": {
+        "min": 1.299999998882413,
+        "median": 1.599999999627471,
+        "max": 7.199999999254942,
+        "p50": 1.599999999627471,
+        "p90": 2.400000000372529,
+        "p95": 2.899999998509884,
+        "p99": 6.400000000372529
+      }
+    }
+  },
+  "passed": true
+}
