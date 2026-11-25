@@ -65,3 +65,24 @@ At 390 × 650 CSS pixels, each of 120 alternating pairs started from a fresh con
 | 16859b5f | warm_seed_form_after_escape_ms | 0 / 0 / 120 | - | - | - | - | - |
 
 On the inherited build every Import attempt left the menu over the form. Pressing Escape made it possible to continue. Those Seed Words timings have their own row. With the menu fix, all 120 journeys reached the seed form directly. Host load changed substantially during the run. The cold-load and menu latency differences do not establish a speedup. These samples cover desktop Chromium at a mobile viewport. Physical iPhone and WebKit measurements remain open. [Menu fix](https://github.com/dvkam/kukai/pull/60)
+
+## Isolate the 3D viewer cost on Home
+
+Use a clean optimized build with the global model-viewer tag removed and the locked model-viewer 3.5.0 npm dependency installed. This comparison serves the same build in both conditions. One condition adds the former module tag immediately after the favicon link. Its script response comes from the locked package. The other condition serves the original build. External HTTP and WebSockets are blocked. Home has no visible 3D models in either condition.
+
+```sh
+python experiments/web-wallet-performance/viewer.py /path/to/optimized-build --samples 100 > viewer-comparison.json
+```
+
+The runner alternates the order of measured pairs. Each visit has a fresh context. The first pair warms the shared browser process and is reported separately. Each accepted visit must stay on the original Home document, render the Google sign-in button, register the viewer exactly when expected, and make the expected number of viewer requests. The interval ends at DOMContentLoaded. It excludes subsequent paint, interaction readiness and remote CDN latency. A final bundle check detects changes during the run.
+
+### Home viewer measurement, November 25, 2026
+
+Chromium 156 loaded the same optimized Home document in 100 alternating pairs. The eager variant fetched 935,194 viewer bytes on every visit. The on-demand variant fetched none. All 200 measured visits reached Home with no 3D model and passed the request and registration checks. One warm-up pair is reported separately. [Raw trials, browser settings and observed bundle hashes](evidence/viewer-2026-11-25.json)
+
+| Home at 390 × 650 | Valid visits | p50 ms | p90 ms | p95 ms | p99 ms |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Eager viewer | 100 | 9,025.5 | 17,031.1 | 19,410.6 | 25,048.9 |
+| On-demand viewer | 100 | 8,774.3 | 16,299.3 | 18,886.6 | 26,376.1 |
+
+The on-demand version removed the Home viewer request. Its p99 DOMContentLoaded time was 1,327.2 ms higher on this shared host. Load varied during the run, so these observations do not establish a consistent latency gain. The earlier CPU profile recorded 54 Home samples in eager viewer evaluation and zero after the change. [Viewer change and profile](https://github.com/dvkam/kukai/pull/62)
