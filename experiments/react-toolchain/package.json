@@ -1,0 +1,36 @@
+{
+  "name": "@kukai/react-toolchain-experiment",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:profile": "vite build --mode profiling",
+    "preview:profile": "vite preview --mode profiling",
+    "lint": "oxlint --deny-warnings",
+    "format:check": "oxfmt --check",
+    "format:write": "oxfmt --write",
+    "styles:types": "tcm src --pattern \"**/*.module.css\" --allowArbitraryExtensions",
+    "typecheck": "node check-css-declarations.ts && pnpm run styles:types --listDifferent && tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "react": "19.3.1",
+    "react-dom": "19.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "@types/react": "19.3.1",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "oxc-transform-react": "0.156.0",
+    "oxfmt": "0.80.0",
+    "oxlint": "1.95.0",
+    "tsrs": "7.1.0-beta.tsrs5",
+    "typed-css-modules": "0.9.1",
+    "typescript": "7.0.2",
+    "vite": "8.3.8",
+    "vitest": "5.1.1"
+  },
+  "packageManager": "pnpm@12.23.0"
+}

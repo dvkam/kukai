@@ -52,6 +52,16 @@ def check_build_evidence(evidence, sources):
       raise ValueError(f'Invalid retained build result: {result["package"]} {result["target"]}')
 
 
+def markdown_sources(root: Path):
+  for directory, subdirectories, files in root.walk():
+    # Experiments can install their own dependencies beside repository documentation.
+    if 'node_modules' in subdirectories:
+      subdirectories.remove('node_modules')
+    for filename in files:
+      if filename.endswith('.md'):
+        yield directory / filename
+
+
 def main():
   baseline = PROGRAM / 'program-plan-v0.5.1.md'
   expected = '8d3c20806b3dc566811d6f464c6c6bcd76fc8d38bb4aea8fd0a3d0b471c1ddf6'
@@ -65,8 +75,7 @@ def main():
     for row in register.splitlines():
       if re.match(r'\| ' + prefix + r'-\d+ \|', row) and '| dvkam |' not in row:
         raise ValueError(f'Unrecorded owner change: {row}')
-  documents = list(PROGRAM.rglob('*.md')) + list((ROOT / 'experiments').rglob('*.md'))
-  for document in documents:
+  for document in (*markdown_sources(PROGRAM), *markdown_sources(ROOT / 'experiments')):
     for target in re.findall(r'\]\(([^)]+)\)', document.read_text()):
       if '://' not in target and not target.startswith('#'):
         path = document.parent / target.split('#')[0]

@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "allowArbitraryExtensions": true,
+    "erasableSyntaxOnly": true,
+    "exactOptionalPropertyTypes": true,
+    "jsx": "react-jsx",
+    "lib": ["ES2025", "DOM", "DOM.Iterable"],
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "noUncheckedSideEffectImports": true,
+    "skipLibCheck": false,
+    "strict": true,
+    "target": "ES2025",
+    "types": ["node", "vite/types/importMeta.d.ts"],
+    "verbatimModuleSyntax": true
+  },
+  "include": ["src", "*.ts"]
+}

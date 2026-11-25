@@ -4,8 +4,8 @@ Retrieved on 20 November 2026 for P0-03. These are experiment candidates, not an
 
 | Tool | Source observation | Compatibility and current result |
 | --- | --- | --- |
-| Node | Official distribution index identifies v26.13.1 as LTS, codename Lithium. | The shell initially has v24.22.1. Node 26 is not installed or tested here. Do not use GitHub's "latest" alpha-tagged release as a stable candidate. |
-| pnpm | GitHub release v12.21.0. | The shell has 11.25.0. Node 26 with pnpm 12 needs a fresh web-project check before adoption. |
+| Node | Official distribution index identifies v26.13.1 as LTS, codename Lithium. | The inherited wallet uses v24.22.1. The fixture below checks Node 26 separately. Do not use GitHub's "latest" alpha-tagged release as a stable candidate. |
+| pnpm | GitHub release v12.21.0. | The original shell had 11.25.0. The fixture below checks the newer pnpm 12 pin with Node 26. |
 | Rust | Release 1.100.0. | Installed in a workspace-local rustup directory. FROST 3.0.0 and CGGMP24 alpha.3 compile for the native host and WASM. No shared wallet toolchain changed. |
 | OCaml and Dune | Releases 5.5.2 and 3.25.0. | Not installed or built here. OCaml 5.5.2 conflicts with Gospel 0.3.1's declared upper bound. |
 | Swift | swift-6.4.2-RELEASE. | Xcode, supported SDKs, deployment target, signing, and physical-device execution remain unconfirmed. Linux Rust compilation supplies no iOS evidence. |
@@ -37,3 +37,11 @@ P3-07 must establish a complete OCaml, Gospel, Cameleer, Why3, and solver combin
 | Independent cryptography and formal-methods reviewers | Unfilled for production under POC-001. | Actual scoped review, with reviewed source revisions and findings, before baseline admission. |
 
 All build observations are local feasibility evidence. Stable release numbers and declared version ranges do not establish security, mutual compatibility, or production suitability.
+
+## React and CSS Modules fixture
+
+The read-only React fixture runs on Node 26.13.1 and pnpm 12.23.0. Its CI job covers a frozen install, deduplication, Rust-backed type-aware lint, formatting, whole-project typechecking, tests and the Vite build. The job runs for pull requests and pushes to `production` or `main`. The fork's default branch is `production`. [Pinned fixture](../../../experiments/react-toolchain/README.md)
+
+Appendix W already selects CSS Modules and shared design tokens as CSS custom properties. The migration starts by agreeing on the `apps/web` initialization and its first read-only journey. The fixture checks the toolchain before that step. Keep Angular's npm lockfile, Karma and its Webpack patch until the inherited wallet is retired. Keep Pyright for the Python experiments that still use it. [Web foundation](../program-plan-v0.5.1.md#appendix-w-web-foundation-carried-from-plan-v2) · [Initialization decision](../decisions.md#proposals-awaiting-decisions)
+
+A separate TypeScript 7.1 beta trial resolved CSS class names directly through a Content Mapper. A misspelled class produced TS2551. The compiler requires explicit permission to execute the mapper through `--runExternalCode`. The fixture uses stable TypeScript and checks generated CSS Module declarations against the stylesheet. Revisit the mapper once TypeScript 7.1 is stable and the editor, bundler and lint backend agree on the same class names. [TypeScript announcement](https://devblogs.microsoft.com/typescript/announcing-typescript-7-1-beta/) · [Content Mapper implementation](https://github.com/microsoft/typescript-go/pull/4712)
