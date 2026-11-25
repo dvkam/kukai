@@ -1,0 +1,48 @@
+# Logged-out wallet performance
+
+Measure cold Home and warm mobile navigation on the inherited web wallet. Use the same runner, network conditions and viewport for each revision. The release targets and reference-device protocol are tracked in [issue #10](https://github.com/dvkam/kukai/issues/10). Report local runs in [issue #52](https://github.com/dvkam/kukai/issues/52).
+
+## Run
+
+Use Node 24.22.1, Python 3.12, and Chrome or Chromium on Linux. Install the wallet's locked Node dependencies in each checkout and install Playwright with `python -m pip install -r requirements-ci.txt`. The runner looks for `chromium` or `google-chrome`. Set `CHROME_BIN` to choose a specific binary.
+
+From the baseline checkout, run the following. The output directory must be new. The build uses Angular's production configuration and disables external font inlining. Script and style optimization remain enabled. Use a checkout with clean application inputs. The build checks those inputs and the commit before and after Angular runs. It writes their digests, the emitted JavaScript and CSS digests, and the Node and Angular versions next to the assets.
+
+```sh
+bench_dir="$PWD/experiments/web-wallet-performance"
+build_dir="$(mktemp -d)"
+node --max-old-space-size=4096 "$bench_dir/build.cjs" "$build_dir/baseline"
+python "$bench_dir/run.py" "$build_dir/baseline" > "$build_dir/baseline.json"
+```
+
+For a comparison, build the second revision from its checkout with the same helper. Keep both checkouts and their dependencies fixed while building.
+
+```sh
+(cd /path/to/candidate && node --max-old-space-size=4096 "$bench_dir/build.cjs" "$build_dir/candidate")
+python "$bench_dir/run.py" "$build_dir/baseline" --candidate "$build_dir/candidate" > "$build_dir/comparison.json"
+```
+
+The default is 200 measured attempts per build. `--samples 1` checks the setup. One warm-up per build primes the shared browser process and static server and has its own record outside the percentiles. The runner alternates the order of a baseline and candidate pair on successive attempts. Before collecting comparison data, check host load and allow unrelated builds or tests to finish. Record the power profile and note any CPU contention.
+
+## What each sample measures
+
+The runner serves the builds over loopback. Every attempt starts a fresh browser context at 390 by 650 CSS pixels, with service workers blocked and normal motion. Routing disables the browser HTTP cache and blocks external HTTP requests and WebSockets. The browser process and server stay open across attempts. The fixture pre-accepts the terms and stays logged out. It has zero assets and contains no keys, funds, transactions or login credentials.
+
+| Workflow | Start | Visible completion |
+| --- | --- | --- |
+| Cold Home | Browser navigation time origin | Home heading, Google sign-in button and closed mobile menu button render. The local hero image has loaded. |
+| Warm menu | Pointer click on Wallet navigation | The expanded menu contains the Import Wallet link. Its animations have settled. |
+| Warm Import | Pointer click on Import Wallet | The Import wallet heading and Keystore File browse control render on `/import`. The menu has closed. |
+| Warm Seed Words | Pointer click on Seed Words | The selected Seed Words method displays an empty, editable recovery textarea. |
+
+The renderer records the click in the capture phase and checks completion across three consecutive animation-frame callbacks. This allows two paint opportunities after the first matching frame. Headless Chromium cannot measure physical display latency. Warm actions stay in the app instance opened by the cold navigation. Time to dispatch an automated pointer click falls outside each warm interval.
+
+A menu that stays open over the Import form fails the Import attempt. The runner then presses Escape and records Seed Words under `warm_seed_form_after_escape_ms` if the menu dismisses and the form works. This keeps that result separate from a successful journey through the menu.
+
+## Read the result
+
+The JSON includes the browser version, host settings, each raw timing, blocked request counts and validation failures. Each step has a 15-second completion timeout. A failed validation has no timing for that action. Uncaught page errors and failed local requests invalidate the trial's timings. A failed journey makes the command exit nonzero after writing its report. If a warm-up cannot render Home, the runner skips the timed attempts.
+
+Each workflow reports attempted, successful, failed and skipped counts. Percentiles use nearest rank on successful samples in ascending order. For percentile `p` over `n` measurements, take the one-based element at `ceil(n × p / 100)`. The report also gives the conventional median and the minimum and maximum. At 100 successful measurements, p99 is the second-slowest sample. A small number of samples can reveal a broken flow. Use repeated matched runs to assess a timing difference.
+
+This fixture measures logged-out browser work with fallback fonts and a warm server and OS cache. Live RPC and authentication, cryptography, large asset lists, transaction approval and recovery require their own fixtures. Re-run on WebKit and a physical reference iPhone before comparing iOS performance.

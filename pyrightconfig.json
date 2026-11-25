@@ -8,7 +8,8 @@
     "experiments/web_limits",
     "experiments/token_amounts",
     "experiments/browser-prf/run.py",
-    "experiments/ed25519-signing/browser/run.py"
+    "experiments/ed25519-signing/browser/run.py",
+    "experiments/web-wallet-performance/run.py"
   ],
   "typeCheckingMode": "basic",
   "pythonVersion": "3.12"
