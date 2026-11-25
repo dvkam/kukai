@@ -513,7 +513,7 @@ $base-background-color: v.$base-background-color;
 }
 
 :host .card {
-  .back-link {
+  a.back-link {
     align-items: center;
     min-height: 44px;
     box-sizing: border-box;
