@@ -51,4 +51,6 @@ The retained run took about 169 seconds for safe-prime generation and 57 seconds
 
 ## Remaining evidence
 
+The separate [EIP-1559 exit experiment](exit/README.md) exercises retained core packages in fresh processes. It reconstructs the exportable key and signs synthetic Ethereum and Base transactions in a runner designed for a private Linux network namespace.
+
 The issue stays open until its full acceptance criteria are met. Browser and physical iPhone execution are Deferred under POC-001. Authenticated transport, malicious and offline participants, concurrent requests, crash-safe nonce handling, presignature reuse attacks, protocol release cutoffs, migration, and the full G3 exit drill are Unrun. Independent review and the presignature-policy decision are Deferred. Native results cannot establish those properties or pass a production gate.

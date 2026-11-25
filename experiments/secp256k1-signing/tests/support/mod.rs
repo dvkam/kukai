@@ -1,37 +1,11 @@
 use std::time::Instant;
 
 use alloy_consensus::{SignableTransaction, TxEip1559};
-use alloy_primitives::{Address, Signature, TxKind, B256, U256};
-use cggmp24::{
-  key_share::{AnyKeyShare, IncompleteKeyShare},
-  supported_curves::Secp256k1,
-};
-use rand_core::{OsRng, RngCore};
+use alloy_primitives::{Address, Signature, B256};
+use cggmp24::{key_share::AnyKeyShare, supported_curves::Secp256k1};
+use rand_core::OsRng;
 use sha3::Keccak256;
-
-pub fn execution_id() -> [u8; 32] {
-  let mut id = [0; 32];
-  OsRng.fill_bytes(&mut id);
-  id
-}
-
-pub fn dkg() -> Vec<IncompleteKeyShare<Secp256k1>> {
-  let id = execution_id();
-  let shares = round_based::sim::run(3, |i, party| async move {
-    cggmp24::keygen::<Secp256k1>(cggmp24::ExecutionId::new(&id), i, 3)
-      .set_threshold(2)
-      .start(&mut OsRng, party)
-      .await
-  })
-  .unwrap()
-  .expect_ok()
-  .into_vec();
-  for share in &shares {
-    assert_eq!(share.shared_public_key(), shares[0].shared_public_key());
-    assert_eq!(share.min_signers(), 2);
-  }
-  shares
-}
+pub use wallet_secp256k1_signing_experiment::{dkg, execution_id, transfer};
 
 pub fn complete_dkg() -> Vec<cggmp24::KeyShare<Secp256k1>> {
   let started = Instant::now();
@@ -67,19 +41,6 @@ pub fn complete_dkg() -> Vec<cggmp24::KeyShare<Secp256k1>> {
     .zip(auxiliary)
     .map(|parts| cggmp24::KeyShare::from_parts(parts).unwrap())
     .collect()
-}
-
-pub fn transfer(chain_id: u64) -> TxEip1559 {
-  TxEip1559 {
-    chain_id,
-    nonce: 7,
-    gas_limit: 21_000,
-    max_fee_per_gas: 2_000_000_000,
-    max_priority_fee_per_gas: 1_000_000_000,
-    to: TxKind::Call(Address::from([0x11; 20])),
-    value: U256::from(1),
-    ..Default::default()
-  }
 }
 
 pub fn threshold_sign(shares: &[cggmp24::KeyShare<Secp256k1>], tx: &TxEip1559) -> Signature {
