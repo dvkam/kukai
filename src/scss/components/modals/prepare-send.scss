@@ -18,6 +18,11 @@ $base-background-color: v.$base-background-color;
   width: 100%;
   max-width: 32em;
 
+  & button.small:focus-visible {
+    outline: 2px solid v.$base-blue-color;
+    outline-offset: 2px;
+  }
+
   & textarea {
     border-radius: v.$border-radius-hard;
     border: $border-width solid $border-color;
