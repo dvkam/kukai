@@ -74,9 +74,9 @@ The original observations above identify the inherited build. The retests below 
 
 ### Remaining interaction checks
 
-To reproduce a pointer collision at 390 px, open Wallet navigation and double-click Create New Wallet. The first click can close the menu and expose the Back link beneath the pointer. The second click then returns Home. This was reproduced with a mouse and emulated touch from Import and from New Wallet itself. A separate failure occurred when Enter in the verification field activated the nested Back button. Retest an intentional second click at another position, a new click at the original position, keyboard Back, and browser history on the changed build. [Reproduction and retest history](https://github.com/dvkam/kukai/issues/55)
+To reproduce a pointer collision at 390 px, open Wallet navigation and double-click Create New Wallet. The first click can close the menu and expose the Back link beneath the pointer. The second click then returns Home. This was reproduced with a mouse and emulated touch from Import and from New Wallet itself. A separate failure occurred when Enter in the verification field activated the nested Back button. The revised Back is one link with a 44 px hit target. All 16 repeated mouse and touch cases that failed on the original passed on the revised build. The 50-case retest included a fresh click at the original position, a moved tap, keyboard Back and browser history. Enter in seed verification stayed on that step. [Fix and retest](https://github.com/dvkam/kukai/pull/85) [Reproduction and retest history](https://github.com/dvkam/kukai/issues/55)
 
-The permission account selector and session selector need their own keyboard checks. Their trigger panels already use anchored motion. Verify a named trigger, complete keyboard selection, dismissal, return focus and clearance at narrow widths for each real caller. [Trigger inventory](https://github.com/dvkam/kukai/issues/53)
+The permission and session panels already animate from their triggers. The November 25 checks below found failures in keyboard selection, dismissal and the permission picker’s highlighted account.
 
 ### Account selection
 
@@ -101,3 +101,13 @@ With the synthetic simulation response accepted, Preview moves focus to the Conf
 ### Returning to another account
 
 The returning-wallet fixture checked 100 keyboard and 100 pointer round trips. Each selection had to finish on the requested account with its full address in the button's accessible name, the picker hidden and inert, and focus restored to the visible trigger. A wrong account or missing focus fails the measurement. Both accounts were synthetic watch-only fixtures. [Protocol and all four percentiles](https://github.com/dvkam/kukai/pull/83)
+
+### Choose the account for a permission request or session
+
+In the inherited web wallet, present a synthetic connection request with two accounts. Tab from the preceding page control. The chooser and Close are skipped, focus reaches Connect and can leave the prompt. Clicking the chooser opens it. Its trigger exposes neither a control name nor an expanded state, its entries have no tab stop, and Escape leaves it open. An incoming request keeps focus on the previous page control. [Permission selector](https://github.com/dvkam/kukai/blob/06387174b7ac29835d01a62d805fd064a15ab68e/src/app/components/ui/dropdown/permission-request/permission-request.component.html#L2)
+
+Choose the second account by pointer and reopen the permission chooser. The trigger and the parent’s staged account change, but the first row stays highlighted. The review dismissed the prompt before granting a permission. In the separate session chooser, the staged account and selected row agree. From Settings, Tab skips the unnamed Edit image that opens that chooser. A pointer can open it, but Escape does not close it and focus can return to the document body. [Settings entry](https://github.com/dvkam/kukai/blob/06387174b7ac29835d01a62d805fd064a15ab68e/src/app/components/views/logged-in/settings/settings.component.html#L76) · [Reproduction and acceptance checks](https://github.com/dvkam/kukai/issues/87)
+
+![At 390 CSS pixels, the permission trigger says reserve-fixture.tez while the open list still highlights everyday-fixture.tez.](permission-account-selection.png)
+
+At 320 CSS pixels, a long synthetic alias clipped by about 68 px in the permission list and 55 px in the session list. Its full address remained visible on the next line. Retest both narrow layouts, verify the selected address visually and with a screen reader, and confirm that browsing or cancelling leaves authorization unchanged. [Account selection follow-up](https://github.com/dvkam/kukai/issues/87)
