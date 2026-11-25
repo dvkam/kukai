@@ -28,6 +28,7 @@ import { HttpClient } from '@angular/common/http';
 import { RSA_X931_PADDING } from 'constants';
 import { CoordinatorService } from '../coordinator/coordinator.service';
 import { IndexerService } from '../indexer/indexer.service';
+import { TzktService } from '../indexer/tzkt/tzkt.service';
 import { LookupService } from '../lookup/lookup.service';
 import { SubjectService } from '../subject/subject.service';
 import { TokenService } from '../token/token.service';
@@ -178,6 +179,18 @@ describe('Activity refresh', () => {
     expect(account.state).toBe('previous counter');
     expect(service.getActivityState(account)).toBe('stale');
   }));
+
+  it('marks activity unavailable if the provider returns an unexpected operation kind', async () => {
+    const provider = new TzktService(new SubjectService());
+    const returnedOperations = [{ type: 'proxy-heartbeat', hasInternals: true, target: { address } }];
+    spyOn(window, 'fetch').and.returnValues(Promise.resolve(new Response(JSON.stringify(returnedOperations))), Promise.resolve(new Response('[]')));
+    indexer.accountInfo.and.resolveTo({ counter: 'counter', tokens: [] });
+    indexer.getOperations.and.callFake((...args) => provider.getOperations(...args));
+
+    await expectAsync(service.updateTransactions(address).toPromise()).toBeRejected();
+    expect(service.getActivityState(account)).toBe('unavailable');
+    expect(account.activities).toBeNull();
+  });
 
   it('confirms empty history only after a successful result and keeps refreshes scoped to each account', fakeAsync(() => {
     const other = new ImplicitAccount('tz1OtherAccount', '');

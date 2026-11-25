@@ -165,11 +165,15 @@ export class TzktService implements Indexer {
     return Boolean(accountInfo && (accountInfo?.type === 'user' || accountInfo?.balance || accountInfo?.tokenBalancesCount));
   }
   async getOperations(address: string, knownTokenIds: string[], wallet: WalletObject, signal?: AbortSignal): Promise<any> {
-    const ops = await fetch(`${CONSTANTS.API_URL}/accounts/${address}/operations?limit=20&type=delegation,origination,transaction,staking`, { signal })
+    const operationTypes = ['delegation', 'origination', 'transaction', 'staking'];
+    const ops = await fetch(`${CONSTANTS.API_URL}/accounts/${address}/operations?limit=20&type=${operationTypes.join(',')}`, { signal })
       .then((response) => this.readRecords(response))
       .then((data) =>
         data
           .map((op) => {
+            if (!operationTypes.includes(op?.type)) {
+              throw new Error('Invalid indexer operation type');
+            }
             if (!op.hasInternals || !wallet.getAccount(op.target.address)) {
               const status: OpStatus = op.status === 'applied' ? OpStatus.CONFIRMED : OpStatus.FAILED;
               let destination = { address: '' };
@@ -206,9 +210,6 @@ export class TzktService implements Indexer {
                   entrypoint = op.action;
                   amount = op.amount.toString();
                   break;
-                default:
-                  console.log(`Ignoring kind ${op.type}`);
-                  return null;
               }
               const activity: Activity = {
                 type: op.type,
