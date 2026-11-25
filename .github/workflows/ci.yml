@@ -37,6 +37,7 @@ jobs:
       - run: npm run typecheck
       - run: npm run test:ci
       - run: npm run test:ci-policy
+      - run: npm run test:tezos-encoding
       - run: npx eslint experiments/browser-prf/probe.js && npx tsc --project experiments/browser-prf/tsconfig.json
 
   program:
