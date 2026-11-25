@@ -15,7 +15,8 @@
         </div>
         <span>COPY</span>
       </button>
-      <button type="button" class="flex-column button" (click)="receive();isOpen = false">
+      <button #receiveTrigger type="button" class="flex-column button" aria-label="Receive address QR code" aria-haspopup="dialog"
+        (click)="openReceive(receiveTrigger)">
         <div class="wrapper">
           <img alt="" class="icon" src="../../../../assets/img/qr-blue.svg" />
         </div>

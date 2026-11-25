@@ -216,6 +216,21 @@ $base-filter-brightness-5: v.$base-filter-brightness-5;
         }
       }
 
+      &.receive {
+        box-sizing: content-box;
+        margin-right: 1rem;
+        background: transparent;
+
+        &:focus-visible {
+          outline: 2px solid $base-blue-color;
+          outline-offset: 2px;
+
+          & .tooltip {
+            display: flex;
+          }
+        }
+      }
+
       &:last-child {
         & img {
           margin: 0 0 0 0.25rem;
