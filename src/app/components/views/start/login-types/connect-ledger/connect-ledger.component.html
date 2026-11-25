@@ -1,20 +1,27 @@
-<form autocomplete="off">
+<form autocomplete="off" (ngSubmit)="getPk()">
   <div class="flex-column card">
-    <a routerLink="/"><button class="flex-row back"><img
-          src="../../../../../assets/img/left-arrow.svg">BACK</button></a>
+    <a routerLink="/" class="flex-row back back-link"><img src="../../../../../assets/img/left-arrow.svg" alt="">BACK</a>
     <div class="flex-column body">
       <h1>Connect your Ledger</h1>
       <p class="description">Keep the private keys safely on your Ledger device and use Kukai to access the Tezos
         blockchain.</p>
       <p class="description">You need to open the Tezos Wallet app on your Ledger device.
       </p>
-      <input name="none" type="text" class="text path-input" [disabled]="!isHDDerivationPathCustom" [(ngModel)]="path"
-        value="'44\'/1729\'/0\'/0\''">
-      <app-ui-toggle-advanced style="width: 24rem;" [default]="false" [text]="'Custom derivation path:'"
-        (stateChange)="setDefaultPath($event)"></app-ui-toggle-advanced>
-      <br /><br /><br />
-      <button class="button next" (click)="getPk()" [disabled]="browser === 'safari'">{{ browser !== 'safari' ?
-        'Connect' : 'Ledger support with Safari is currently unavailable' }}</button>
+      <div class="import-form">
+        <div class="import-group">
+          <app-ui-toggle-advanced [default]="false" text="Custom derivation path" controls="ledger-derivation-path"
+            (stateChange)="setDefaultPath($event)"></app-ui-toggle-advanced>
+        </div>
+        <div class="import-group">
+          <label for="ledger-derivation-path">Derivation path</label>
+          <input id="ledger-derivation-path" name="path" type="text" class="text import-field path-input"
+            [disabled]="!isHDDerivationPathCustom" [(ngModel)]="path" autocomplete="off" autocapitalize="off" spellcheck="false"
+            [attr.aria-invalid]="pathError ? 'true' : null" [attr.aria-describedby]="pathError ? 'ledger-path-error' : null">
+        </div>
+        <p class="import-error" id="ledger-path-error" aria-live="polite">{{ pathError }}</p>
+        <button class="button next" type="submit" [disabled]="browser === 'safari'">{{ browser !== 'safari' ?
+          'Connect' : 'Ledger support with Safari is currently unavailable' }}</button>
+      </div>
     </div>
   </div>
 </form>

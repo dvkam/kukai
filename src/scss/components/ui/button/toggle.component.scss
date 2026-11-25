@@ -1,14 +1,8 @@
 @use "../../../abstracts/variables" as v;
 @use "../../../abstracts/mixins" as m;
 
-$base-font-color: v.$base-font-color;
 $base-end-color: v.$base-end-color;
 $base-blue-color-lightened: v.$base-blue-color-lightened;
-$color-lightened-3: v.$color-lightened-3;
-$color-lightened-4: v.$color-lightened-4;
-$color-lightened-5: v.$color-lightened-5;
-$color-lightened-6: v.$color-lightened-6;
-$advanced-color: #e6eaef;
 $border-width: v.$border-width;
 $border-color: v.$border-color;
 
@@ -37,10 +31,9 @@ $border-color: v.$border-color;
 
 .advanced {
   font-size: 100%;
-  min-width: 12em;
   justify-content: center;
-  margin: 0 0 0 1em;
-  width: 100%;
+  margin-inline-start: 1em;
+  width: calc(100% - 1em);
 
   & * {
     -webkit-tap-highlight-color: #fff0;
@@ -49,12 +42,28 @@ $border-color: v.$border-color;
   & .switch-container {
     display: flex;
     align-items: center;
-    flex-direction: row;
+    flex-wrap: wrap;
     width: 100%;
-    height: 1em;
-    font-size: 1.054em;
+    min-height: 2.75em;
+    padding: 0;
+    gap: 0.75em;
+    border: 0;
+    border-radius: 0.25em;
+    background: transparent;
+    font: inherit;
+    text-align: left;
+    text-transform: none;
+    letter-spacing: normal;
+
+    &:focus-visible {
+      outline: 2px solid v.$base-blue-color;
+      outline-offset: 3px;
+    }
 
     & .switch {
+      align-items: center;
+      flex-shrink: 0;
+
       & .slider {
         @include m.base-relative;
         cursor: pointer;
@@ -63,7 +72,6 @@ $border-color: v.$border-color;
         background-color: $base-end-color;
         border: $border-width solid v.$border-color;
         border-radius: v.$border-radius-hardest;
-        transition: 0.4s;
         width: 3.5em;
         height: 2em;
         font-size: 1.125em;
@@ -85,7 +93,11 @@ $border-color: v.$border-color;
           left: 0.25em;
           bottom: 0.25em;
           background-color: v.$border-color;
-          transition: 0.25s all;
+          transition: transform 0.25s, background-color 0.25s;
+
+        @media (prefers-reduced-motion: reduce) {
+          transition: none;
+        }
           border-radius: v.$border-radius-hardest;
         }
       }
@@ -95,23 +107,14 @@ $border-color: v.$border-color;
       margin: 0;
       font-weight: 500;
       &.key {
-        color: $color-lightened-3 !important;
+        color: v.$base-font-color-secondary;
         font-size: 1.25em;
         margin: 0 0.5em 0 0;
-        &.active {
-          color: $color-lightened-3 !important;
-          & .round {
-            -webkit-transform: translateX(1.5em);
-            -ms-transform: translateX(1.5em);
-            transform: translateX(1.5em);
-            background-color: $base-blue-color-lightened;
-          }
-        }
       }
 
       &.value {
-        @include m.multiply("font-size", 1.125, "em !important");
-        color: #6c7a8d !important;
+        color: v.$base-font-color;
+        overflow-wrap: anywhere;
       }
     }
   }

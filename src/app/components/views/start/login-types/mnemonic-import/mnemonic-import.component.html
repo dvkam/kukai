@@ -1,106 +1,136 @@
 <div class="flex-column card">
-  <a routerLink="/"><button class="flex-row back"><img src="../../../../../assets/img/left-arrow.svg">BACK</button></a>
+  <a routerLink="/" class="flex-row back back-link"><img src="../../../../../assets/img/left-arrow.svg" alt="">BACK</a>
   <div *ngIf="activePanel === 0" class="flex-column body">
     <h1>Import wallet</h1>
-    <div class="flex-row import-options">
-      <span [class.selected]="importOption===0" (click)="reset(); importOption = 0">Keystore File</span>
-      <span [class.selected]="importOption===1" (click)="reset(); importOption = 1">Seed Words</span>
-      <span [class.selected]="importOption===2" (click)="reset(); importOption = 2">Fundraiser</span>
+    <div class="flex-row import-options" role="tablist" aria-label="Import method" [attr.aria-describedby]="hasImportEntries ? 'import-switch-hint' : null"
+      (keydown)="moveImportTabFocus($event)" (focusout)="restoreSelectedTabStop($event)">
+      <button *ngFor="let method of importMethods; index as index" type="button" role="tab"
+        [id]="'import-tab-' + index" [attr.aria-controls]="'import-panel-' + index"
+        [attr.aria-selected]="importOption === index" [attr.tabindex]="focusedImportOption === index ? 0 : -1"
+        [attr.aria-disabled]="importingKeystore ? 'true' : null" (focus)="focusedImportOption = index"
+        (click)="selectImportOption(index)">
+        {{ method }}
+      </button>
     </div>
-    <ng-container *ngIf="importOption === 0">
-      <form autocomplete="off">
-        <p class="description">
-          Import your wallet from an encrypted keystore file (<span style="text-transform: lowercase;">.tez</span>)
-        </p>
-        <input #keyStore name="none" type="file" (change)="handleFileInput($event.target.files)"
-          accept=".tez{{ firefox ? ', application/json' : '' }}" id="file" name="file">
-        <div class="flex-row button input-file-wrapper">
-          <label for="file" class="flex-row button input-file" [class.loaded]="walletJson"
-            (click)="keyStore?.nativeElement?.click();">
-            <ng-container *ngIf="!walletJson"><span class="b">Browse</span><img
-                src="../../../../../assets/img/import-plus.png" /></ng-container>
-            <ng-container *ngIf="walletJson">
-              <div class="flex-row body"><img src="../../../../../assets/img/lock.png" />&nbsp;&nbsp;<span
-                  class="flex-row filename">{{
-                  fileName
-                  }}</span>
-              </div>
+    <p *ngIf="hasImportEntries" class="import-switch-hint" id="import-switch-hint">Switching import methods clears this form.</p>
+    <div *ngFor="let method of importMethods; index as index" class="import-panel" role="tabpanel"
+      [id]="'import-panel-' + index" [attr.aria-labelledby]="'import-tab-' + index" [hidden]="importOption !== index">
+      <ng-container *ngIf="importOption === index">
+        <form *ngIf="index === 0; else recoveryForm" class="import-form" autocomplete="off" (ngSubmit)="checkImportPwd()">
+          <p class="description" id="keystore-help">Import your wallet from an encrypted keystore file (.tez).</p>
+          <input #fileInput type="file" hidden accept=".tez,.json" (change)="chooseFile(fileInput)">
+          <div class="flex-row input-file-wrapper">
+            <button type="button" class="flex-row button input-file" [class.loaded]="walletJson" [disabled]="importingKeystore"
+              [attr.aria-describedby]="'keystore-help' + (fileName ? ' keystore-file-name' : '') + (fileError ? ' keystore-file-error' : '')"
+              (click)="fileInput.click()">
+              <span *ngIf="walletJson" class="flex-row body" aria-hidden="true">
+                <img src="../../../../../assets/img/lock.png" alt=""><span id="keystore-file-name" class="filename">{{ fileName }}</span>
+              </span>
               <span class="b">Browse</span>
+              <img *ngIf="!walletJson" src="../../../../../assets/img/import-plus.png" alt="">
+            </button>
+          </div>
+          <p id="keystore-file-error" class="import-error" aria-live="polite">{{ fileError }}</p>
+          <ng-container *ngIf="walletJson">
+            <div class="import-group">
+              <label for="keystore-password">Keystore password</label>
+              <input id="keystore-password" name="keystore-password" type="password" class="text import-field"
+                autocomplete="current-password" aria-required="true" [(ngModel)]="pwd"
+                [attr.aria-invalid]="fieldError?.field === 'keystore-password' ? 'true' : null"
+                [attr.aria-describedby]="fieldError?.field === 'keystore-password' ? 'import-field-error' : null">
+            </div>
+            <p id="import-field-error" class="import-error" aria-live="polite">{{ fieldError?.message }}</p>
+            <button type="submit" class="button next" [disabled]="importingKeystore">Import</button>
+          </ng-container>
+        </form>
+        <ng-template #recoveryForm>
+          <form class="import-form" autocomplete="off" (ngSubmit)="retrieve()">
+            <p class="description faucet" *ngIf="index === 2"><span>First, <a routerLink="/activate">activate</a> your fundraiser wallet.</span></p>
+            <div class="import-group">
+              <label for="recovery-words">Recovery (seed) words</label>
+              <p id="recovery-words-help" class="import-help">Enter 12 to 24 words.</p>
+              <textarea id="recovery-words" name="recovery-words" class="text import-field seed-word" [(ngModel)]="mnemonic"
+                autocomplete="off" autocapitalize="off" spellcheck="false" aria-required="true"
+                [attr.aria-invalid]="fieldError?.field === 'words' ? 'true' : null"
+                [attr.aria-describedby]="'recovery-words-help' + (fieldError?.field === 'words' ? ' import-field-error' : '')"
+                (keydown)="seedWordKeydown($event)"></textarea>
+            </div>
+            <ng-container *ngIf="index === 1">
+              <div class="import-group">
+                <app-ui-toggle-advanced [default]="false" [state]="advancedForm" [controls]="'recovery-advanced'"
+                  (stateChange)="advancedForm = $event"></app-ui-toggle-advanced>
+              </div>
+              <div id="recovery-advanced" class="import-group" [hidden]="!advancedForm">
+                <label for="recovery-passphrase">Seed passphrase</label>
+                <p id="recovery-passphrase-help" class="import-help">Enter a passphrase if one protects your seed words.</p>
+                <input id="recovery-passphrase" name="passphrase" class="text import-field" type="password" autocomplete="off"
+                  [(ngModel)]="passphrase" [attr.aria-invalid]="fieldError?.field === 'passphrase' ? 'true' : null"
+                  [attr.aria-describedby]="'recovery-passphrase-help' + (fieldError?.field === 'passphrase' ? ' import-field-error' : '')">
+                <ng-container *ngTemplateOutlet="recoveryAddress"></ng-container>
+              </div>
             </ng-container>
-          </label>
-        </div>
-        <input *ngIf="walletJson" name="none" type="password" class="text" autocomplete="current-password"
-          (keydown.enter)='!messageService.spinnerOn ? checkImportPwd() : null' id="pwd" [(ngModel)]="pwd"
-          placeholder="Password">
-        <button class="button next" [style.visibility]="!walletJson ? 'hidden' : ''"
-          (click)='!messageService.spinnerOn ? checkImportPwd() : null'>Import</button>
-      </form>
-    </ng-container>
-    <ng-container *ngIf="importOption > 0">
-      <form autocomplete="off">
-        <p class="description faucet" *ngIf="importOption === 2"><span>Please make sure to first <a
-              routerLink="/activate">activate</a> your fundraiser wallet.</span></p>
-        <span class="description label">RECOVERY (SEED) WORDS <span style="color: #98a0ab">12-24
-            WORDS</span></span>
-        <textarea name="none" class="text seed-word" [(ngModel)]="mnemonic" autocomplete="off" spellcheck="false"
-          [placeholder]="'Seed Words (required)'" (keydown)="seedWordKeydown($event)"></textarea>
-      </form>
-      <ng-container *ngIf="importOption === 1">
-        <app-ui-toggle-advanced style="width: 13rem;" [default]="false" (stateChange)="advancedForm = $event">
-        </app-ui-toggle-advanced>
-        <br /><br />
-        <form autocomplete="off" *ngIf="advancedForm" class="flex-row-wrap import-option-1">
-          <div class="flex-column">
-            <span class="label"><b>If your seed words are protected by a passphrase, it needs to be
-                entered here</b></span>
-            <input name="none" class="text" type="password" name="passphrase" autocomplete="one-time-code"
-              [(ngModel)]="passphrase" [placeholder]="'Passphrase (optional)'" readonly="true"
-              (click)="clickPassword($event)" (blur)="blurPassword($event)">
-          </div>
-          <div class="flex-column">
-            <span class="label"><b>Provide the address to verify your passphrase is correct</b></span>
-            <input name="none" type="text" class="text" [(ngModel)]="pkh"
-              [placeholder]='passphrase ? "tz1... (required)" : "tz1... (optional)"'>
-          </div>
-        </form>
+            <ng-container *ngIf="index === 2">
+              <div class="import-group">
+                <label for="fundraiser-email">Fundraiser email</label>
+                <input id="fundraiser-email" name="email" class="text import-field" type="text" inputmode="email"
+                  autocapitalize="off" spellcheck="false" aria-required="true" [(ngModel)]="email"
+                  [attr.aria-invalid]="fieldError?.field === 'email' ? 'true' : null"
+                  [attr.aria-describedby]="fieldError?.field === 'email' ? 'import-field-error' : null">
+              </div>
+              <div class="import-group">
+                <label for="fundraiser-password">Fundraiser password</label>
+                <input id="fundraiser-password" name="tge-password" class="text import-field" type="password" autocomplete="off"
+                  aria-required="true" [(ngModel)]="password" [attr.aria-invalid]="fieldError?.field === 'password' ? 'true' : null"
+                  [attr.aria-describedby]="fieldError?.field === 'password' ? 'import-field-error' : null">
+              </div>
+              <div class="import-group"><ng-container *ngTemplateOutlet="recoveryAddress"></ng-container></div>
+            </ng-container>
+            <ng-template #recoveryAddress>
+              <label for="recovery-address">Public account address</label>
+              <p id="recovery-address-help" class="import-help">{{ index === 2 ? 'Recommended to verify your fundraiser email and password.' : 'Required when you use a seed passphrase.' }}</p>
+              <input id="recovery-address" name="address" type="text" class="text import-field" [(ngModel)]="pkh"
+                autocapitalize="off" spellcheck="false" [attr.aria-required]="index === 1 && passphrase ? 'true' : null"
+                [attr.aria-invalid]="fieldError?.field === 'address' ? 'true' : null"
+                [attr.aria-describedby]="'recovery-address-help' + (fieldError?.field === 'address' ? ' import-field-error' : '')">
+            </ng-template>
+            <p id="import-field-error" class="import-error" aria-live="polite">{{ fieldError?.message }}</p>
+            <button type="submit" class="button next">Import</button>
+          </form>
+        </ng-template>
       </ng-container>
-      <ng-container *ngIf="importOption === 2">
-        <form autocomplete="off">
-          <span class="label">The email used during the fundraiser</span>
-          <input name="none" class="text" type="text" [(ngModel)]="email" [placeholder]="'Email (required)'">
-          <span class="label">The password you chose during the fundraiser</span>
-          <input name="none" class="text" type="password" name="tge-password" autocomplete="one-time-code"
-            [(ngModel)]="password" [placeholder]="'Password (required)'" readonly="true" (click)="clickPassword($event)"
-            (blur)="blurPassword($event)">
-          <span class="label">Provide the public key hash to verify your email and password are correct</span>
-          <input name="none" type="text" class="text" [(ngModel)]="pkh" [placeholder]="'tz1... (recomended)'">
-        </form>
-      </ng-container>
-      <button class="button next" (click)="retrieve()">Import</button>
-    </ng-container>
+    </div>
   </div>
   <div *ngIf="activePanel==1 && chooseWalletState === chooseWalletStateEnum.UserDoesNotNeedToChooseWallet"
     class="flex-column body">
-    <form autocomplete="off">
-      <h1>Set a password</h1>
+    <form class="import-form" autocomplete="off" (ngSubmit)="setPwdOrConfirmWalletType()">
+      <h1 #stepHeading tabindex="-1">Set a password</h1>
       <p class="description bold blue">This password will be used to create an encrypted keystore file.</p>
       <p class="description">When performing operations that need to be signed with your
         secret key, this password will be required</p>
-      <input name="none" type="password" placeholder="{{ 'NEWWALLETCOMPONENT.PASSWORD' | translate }}" class="text"
-        autocomplete="new-password" [(ngModel)]="pwd1" (keyup)="calcStrength()">
-      <small class="strength"> {{ 'NEWWALLETCOMPONENT.PASSWORDSTRENGTH' | translate }} — <b
-          [style.color]="pwdStrength === 'Catastrophic!' ? 'darkred' : pwdStrength === 'Very weak!' ? 'red' : pwdStrength === 'Weak!' ? 'orange' : pwdStrength === 'Strong!' ? 'green' : 'red'">{{
-          pwdStrength }}</b></small>
-      <input name="none" type="password" placeholder="{{ 'NEWWALLETCOMPONENT.CONFIRMPASSWORD' | translate }}"
-        class="text" autocomplete="new-password" [(ngModel)]="pwd2">
-      <button class="button next" [style.visibility]="!pwd1 ? 'hidden' : ''"
-        (click)="setPwdOrConfirmWalletType()">Next</button>
+      <div class="import-group">
+        <label for="new-import-password">{{ 'NEWWALLETCOMPONENT.PASSWORD' | translate }}</label>
+        <input id="new-import-password" name="new-password" type="password" class="text import-field"
+          autocomplete="new-password" [(ngModel)]="pwd1" (ngModelChange)="calcStrength()" aria-required="true"
+          [attr.aria-invalid]="fieldError?.field === 'new-password' ? 'true' : null"
+          [attr.aria-describedby]="'import-password-strength' + (fieldError?.field === 'new-password' ? ' import-field-error' : '')">
+        <small class="strength" id="import-password-strength">{{ 'NEWWALLETCOMPONENT.PASSWORDSTRENGTH' | translate }} — <b
+          [style.color]="pwdStrength === 'Catastrophic!' ? 'darkred' : pwdStrength === 'Very weak!' ? 'red' : pwdStrength === 'Weak!' ? 'orange' : pwdStrength === 'Strong!' ? 'green' : 'red'">{{ pwdStrength }}</b></small>
+      </div>
+      <div class="import-group">
+        <label for="confirm-import-password">{{ 'NEWWALLETCOMPONENT.CONFIRMPASSWORD' | translate }}</label>
+        <input id="confirm-import-password" name="confirm-password" type="password" class="text import-field"
+          autocomplete="new-password" [(ngModel)]="pwd2" aria-required="true"
+          [attr.aria-invalid]="fieldError?.field === 'confirm-password' ? 'true' : null"
+          [attr.aria-describedby]="fieldError?.field === 'confirm-password' ? 'import-field-error' : null">
+      </div>
+      <p id="import-field-error" class="import-error" aria-live="polite">{{ fieldError?.message }}</p>
+      <button type="submit" class="button next" [disabled]="messageService.spinnerOn">Next</button>
     </form>
   </div>
   <div
     *ngIf="importOption === 1 && activePanel === 1 && chooseWalletState !== chooseWalletStateEnum.UserDoesNotNeedToChooseWallet"
     class="body flex-column">
-    <h1>Confirm Wallet Type</h1>
+    <h1 #stepHeading tabindex="-1">Confirm Wallet Type</h1>
     <p class="description" *ngIf="chooseWalletState !== chooseWalletStateEnum.TzktErrorEncountered">
       You have used both the HD and Legacy wallets derived from the seed words. Please choose one.
     </p>
@@ -110,27 +140,27 @@
     <div class="radios flex-row">
       <div class="flex-column">
         <div class="wallet-type-option">
-          <input name="none" (change)="storableWalletType = storableWalletTypeEnum.HdWallet" type="radio"
+          <input id="import-hd" (change)="storableWalletType = storableWalletTypeEnum.HdWallet" type="radio"
             name="walletType" value="hd" checked>
-          <span>HD wallet</span>
+          <label for="import-hd">HD wallet</label>
         </div>
         <div>Address: {{hdCandidate.pkh}}</div>
         <div>Tez Balance: {{hdCandidate.balance ?? '-'}}</div>
       </div>
       <div class="flex-column">
         <div class="wallet-type-option">
-          <input name="none" (change)="storableWalletType = storableWalletTypeEnum.LegacyWallet" type="radio"
+          <input id="import-legacy" (change)="storableWalletType = storableWalletTypeEnum.LegacyWallet" type="radio"
             name="walletType" value="legacy">
-          <span>Legacy wallet</span>
+          <label for="import-legacy">Legacy wallet</label>
         </div>
         <div>Address: {{legacyCandidate.pkh}}</div>
         <div>Tez balance: {{legacyCandidate.balance ?? '-'}}</div>
       </div>
     </div>
-    <button class="button next" (click)="setPwdAfterConfirmingWalletType()">Confirm Wallet Type</button>
+    <button class="button next" [disabled]="messageService.spinnerOn" (click)="setPwdAfterConfirmingWalletType()">Confirm Wallet Type</button>
   </div>
   <div *ngIf="activePanel==2" class="flex-column body">
-    <h1>Wallet created!</h1>
+    <h1 #stepHeading tabindex="-1">Wallet created!</h1>
     <p class="description bold">Your wallet is now set up and ready to be used.</p>
     <p class="description">Download your encrypted keystore file and import it when you want to access your wallet.
     </p>

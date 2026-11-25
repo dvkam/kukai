@@ -1,11 +1,10 @@
 <div class="flex-row advanced">
-  <div class="flex-row switch-container">
-    <span class="value">{{ text }}&nbsp;&nbsp;&nbsp;&nbsp;</span>
-    <label class="flex-row switch">
-      <span class="key" [class]="state ? 'active' : ''">{{ state ? ' ON' : 'OFF' }}</span>
-      <span class="slider" [class]="state ? 'active' : ''" (click)="toggle()">
-        <span class="round"></span>
-      </span>
-    </label>
-  </div>
+  <button type="button" class="switch-container" role="switch" [attr.aria-label]="text"
+    [attr.aria-checked]="state" [attr.aria-controls]="controls" (click)="toggle()">
+    <span class="value" aria-hidden="true">{{ text }}</span>
+    <span class="flex-row switch" aria-hidden="true">
+      <span class="key">{{ state ? 'ON' : 'OFF' }}</span>
+      <span class="slider" [class.active]="state"><span class="round"></span></span>
+    </span>
+  </button>
 </div>
