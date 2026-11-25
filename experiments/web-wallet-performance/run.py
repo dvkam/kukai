@@ -12,8 +12,7 @@ from contextlib import ExitStack, contextmanager
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from importlib.metadata import version
 from pathlib import Path
-from statistics import median
-from sys import stderr
+from sys import float_info, stderr
 from threading import Thread
 from urllib.parse import urlsplit
 
@@ -75,9 +74,11 @@ def elapsed(result: object) -> float:
         raise TypeError("Browser timing result is missing or invalid")
     if result.get("error") == "menu-stayed-open":
         raise MenuStayedOpen("Navigation stayed open over the Import form")
+    if "error" in result:
+        raise ValueError(str(result["error"]))
     value = result.get("ms")
-    if not isinstance(value, (int, float)) or not math.isfinite(value) or value <= 0:
-        raise ValueError(result.get("error", f"invalid timing {value!r}"))
+    if isinstance(value, bool) or not isinstance(value, (int, float)) or not 0 < value <= float_info.max:
+        raise ValueError(f"invalid timing {value!r}")
     return value
 
 
@@ -179,13 +180,18 @@ def summarize(trials: list[dict], steps: tuple[str, ...] = STEPS) -> dict:
             f"p{percentile}": round(values[math.ceil(len(values) * percentile / 100) - 1], 1)
             if values else None for percentile in PERCENTILES
         }
+        middle = None
+        if values:
+            lower = values[(len(values) - 1) // 2]
+            upper = values[len(values) // 2]
+            middle = round(lower + (upper - lower) / 2, 1)
         workflows[step] = {
             "attempted": len(attempted),
             "samples": len(values),
             "failed": len(attempted) - len(values),
             "skipped": len(trials) - len(attempted),
             "min": round(values[0], 1) if values else None,
-            "median": round(median(values), 1) if values else None,
+            "median": middle,
             "max": round(values[-1], 1) if values else None,
             **percentiles,
         }

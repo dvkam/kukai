@@ -73,6 +73,7 @@ jobs:
       - run: python -m unittest discover -s tests -v
       - run: ruff check experiments/web-wallet-performance
       - run: python scripts/check-program-docs.py
+      - run: python -m unittest discover -s experiments/web-wallet-performance -v
       - run: python experiments/browser-prf/run.py
       - name: Check Solana fee payment with a zero-SOL token owner
         run: |
