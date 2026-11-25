@@ -1,0 +1,147 @@
+@use '../../../abstracts/variables' as v;
+
+:host {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  margin-block: 1rem;
+}
+
+.dropdown {
+  position: relative;
+}
+
+.currentAddress,
+.option {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.625rem 0.75rem;
+  color: v.$base-font-color;
+  font: inherit;
+  font-size: 1rem;
+  letter-spacing: normal;
+  text-align: start;
+  text-transform: none;
+
+  &:focus-visible {
+    outline: 2px solid v.$base-font-color;
+    outline-offset: -3px;
+  }
+}
+
+.currentAddress {
+  background: v.$color-lightened-65;
+  border: v.$border-width solid v.$border-color;
+  border-radius: v.$border-radius-hard;
+  transition: border-radius 250ms;
+
+  &:disabled {
+    cursor: default;
+  }
+}
+
+.control-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.identity {
+  display: grid;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.alias {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+
+  img {
+    width: 1em;
+    height: 1em;
+    object-fit: contain;
+    flex: none;
+  }
+
+  span {
+    min-width: 0;
+    font-weight: 500;
+  }
+}
+
+.address {
+  font-size: 0.875rem;
+}
+
+.icon-db {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex: none;
+  filter: v.$base-filter-brightness-5;
+  transition: transform 250ms;
+}
+
+.dropdown-content {
+  box-sizing: border-box;
+  display: none;
+  flex-direction: column;
+  width: 100%;
+  max-height: 15rem;
+  overflow-y: auto;
+  background: v.$base-end-color;
+  border: v.$border-width solid v.$border-color;
+  border-radius: 0 0 v.$border-radius-hard v.$border-radius-hard;
+}
+
+.option {
+  flex: none;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+
+  &:hover {
+    background: v.$color-lightened-6;
+  }
+
+  &[aria-current='true'] {
+    background: v.$color-lightened-5;
+  }
+}
+
+.current-marker {
+  flex: 0 0 1.25rem;
+  text-align: center;
+}
+
+.expanded {
+  .currentAddress {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .icon-db {
+    transform: rotate(180deg);
+  }
+
+  .dropdown-content {
+    display: flex;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .currentAddress,
+  .icon-db {
+    transition: none;
+  }
+}

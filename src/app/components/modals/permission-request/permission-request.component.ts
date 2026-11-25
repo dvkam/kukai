@@ -1,98 +1,100 @@
-import { Component, OnInit, Input, EventEmitter, Output, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
-import { WalletService } from '../../../services/wallet/wallet.service';
-import { MessageService } from '../../../services/message/message.service';
-import { Subscription } from 'rxjs';
-import { SubjectService } from '../../../services/subject/subject.service';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { BeaconService } from '../../../services/beacon/beacon.service';
-import { Account } from '../../../services/wallet/wallet';
+import { Subscription } from 'rxjs';
+import { MessageService } from '../../../services/message/message.service';
+import { SubjectService } from '../../../services/subject/subject.service';
+import { WalletService } from '../../../services/wallet/wallet.service';
+import { Account, ImplicitAccount } from '../../../services/wallet/wallet';
+import { PermissionRequestDropdownComponent } from '../../ui/dropdown/permission-request/permission-request.component';
+import { InvokedDialog } from '../invoked-dialog';
+import { wrapDialogFocus } from '../modal-focus';
+
+interface PermissionRequestDisplay {
+  version?: string | number;
+  appMetadata?: { name: string; icon?: string };
+}
 
 @Component({
   selector: 'app-permission-request',
   templateUrl: './permission-request.component.html',
-  styleUrls: ['../../../../scss/components/modals/modal.scss']
+  styleUrls: [
+    '../../../../scss/components/modals/modal.scss',
+    '../../../../scss/components/modals/invoked-dialog.scss',
+    '../../../../scss/components/modals/account-selection-dialog.scss'
+  ]
 })
-export class PermissionRequestComponent implements OnInit, OnChanges, OnDestroy {
-  @Input() permissionRequest: any;
-  @Input() activeAccount;
-  @Output() permissionResponse = new EventEmitter();
-  syncSub: Subscription;
-  preSelectedAccount: Account;
-  selectedAccount: Account;
-  accounts: Account[];
-  private subscriptions: Subscription = new Subscription();
-  constructor(
-    public walletService: WalletService,
-    private messageService: MessageService,
-    private subjectService: SubjectService,
-    private router: Router,
-    private beaconService: BeaconService
-  ) {}
-  ngOnInit(): void {
-    if (this.walletService.wallet) {
-      this.preSelectedAccount = this.selectedAccount = this.activeAccount?.address?.startsWith('tz')
-        ? this.activeAccount
-        : this.walletService.wallet.implicitAccounts[0];
-    }
-    this.subscriptions.add(
-      this.subjectService.walletUpdated.subscribe(async () => {
-        this.accounts = this.walletService.wallet?.getImplicitAccounts();
-      })
-    );
-    this.accounts = this.walletService.wallet?.getImplicitAccounts();
-  }
+export class PermissionRequestComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy {
+  @Input() permissionRequest: PermissionRequestDisplay;
+  @Input() activeAccount: Account;
+  @Output() permissionResponse = new EventEmitter<string | null>();
+  @ViewChild('dialog', { static: true }) private dialog: ElementRef<HTMLDialogElement>;
+  @ViewChild('content', { static: true }) private content: ElementRef<HTMLElement>;
+  @ViewChild(PermissionRequestDropdownComponent, { static: true }) private selector: PermissionRequestDropdownComponent;
+  selectedAccount: ImplicitAccount | undefined;
+  accounts: ImplicitAccount[] = [];
+  readonly wrapFocus = wrapDialogFocus;
+  private invokedDialog?: InvokedDialog;
+  private responseSub?: Subscription;
+  private walletSub?: Subscription;
+
+  constructor(private walletService: WalletService, private messageService: MessageService, private subjectService: SubjectService, private router: Router) {}
+
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes.activeAccount) {
-      this.preSelectedAccount = this.selectedAccount = this.activeAccount?.address?.startsWith('tz')
-        ? this.activeAccount
-        : this.walletService.wallet.implicitAccounts[0];
-    }
-    if (this.permissionRequest) {
-      const scrollBarWidth = window.innerWidth - document.body.offsetWidth;
-      document.body.style.marginRight = scrollBarWidth.toString();
-      document.body.style.overflow = 'hidden';
-      this.messageService.removeBeaconMsg(true);
-      this.syncSub = this.subjectService.beaconResponse.subscribe((response) => {
-        this.permissionResponse.emit(response ? 'silent' : '');
-        this.reset();
-      });
-    }
+    if (!changes.permissionRequest) return;
+    this.closeDialog();
+    if (!this.permissionRequest) return;
+    this.accounts = this.walletService.wallet?.getImplicitAccounts() ?? [];
+    this.selectedAccount = this.accounts.find((account) => account.address === this.activeAccount?.address) ?? this.accounts[0];
+    this.messageService.removeBeaconMsg(true);
+    this.responseSub = this.subjectService.beaconResponse.subscribe((response) => this.respond(response ? 'silent' : ''));
+    this.invokedDialog?.open();
   }
+
+  ngOnInit(): void {
+    this.walletSub = this.subjectService.walletUpdated.subscribe(() => {
+      const selectedAddress = this.selectedAccount?.address;
+      this.accounts = this.walletService.wallet?.getImplicitAccounts() ?? [];
+      this.selectedAccount = this.accounts.find((account) => account.address === selectedAddress);
+    });
+  }
+
+  ngAfterViewInit(): void {
+    this.invokedDialog = new InvokedDialog(this.dialog.nativeElement, this.content.nativeElement);
+    if (this.responseSub) this.invokedDialog.open();
+  }
+
   ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
+    this.closeDialog();
+    this.walletSub?.unsubscribe();
   }
+
+  cancel(event: Event): void {
+    event.preventDefault();
+    this.rejectPermissions();
+  }
+
   rejectPermissions(): void {
-    this.permissionResponse.emit(null);
-    this.reset();
+    this.respond(null);
   }
+
   grantPermissions(): void {
-    const pk = this.selectedAccount?.pk;
-    this.permissionResponse.emit(pk);
-    this.reset();
-    this.router.navigate([`/account/${this.selectedAccount.address}`]);
+    const account = this.selectedAccount;
+    if (!this.responseSub || !account?.pk) return;
+    this.respond(account.pk);
+    this.router.navigate([`/account/${account.address}`]);
   }
-  reset(): void {
-    document.body.style.marginRight = '';
-    document.body.style.overflow = '';
-    this.permissionRequest = null;
-    if (this.syncSub) {
-      this.syncSub.unsubscribe();
-      this.syncSub = undefined;
-    }
+
+  private respond(response: string | null): void {
+    if (!this.responseSub) return;
+    this.closeDialog();
+    this.permissionResponse.emit(response);
   }
-  scopeToText(scope: string): string {
-    if (scope === 'sign') {
-      return 'Request other signing';
-    } else if (scope === 'operation_request') {
-      return 'Request operation signing';
-    }
-    return scope;
-  }
-  cachedIcon(permissionRequest): string {
-    if (permissionRequest?.appMetadata?.icon) {
-      let icon = permissionRequest?.appMetadata?.icon;
-      return icon;
-    }
-    return '';
+
+  private closeDialog(): void {
+    if (!this.responseSub) return;
+    this.responseSub.unsubscribe();
+    this.responseSub = undefined;
+    this.selector?.closeDropdown();
+    this.invokedDialog?.close({ restoreFocus: true });
   }
 }

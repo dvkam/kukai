@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { CoordinatorService } from '../../../../services/coordinator/coordinator.service';
 import { SubjectService } from '../../../../services/subject/subject.service';
 import { ModalComponent } from '../../../../components/modals/modal.component';
+import { SessionSelectData } from '../../../../components/modals/session-select/session-select.component';
 import { HdWallet, LegacyWalletV3, TorusWallet, ExportedSocialWallet } from '../../../../services/wallet/wallet';
 import { WalletConnectService } from '../../../../services/wallet-connect/wallet-connect.service';
 
@@ -88,8 +89,16 @@ export class SettingsComponent implements OnInit, OnDestroy {
         this.walletService.wallet instanceof ExportedSocialWallet)
     );
   }
-  changeSession(session: any): void {
-    ModalComponent.currentModel.next({ name: 'session-select', data: { topic: session.topic, preSelectedAccountAddress: session.address } });
+  changeSession(session: { topic: string; address: string }, invoker: HTMLButtonElement, sessions: HTMLButtonElement, back: HTMLButtonElement): void {
+    const data: SessionSelectData = {
+      topic: session.topic,
+      preSelectedAccountAddress: session.address,
+      invocation: { invoker, focusAfterClose: [invoker, sessions, back] }
+    };
+    ModalComponent.currentModel.next({ name: 'session-select', data });
+  }
+  trackSessionDapp(_index: number, dapp: { key: string }): string {
+    return dapp.key;
   }
   unsorted() {}
 }

@@ -1,54 +1,74 @@
-import { Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { Router } from '@angular/router';
-import { TorusWallet } from '../../../../services/wallet/wallet';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
+import { ImplicitAccount, TorusWallet } from '../../../../services/wallet/wallet';
 import { LookupService } from '../../../../services/lookup/lookup.service';
 import { WalletService } from '../../../../services/wallet/wallet.service';
-import { DropdownComponent } from '../dropdown.component';
 
 @Component({
   selector: 'app-ui-dropdown-permission-request',
   templateUrl: './permission-request.component.html',
-  styleUrls: ['../../../../../scss/components/ui/dropdown/account-dropdown.component.scss']
+  styleUrls: ['../../../../../scss/components/ui/dropdown/staged-account-select.component.scss']
 })
-export class PermissionRequestDropdownComponent extends DropdownComponent implements OnInit, OnChanges {
-  constructor(public router: Router, public lookupService: LookupService, private walletService: WalletService) {
-    super();
-  }
+export class PermissionRequestDropdownComponent {
+  private static nextId = 0;
+  readonly panelId = `staged-account-options-${PermissionRequestDropdownComponent.nextId++}`;
+  @Input() options: readonly ImplicitAccount[] = [];
+  @Input() current?: ImplicitAccount | null;
+  @Output() dropdownResponse = new EventEmitter<ImplicitAccount>();
+  @ViewChild('panelTrigger') private trigger: ElementRef<HTMLButtonElement>;
+  isOpen = false;
 
-  ngOnInit(): void {
-    this.selection = this.current;
-    this.list = this.options;
-  }
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes.options && changes.options.currentValue !== changes.options.previousValue) {
-      this.list = this.options;
-    }
-  }
+  constructor(
+    private readonly lookupService: LookupService,
+    private readonly walletService: WalletService,
+    private readonly host: ElementRef<HTMLElement>
+  ) {}
 
   getUsername(address: string): string {
-    if (this.walletService.wallet instanceof TorusWallet) {
-      return this.walletService.wallet.displayName();
-    } else {
-      const party = this.lookupService.resolve({
-        address: address || this.current?.address
-      });
-      if (party?.name) {
-        return party.name;
-      }
-    }
-    return '';
+    const wallet = this.walletService.wallet;
+    return wallet instanceof TorusWallet ? wallet.displayName() : this.lookupService.resolve({ address })?.name ?? '';
   }
+
   getVerifier(): string {
-    if (this.walletService.wallet instanceof TorusWallet) {
-      return this.walletService.wallet.verifier;
-    } else {
-      return 'domain';
-    }
+    const wallet = this.walletService.wallet;
+    return wallet instanceof TorusWallet ? wallet.verifier : 'domain';
+  }
+
+  trackAccount(_: number, account: ImplicitAccount): string {
+    return account.address;
   }
 
   toggleDropdown(): void {
-    this.dropdownResponse.emit(this.selection);
     this.isOpen = !this.isOpen;
+  }
+
+  closeDropdown(): void {
+    this.isOpen = false;
+  }
+
+  choose(account: ImplicitAccount): void {
+    this.closeAndFocusTrigger();
+    this.dropdownResponse.emit(account);
+  }
+
+  @HostListener('keydown.escape', ['$event'])
+  escape(event: KeyboardEvent): void {
+    if (this.isOpen) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.closeAndFocusTrigger();
+    }
+  }
+
+  @HostListener('focusout', ['$event.relatedTarget'])
+  @HostListener('document:click', ['$event.target'])
+  closeWhenLeaving(target: EventTarget | null): void {
+    if (this.isOpen && target instanceof Node && !this.host.nativeElement.contains(target)) {
+      this.closeDropdown();
+    }
+  }
+
+  private closeAndFocusTrigger(): void {
+    this.closeDropdown();
+    this.trigger.nativeElement.focus({ preventScroll: true });
   }
 }

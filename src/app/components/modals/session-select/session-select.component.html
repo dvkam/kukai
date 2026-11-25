@@ -1,19 +1,20 @@
-<div *ngIf="isOpen" class="flex-column kukai-modal">
-  <div class="content">
+<dialog #dialog inert class="flex-column kukai-modal invoked-dialog account-selection-dialog" aria-labelledby="session-select-title"
+  (cancel)="cancel($event)" (keydown.tab)="wrapFocus($event)" (keydown.shift.tab)="wrapFocus($event)">
+  <div #content class="content">
     <div class="flex-row top">
-      <div class="flex-row button close" (click)="close()"><img class="x"
-          src="../../../assets/img/close-btn-x.png" /></div>
-      <h1 class="title">Change Session Account</h1>
+      <button type="button" autofocus class="flex-row close" aria-label="Close" (click)="dismiss()">
+        <img class="x" src="assets/img/close-btn-x.png" alt="" />
+      </button>
+      <h1 id="session-select-title" class="title">Change Session Account</h1>
     </div>
     <div class="seperator"></div>
     <div class="flex-column session-select">
-      <app-ui-dropdown-session-select [options]="accounts" [current]="selectedAccount"
-        (dropdownResponse)="selectedAccount = $event" style="width: 100%;align-self: center;">
-      </app-ui-dropdown-session-select>
+      <app-ui-dropdown-permission-request [options]="accounts" [current]="selectedAccount"
+        (dropdownResponse)="selectedAccount = $event"></app-ui-dropdown-permission-request>
       <div class="flex-column bottom">
         <div class="seperator"></div>
-        <button class="blue confirm" (click)="changeAddress()">Confirm</button>
+        <button type="button" class="blue confirm" [disabled]="!selectedAccount?.pk" (click)="changeAddress()">Confirm</button>
       </div>
     </div>
   </div>
-</div>
+</dialog>
