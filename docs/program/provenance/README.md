@@ -17,6 +17,8 @@ Research record for [P0-02](https://github.com/dvkam/kukai/issues/2). The invent
 
 The [verification procedure](verify.md) reproduces these counts and compares the manifests with the pinned Git trees. Root license evidence is retained verbatim in [notices](notices/). These copies include the Swift libraries' MIT copyright and permission notices. They are evidence for those sources, not a license grant over the new project.
 
+The Kukai web manifest records `hot-and-cold.json` at blob `e80099c6f7c30008e9480d23441615ba68f66450`. The old mixed-operation example contains one Tezos contract origination. The original file remains available at the pinned upstream revision. [Web manifest](kukai-files.csv) · [Upstream example](https://github.com/kukai-wallet/kukai/blob/f0fa7222a039012797383fe4a68594e10b92a888/hot-and-cold.json)
+
 Every manifest file license is `NOASSERTION`. This is an SPDX sentinel for unresolved file-level licensing, not permission to reuse. Root grants alone do not resolve copied third-party content. No file has been approved for copying into the new wallet. This conservative result keeps uncertain code outside PoC implementation without deleting the inherited application.
 
 ## Copied code and asset questions

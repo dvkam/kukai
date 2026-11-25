@@ -9,6 +9,6 @@ cargo +1.100.0 clippy --release --manifest-path experiments/secp256k1-signing/Ca
 cargo +1.100.0 test --release --manifest-path experiments/secp256k1-signing/Cargo.toml --locked -- --nocapture
 ```
 
-Expect three tests to pass with no ignored or filtered tests. Parameter generation can take several minutes. Keep the full output and exit code. A timeout or error is an incomplete or failed run, not a passing result.
+Expect three quorum tests and seven EVM approval-binding tests to pass. No test should be ignored or filtered. Parameter generation can take several minutes. Keep the full output and exit code. A timeout or error is an incomplete or failed run, not a passing result.
 
 Use the release profile for these native checks. Keep the security parameters unchanged. Do not reuse or persist test primes, key packages, nonces, or presignatures to shorten later runs.
