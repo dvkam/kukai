@@ -34,6 +34,8 @@ jobs:
         env:
           HUSKY: '0'
       - run: npm run lint
+      - name: Typecheck the portfolio fixture and check its build script
+        run: npx tsc -p experiments/tezos-balance-refresh/tsconfig.json && node --check experiments/tezos-balance-refresh/bundle.cjs
       - run: npm run typecheck
       - run: npm run test:ci
       - run: npm run test:ci-policy
@@ -61,7 +63,7 @@ jobs:
       - run: ruff check experiments/recovery-model/check.py experiments/ed25519-signing/exit/check.py experiments/secp256k1-signing/exit/check.py
       - run: pyright
       - run: python -m unittest discover -s tests -v
-      - run: ruff check experiments/web-wallet-performance
+      - run: ruff check experiments/web-wallet-performance experiments/tezos-balance-refresh/run.py
       - run: python scripts/check-program-docs.py
       - run: python experiments/browser-prf/run.py
       - name: Check Solana fee payment with a zero-SOL token owner
