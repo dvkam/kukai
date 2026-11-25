@@ -58,7 +58,7 @@ describe('Staged account selector', () => {
   it('returns focus to the trigger when the focused account is removed', () => {
     trigger.click();
     fixture.detectChanges();
-    const choice = [...panel.querySelectorAll('button')].find((button) => button.textContent.includes(second.address))!;
+    const choice = Array.from(panel.querySelectorAll('button')).find((button) => button.textContent.includes(second.address))!;
     choice.focus();
     expect(document.activeElement).toBe(choice);
 
