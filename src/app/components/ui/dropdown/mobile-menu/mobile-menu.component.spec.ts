@@ -114,6 +114,12 @@ describe('Mobile navigation destinations', () => {
     expect(router.url).toBe('/');
   }));
 
+  it('allows a new click on Back at the same point', fakeAsync(() => {
+    followCreateWallet();
+    sendClick(fixture.nativeElement.querySelector('[data-new-wallet-back]'), 1);
+    expect(router.url).toBe('/');
+  }));
+
   it('allows a different control at the same point', fakeAsync(() => {
     followCreateWallet();
     sendClick(fixture.nativeElement.querySelector('#other-destination'), 2);
