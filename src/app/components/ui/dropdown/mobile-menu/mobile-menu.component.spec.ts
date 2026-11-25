@@ -41,10 +41,13 @@ describe('Mobile navigation destinations', () => {
     expect(panel.inert).toBeTrue();
     trigger.click();
     fixture.detectChanges();
-    panel.querySelector('a')!.click();
+    const sameDestination = panel.querySelector('a')!;
+    sameDestination.focus();
+    sameDestination.click();
     tick();
     fixture.detectChanges();
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
     expect(panel.inert).toBeTrue();
+    expect(document.activeElement).toBe(trigger);
   }));
 });

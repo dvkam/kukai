@@ -29,7 +29,7 @@
       </button>
     </div>
     <a *ngIf="!CONSTANTS.TEZOS_X" class="flex-row button delegation" routerLink="/account/{{activeAccount?.address}}/stakers"
-      (click)="isOpen = false">
+      (click)="returnToTrigger()">
       <div *ngIf="!activeAccount?.delegate" class="flex-row">
         <span class="flex-row">DELEGATING:</span><span class="choose">NOT
           DELEGATING</span>
@@ -41,7 +41,7 @@
       </div>
     </a>
 
-    <a class="flex-row button" [routerLink]="'/account/' + activeAccount?.address + '/settings'" (click)="isOpen = false">
+    <a class="flex-row button" [routerLink]="'/account/' + activeAccount?.address + '/settings'" (click)="returnToTrigger()">
       <span>SETTINGS</span><img alt="" class="icon settings" src="../../../../assets/img/cog.svg" style="width: 2.75rem" />
     </a>
     <button type="button" class="flex-row button" (click)="logout();isOpen = false">
@@ -49,13 +49,13 @@
     </button>
   </div>
   <div *ngIf="router.url.indexOf('/account/') !== 0" id="wallet-navigation-panel" class="flex-column mobile dropdown-content" [walletPanelTrigger]="panelTrigger" [panelOpen]="isOpen">
-    <a routerLink="/import/" class="flex-row button" (click)="isOpen = false">
+    <a routerLink="/import/" class="flex-row button" (click)="returnToTrigger()">
       <span>Import Wallet</span>
     </a>
-    <a routerLink="/new-wallet/" class="flex-row button" (click)="isOpen = false">
+    <a routerLink="/new-wallet/" class="flex-row button" (click)="returnToTrigger()">
       <span>Create New Wallet</span>
     </a>
-    <a routerLink="/connect-ledger/" class="flex-row button" (click)="isOpen = false">
+    <a routerLink="/connect-ledger/" class="flex-row button" (click)="returnToTrigger()">
       <span>Connect Ledger</span>
     </a>
   </div>
