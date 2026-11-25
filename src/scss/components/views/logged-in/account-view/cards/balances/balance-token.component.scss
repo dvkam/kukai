@@ -259,7 +259,7 @@ $base-blue-color: v.$base-blue-color;
 }
 
 @media (min-width: v.$layout-break-6) {
-  :host button.with-image.buy:hover .tooltip {
+  :host button.with-image.buy:is(:hover, :focus-visible) .tooltip {
     display: block;
   }
 }
@@ -269,4 +269,8 @@ $base-blue-color: v.$base-blue-color;
     width: 6rem;
     margin: 0 2rem 0 0rem;
   }
+}
+:host button.buy:focus-visible {
+  outline: 2px solid v.$base-blue-color;
+  outline-offset: 2px;
 }

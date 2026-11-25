@@ -7,29 +7,37 @@
     <div class="flex-column login">
       <span>Sign in with social:</span>
       <div class="flex-row social">
-        <button class="flex-row google" (click)="torusLogin('google')"><img
-            src="../../../assets/img/google-logo.svg">&nbsp;<span>CONTINUE WITH
+        <button type="button" class="flex-row google" (click)="torusLogin('google')"><img
+            alt="" src="../../../assets/img/google-logo.svg">&nbsp;<span>CONTINUE WITH
             GOOGLE</span></button>
         <div class="flex-row torus">
-          <img class="facebook" src="../../../assets/img/facebook-logo.svg" (click)="torusLogin('facebook')">
-          <img class="twitter" src="../../../assets//img/twitter-logo.svg" (click)="torusLogin('twitter')">
-          <img class="reddit" src="../../../assets/img/reddit-logo.svg" (click)="torusLogin('reddit')">
-          <img class="email" src="../../../assets/img/email-logo-start.svg" (click)="torusLogin('email')">
+          <button type="button" class="provider facebook" aria-label="Continue with Facebook" (click)="torusLogin('facebook')">
+            <img alt="" src="../../../assets/img/facebook-logo.svg">
+          </button>
+          <button type="button" class="provider twitter" aria-label="Continue with Twitter" (click)="torusLogin('twitter')">
+            <img alt="" src="../../../assets/img/twitter-logo.svg">
+          </button>
+          <button type="button" class="provider reddit" aria-label="Continue with Reddit" (click)="torusLogin('reddit')">
+            <img alt="" src="../../../assets/img/reddit-logo.svg">
+          </button>
+          <button type="button" class="provider email" aria-label="Continue with email" (click)="torusLogin('email')">
+            <img alt="" src="../../../assets/img/email-logo-start.svg">
+          </button>
         </div>
       </div>
       <span>Get Kukai App:</span>
       <div class="flex-row ios">
-        <button class="flex-row" (click)="downloadIOS();"><img
-            src="../../../assets/img/download-app-store-light.svg"></button>
+        <button type="button" class="flex-row" aria-label="Download Kukai on the App Store" (click)="downloadIOS()"><img
+            alt="" src="../../../assets/img/download-app-store-light.svg"></button>
       </div>
     </div>
     <div class="flex-column bottom">
-      <img src="../../../assets/img/landing-hero.png" id="bg-mobile">
+      <img alt="" src="../../../assets/img/landing-hero.png" id="bg-mobile">
       <div id="ribbon-mobile"></div>
     </div>
   </div>
   <div class="flex-column right">
-    <img src="../../../assets/img/landing-hero.png" id="bg">
+    <img alt="" src="../../../assets/img/landing-hero.png" id="bg">
     <div id="ribbon"></div>
   </div>
 </div>

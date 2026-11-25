@@ -28,7 +28,7 @@
       }
     },
     {
-      "files": ["**/mobile-menu.component.html"],
+      "files": ["**/mobile-menu.component.html", "**/start.component.html", "**/send-button.component.html", "**/404.component.html", "**/500.component.html"],
       "parser": "@angular-eslint/template-parser",
       "plugins": ["@angular-eslint/template"],
       "rules": {
