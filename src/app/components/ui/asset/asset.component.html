@@ -12,6 +12,6 @@
 </video>
 <div *ngIf="this.display === Display.threeD && AppComponent.hasWebGL" class="model-wrapper">
   <model-viewer crossorigin="anonymous" #model id="modelCanvas" auto-rotate rotation-per-second="30deg"
-    [src]="dataSrc" alt="postSrc" (load)="onLoad($event)" (error)="onError($event)"
+    [attr.src]="dataSrc" alt="3D collectible" (load)="onLoad($event)" (error)="onError($event)"
     camera-controls ar ar-modes="webxr scene-viewer quick-look"></model-viewer>
 </div>
