@@ -1,0 +1,46 @@
+{
+  "mode": "unisolated_smoke",
+  "interfaces": null,
+  "external_ipv4_route": null,
+  "signer_sha256": "ce799da6d937682e7ba90eefb427ea9c569cedaf125ffe5ce4c9dfdd60600268",
+  "transfer": {
+    "taquito": {
+      "commitHash": "1cc2663cf397066ce46065a2595aaeaf41c42552",
+      "version": "25.1.1"
+    },
+    "protocol": "PsUshuai9QapM5TGj1JpuVGkdxz5GykdnEvS6Rh8SUVrARvZLCY",
+    "operation": {
+      "branch": "BLDTpzk6Gx6PN6at6gBtGREQFqHMKZ6TDCeJadj1XDBNaZHf9v2",
+      "contents": [
+        {
+          "kind": "transaction",
+          "source": "tz1VvoGJr11sws49hQFr8Z5NAFNhd3DsxTNp",
+          "fee": "500",
+          "counter": "1",
+          "gas_limit": "1500",
+          "storage_limit": "0",
+          "amount": "1000000",
+          "destination": "tz1YW31pcYhHMacKHZbZUTBVXXTptpDKLUEK"
+        }
+      ]
+    },
+    "public_key": "edpkvGjHtGJ9mongNbScqMTQMRw7vMUUvXhvBnSFUQtWwwsbGHFH1U",
+    "unsigned_hex": "42424242424242424242424242424242424242424242424242424242424242426c0070dd1ec8ad9084ed275e20bd5a52213c6951f803f40301dc0b00c0843d00008d1693a0906bde5679fe3ac63dd9b94774e4e96c00",
+    "watermark_hex": "03",
+    "signature": "edsigtxvgPRNj9DL6Xk8bgDHEZGVMd9XArLqyMizjxMAc7DtCAb3i7wUtGVHX66srsz9nmm2oiszf7Sj1p23oFUXXfs67XCGWJi",
+    "taquito_verified": true,
+    "taquito_rejected": [
+      "changed_amount",
+      "explicit_default_unit",
+      "wrong_watermark",
+      "missing_watermark",
+      "wrong_public_key"
+    ]
+  },
+  "signer_refused": [
+    "extra_operation_input",
+    "stale_recovery",
+    "missing_recovery",
+    "wrong_account"
+  ]
+}
