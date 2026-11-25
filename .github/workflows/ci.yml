@@ -67,8 +67,8 @@ jobs:
         run: |
           python -m venv "${RUNNER_TEMP}/solana-fees"
           "${RUNNER_TEMP}/solana-fees/bin/python" -m pip install --only-binary=:all: --require-hashes -r experiments/solana-fees/requirements-linux-x86_64.txt
-          ruff check experiments/solana-fees/check.py experiments/ed25519-signing/exit/check_sol.py
-          pyright --pythonpath "${RUNNER_TEMP}/solana-fees/bin/python" experiments/solana-fees/check.py experiments/ed25519-signing/exit/check_sol.py
+          ruff check experiments/solana-fees/check.py experiments/ed25519-signing/exit/check_sol.py experiments/ed25519-signing/exit/check_spl_revoke.py
+          pyright --pythonpath "${RUNNER_TEMP}/solana-fees/bin/python" experiments/solana-fees/check.py experiments/ed25519-signing/exit/check_sol.py experiments/ed25519-signing/exit/check_spl_revoke.py
           "${RUNNER_TEMP}/solana-fees/bin/python" experiments/solana-fees/check.py
       - run: python experiments/recovery-model/check.py
 
@@ -103,6 +103,11 @@ jobs:
           parent_net=$(stat -Lc %i /proc/self/ns/net)
           sudo unshare --net --setgid "$(id -g)" --setuid "$(id -u)" -- "${RUNNER_TEMP}/solana-exit/bin/python" \
             experiments/ed25519-signing/exit/check_sol.py experiments/ed25519-signing/target/debug/examples --parent-net-inode "$parent_net"
+      - name: Revoke a synthetic SPL delegate without network access
+        run: |
+          parent_net=$(stat -Lc %i /proc/self/ns/net)
+          sudo unshare --net --setgid "$(id -g)" --setuid "$(id -u)" -- "${RUNNER_TEMP}/solana-exit/bin/python" \
+            experiments/ed25519-signing/exit/check_spl_revoke.py experiments/ed25519-signing/target/debug/examples --parent-net-inode "$parent_net"
       - run: cargo +1.100.0 fmt --manifest-path experiments/secp256k1-signing/Cargo.toml -- --check
       - run: cargo +1.100.0 clippy --release --manifest-path experiments/secp256k1-signing/Cargo.toml --locked --all-targets -- -D warnings
       - run: cargo +1.100.0 test --release --manifest-path experiments/secp256k1-signing/Cargo.toml --locked -- --nocapture

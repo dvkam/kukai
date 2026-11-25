@@ -33,3 +33,5 @@ Hosted CI creates the network namespace and drops to the runner's UID and GID be
 Both user quorums signed and the independent verifier accepted both results. All four invalid input sets refused without emitting signature bytes. Changing the challenge invalidated each valid signature. Only loopback was visible and the external route check failed as expected. [Per-case results](evidence/result.json) · [Run record](evidence/run.json)
 
 The native SOL transfer drill uses the same retained quorum with a System Program transfer in LiteSVM. [Native SOL transfer drill](sol.md)
+
+The classic SPL Token replay uses the refreshed quorum to revoke an existing delegate and verifies the authority change in LiteSVM. [SPL delegate revocation](spl-revoke.md)

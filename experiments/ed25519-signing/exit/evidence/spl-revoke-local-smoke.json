@@ -1,0 +1,57 @@
+{
+  "mode": "unisolated_smoke",
+  "interfaces": null,
+  "external_ipv4_route": null,
+  "signer_sha256": "fd1b07cd4e1989c81ba273aa9d4a96557d56cf0afcabaf4063635bba7e771fa9",
+  "revoke": {
+    "initial": {
+      "source_raw_units": 100,
+      "destination_raw_units": 0,
+      "source_delegate": "synthetic_delegate",
+      "delegated_raw_units": 25,
+      "source_rent_lamports": 2039280,
+      "destination_rent_lamports": 2039280,
+      "owner_lamports": 10000000,
+      "delegate_lamports": 10000000
+    },
+    "after_authorized_delegate_transfer": {
+      "source_raw_units": 99,
+      "destination_raw_units": 1,
+      "source_delegate": "synthetic_delegate",
+      "delegated_raw_units": 24,
+      "source_rent_lamports": 2039280,
+      "destination_rent_lamports": 2039280,
+      "owner_lamports": 10000000,
+      "delegate_lamports": 9995000
+    },
+    "after_revoke": {
+      "source_raw_units": 99,
+      "destination_raw_units": 1,
+      "source_delegate": null,
+      "delegated_raw_units": 0,
+      "source_rent_lamports": 2039280,
+      "destination_rent_lamports": 2039280,
+      "owner_lamports": 9995000,
+      "delegate_lamports": 9995000
+    },
+    "after_refused_delegate_transfer": {
+      "source_raw_units": 99,
+      "destination_raw_units": 1,
+      "source_delegate": null,
+      "delegated_raw_units": 0,
+      "source_rent_lamports": 2039280,
+      "destination_rent_lamports": 2039280,
+      "owner_lamports": 9995000,
+      "delegate_lamports": 9990000
+    },
+    "refused_delegate_error": "OwnerMismatch",
+    "revoke_fee_lamports": 5000,
+    "authorized_transfer_fee_lamports": 5000,
+    "refused_transfer_fee_lamports": 5000,
+    "revoke_fee_payer": "token_owner",
+    "delegate_transfer_fee_payer": "synthetic_delegate",
+    "revoke_required_signatures": 1,
+    "source_owner_preserved": true,
+    "mint_preserved": true
+  }
+}
