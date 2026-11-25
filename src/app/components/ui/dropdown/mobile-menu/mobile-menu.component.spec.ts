@@ -20,7 +20,10 @@ describe('Mobile navigation destinations', () => {
     TestBed.configureTestingModule({
       declarations: [ImportDestination, MobileMenuDropdownComponent],
       imports: [CommonModule, TriggerPanelDirective, RouterTestingModule.withRoutes([{ path: 'import', component: ImportDestination }])],
-      providers: [WalletService, LookupService, MessageService, SubjectService, TranslateService, UnlockableService].map((provide) => ({ provide, useValue: {} }))
+      providers: [WalletService, LookupService, MessageService, SubjectService, TranslateService, UnlockableService].map((provide) => ({
+        provide,
+        useValue: {}
+      }))
     });
     spyOn(window, 'matchMedia').and.returnValue({ matches: true } as MediaQueryList);
     const fixture = TestBed.createComponent(MobileMenuDropdownComponent);
