@@ -48,7 +48,6 @@ import { ChartService } from '../../../../app/services/chart/chart.service';
 import { BuyComponent } from './account-view/buy/buy.component';
 import { BuyModalComponent } from '../../modals/buy/buy.component';
 import { SessionSelectComponent } from '../../modals/session-select/session-select.component';
-import { SessionSelectDropdownComponent } from '../../ui/dropdown/session-select/session-select.component';
 
 @NgModule({
   declarations: [
@@ -93,8 +92,7 @@ import { SessionSelectDropdownComponent } from '../../ui/dropdown/session-select
     ChartComponent,
     BuyComponent,
     BuyModalComponent,
-    SessionSelectComponent,
-    SessionSelectDropdownComponent
+    SessionSelectComponent
   ],
   imports: [TriggerPanelDirective, CommonModule, LoggedInRoutingModule, HttpClientModule, FormsModule],
   exports: [
@@ -110,7 +108,6 @@ import { SessionSelectDropdownComponent } from '../../ui/dropdown/session-select
     PermissionRequestComponent,
     PermissionRequestDropdownComponent,
     SessionSelectComponent,
-    SessionSelectDropdownComponent,
     ListComponent,
     AccountListComponent,
     AccountListBodyComponent,

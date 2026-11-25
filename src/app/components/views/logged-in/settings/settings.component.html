@@ -1,5 +1,5 @@
 <div class="flex-column settings">
-  <a><button class="flex-row back" [routerLink]="'/account/' + activeAccount?.address"><img
+  <a><button #back class="flex-row back" [routerLink]="'/account/' + activeAccount?.address"><img
         src="../../../../../assets/img/left-arrow.svg">BACK</button></a>
   <h3>Connect with dApps</h3>
   <div class="seperator"></div>
@@ -50,15 +50,16 @@
           </table>
         </ng-container>
         <ng-container *ngIf="walletConnectService.sessions.size">
-          <h4>Sessions <span class="blue-click"
-              (click)="walletConnectService.sessions.expanded = !walletConnectService.sessions.expanded">&nbsp;{{
-              walletConnectService.sessions.expanded ? '&ndash;' : '+'}}&nbsp;</span>
+          <h4>Sessions <button #sessions type="button" class="session-action toggle-sessions" aria-label="Sessions"
+              [attr.aria-expanded]="walletConnectService.sessions.expanded"
+              (click)="walletConnectService.sessions.expanded = !walletConnectService.sessions.expanded">{{
+              walletConnectService.sessions.expanded ? '&ndash;' : '+'}}</button>
             <ng-container
               *ngIf="walletConnectService.sessions.size">({{walletConnectService.sessions.size}})</ng-container>
           </h4>
           <table *ngIf="walletConnectService.sessions.expanded">
             <tbody class="wc sessions">
-              <ng-container *ngFor="let dapp of walletConnectService.sessions.dapp | keyvalue">
+              <ng-container *ngFor="let dapp of walletConnectService.sessions.dapp | keyvalue; trackBy: trackSessionDapp">
                 <tr class="dapp">
                   <td>{{ dapp.key }}<ng-container *ngIf="dapp?.value?.s?.length > 1">&nbsp;<span class="blue-click"
                         (click)="walletConnectService.sessions.dapp[dapp.key].expanded = !walletConnectService.sessions.dapp[dapp.key].expanded">
@@ -74,8 +75,11 @@
                     </ng-container>
                   </td>
                   <td>
-                    <img class="modify" (click)="changeSession(dapp.value.s[dapp.value.s.length-1])"
-                      src="../../../assets/img/wc_modify.svg">
+                    <button #edit type="button" class="session-action modify" aria-haspopup="dialog"
+                      [attr.aria-label]="'Change session account for ' + dapp.key"
+                      (click)="changeSession(dapp.value.s[dapp.value.s.length - 1], edit, sessions, back)">
+                      <img src="../../../assets/img/wc_modify.svg" alt="" />
+                    </button>
                     <img (click)="walletConnectService.deleteSessions(dapp?.value?.s)"
                       src="../../../assets/img/wc_delete.svg">
                   </td>

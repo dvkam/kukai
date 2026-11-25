@@ -1,24 +1,32 @@
-<div class="flex-row dropdown pr-request" [class.expanded]="isOpen" [id]="ecmpId">
-  <div #panelTrigger class="flex-row currentAddress" (click)="toggleDropdown()"><img
-      *ngIf="!!getUsername(selection?.address)" class="logo" src="../../../../assets/img/{{ getVerifier() }}-logo.svg" /><span
-      class="address">{{
-      getUsername(selection?.address) || "&nbsp;&nbsp;&nbsp;&nbsp;" + selection?.address }}</span><img
-      *ngIf="['', 'domain'].includes(getVerifier())" class="button icon-db"
-      src="../../../../assets/img/down-arrow.svg" />
-  </div>
-  <div class="flex-column dropdown-content" [walletPanelTrigger]="panelTrigger" [panelOpen]="isOpen">
-    <ng-container *ngFor="let account of options">
-      <div class="option" [class.selected]="account?.address === current?.address"
-        (click)="selection = account; toggleDropdown()">
-        <ng-container *ngIf="getUsername(account?.address)">
-          <div class="flex-row alias"><img class="logo"
-              src="../../../../assets/img/{{ getVerifier() }}-logo.svg" /><span>{{
-              getUsername(account?.address) }}</span></div>
-          <br /><span>{{
-            account?.address }}</span>
-        </ng-container>
-        <ng-container *ngIf="!getUsername(account?.address)">{{ account?.address }}</ng-container>
-      </div>
-    </ng-container>
+<div class="dropdown" [class.expanded]="isOpen">
+  <button #panelTrigger type="button" class="currentAddress" [attr.aria-expanded]="isOpen" [attr.aria-controls]="panelId"
+    [attr.aria-labelledby]="panelId + '-label ' + panelId + '-current'" [attr.aria-disabled]="options?.length ? null : 'true'"
+    (click)="toggleDropdown()">
+    <span class="control-label" [id]="panelId + '-label'">Select account</span>
+    <span class="identity" [id]="panelId + '-current'">
+      <ng-container *ngIf="current; else noSelection">
+        <ng-container *ngTemplateOutlet="accountIdentity; context: { $implicit: current }"></ng-container>
+      </ng-container>
+      <ng-template #noSelection>{{ options?.length ? 'No account selected' : 'No accounts available' }}</ng-template>
+    </span>
+    <img class="icon-db" src="assets/img/down-arrow.svg" alt="" />
+  </button>
+
+  <div class="dropdown-content" role="group" aria-label="Accounts" [id]="panelId" [walletPanelTrigger]="panelTrigger" [panelOpen]="isOpen">
+    <button *ngFor="let account of options; trackBy: trackAccount" type="button" class="option" [attr.data-account-address]="account.address"
+      [attr.aria-current]="account.address === current?.address ? 'true' : null" (click)="choose(account)">
+      <span class="identity">
+        <ng-container *ngTemplateOutlet="accountIdentity; context: { $implicit: account }"></ng-container>
+      </span>
+      <span class="current-marker" aria-hidden="true">{{ account.address === current?.address ? '✓' : '' }}</span>
+    </button>
   </div>
 </div>
+
+<ng-template #accountIdentity let-account>
+  <span *ngIf="getUsername(account.address) as username" class="alias">
+    <img [src]="'assets/img/' + getVerifier() + '-logo.svg'" alt="" />
+    <span>{{ username }}</span>
+  </span>
+  <span class="address">{{ account.address }}</span>
+</ng-template>

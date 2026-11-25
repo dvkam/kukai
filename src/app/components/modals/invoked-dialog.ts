@@ -16,26 +16,30 @@ const expanded = { transform: 'scale(1)', opacity: 1 };
 export class InvokedDialog {
   private invocation?: DialogInvocation;
   private invokerBounds?: DOMRectReadOnly;
+  private previousFocus?: HTMLElement;
   private motion?: Animation;
 
   constructor(private readonly dialog: HTMLDialogElement, private readonly content: HTMLElement) {}
 
-  open(invocation: DialogInvocation): void {
+  open(invocation?: DialogInvocation): void {
     const from = this.readMotionFrame();
     this.clearMotion();
     this.invocation = invocation;
-    this.invokerBounds = invocation.invokerBounds ?? invocation.invoker.getBoundingClientRect();
+    this.invokerBounds = invocation?.invokerBounds ?? invocation?.invoker.getBoundingClientRect();
+    const active = this.dialog.ownerDocument.activeElement;
+    this.previousFocus = active instanceof HTMLElement ? active : undefined;
     this.dialog.inert = false;
     this.dialog.showModal();
-    if (this.shouldAnimate()) this.animateContent(true, from);
+    if (invocation && this.shouldAnimate()) this.animateContent(true, from);
   }
 
   close({ animate = false, restoreFocus = false } = {}): void {
     const invocation = this.invocation;
+    const previousFocus = this.previousFocus;
     const wasOpen = this.dialog.open;
     const from = animate ? this.readMotionFrame() : undefined;
     this.clearMotion();
-    const animateExit = wasOpen && animate && this.shouldAnimate();
+    const animateExit = wasOpen && animate && !!invocation && this.shouldAnimate();
     // Leave the top layer immediately. The inert panel can finish painting its exit.
     this.dialog.classList.toggle('closing', animateExit);
     this.dialog.close();
@@ -43,8 +47,8 @@ export class InvokedDialog {
     if (animateExit) this.animateContent(false, from);
     else this.releaseInvocation();
 
-    if (wasOpen && restoreFocus && invocation) {
-      restoreInvokerFocus(invocation.focusAfterClose ?? [invocation.invoker]);
+    if (wasOpen && restoreFocus) {
+      restoreInvokerFocus(invocation?.focusAfterClose ?? [invocation?.invoker, previousFocus]);
     }
   }
 
@@ -101,5 +105,6 @@ export class InvokedDialog {
   private releaseInvocation(): void {
     this.invocation = undefined;
     this.invokerBounds = undefined;
+    this.previousFocus = undefined;
   }
 }

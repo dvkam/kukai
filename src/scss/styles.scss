@@ -8,3 +8,7 @@
     overflow-y: hidden !important;
   }
 }
+
+:is(html, body):has(.account-selection-dialog[open]) {
+  overflow-y: hidden !important;
+}

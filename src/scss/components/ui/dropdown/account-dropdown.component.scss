@@ -14,74 +14,11 @@ $border-radius-hard: v.$border-radius-hard;
 $box-shadow: v.$box-shadow;
 $box-shadow-dark: v.$box-shadow-dark;
 $border-color-dark-only: v.$border-color-dark-only;
-$border-width-dark-only: v.$border-width-dark-only;
 
 .dropdown {
   display: block;
   position: relative;
   margin: 0 0.5em 0 0;
-
-  &.session-select {
-    width: 100%;
-    margin: 1em 0;
-
-    & .dropdown-content {
-      position: initial;
-      width: 100%;
-    }
-    &.expanded {
-      & .dropdown-content {
-        overflow-y: auto;
-      }
-    }
-    
-    & .currentAddress {
-      width: calc(100% - 1em - #{$border-width});
-    }
-
-    & .icon-db {
-      right: 0.75em;
-    }
-  }
-
-  &.pr-request {
-    width: 100%;
-    margin: 1em 0;
-
-    & .currentAddress {
-      width: calc(100% - 1em - #{$border-width});
-      padding: 0 0 0 calc(1em - #{$border-width});
-      border: $border-width solid $border-color-dark-only;
-      font-size: 1.15em;
-    }
-
-    & .icon-db {
-      right: 0.75em;
-    }
-
-    & .dropdown-content {
-      top: 0em;
-      width: calc(100% + #{$border-width} * 2);
-      border: 0 solid $border-color-dark-only;
-      position: relative;
-      max-height: 15em;
-      overflow-y: auto;
-      margin: 0 0 2.5em 0;
-
-      &::-webkit-scrollbar-track {
-        margin: 0 0 1.5em 0;
-      }
-
-      & .option {
-        padding: 0.75em 1.125em 0.75em 2.375em;
-      }
-    }
-    &.expanded {
-      & .dropdown-content {
-        border: $border-width-dark-only solid $border-color-dark-only;
-      }
-    }
-  }
 
   & * {
     -webkit-tap-highlight-color: #fff0;
@@ -243,7 +180,7 @@ $border-width-dark-only: v.$border-width-dark-only;
   :host {
     width: 50%;
 
-    & .dropdown:not(.pr-request) .dropdown-content {
+    & .dropdown .dropdown-content {
       width: calc(100% + 6em);
       top: 4.78em;
       left: calc(-4em + $border-width);

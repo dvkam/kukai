@@ -1,0 +1,42 @@
+@use "../../abstracts/variables" as v;
+
+.kukai-modal.account-selection-dialog {
+  .content {
+    box-sizing: border-box;
+    flex: none;
+    margin: clamp(1rem, 12vh, 6rem) auto auto;
+    overflow: visible;
+  }
+
+  .top {
+    min-height: 3em;
+    height: auto;
+    padding-block: 0.35em 1em;
+
+    .title {
+      box-sizing: border-box;
+      height: auto;
+      padding-inline: 2em;
+      white-space: normal;
+    }
+  }
+
+  app-ui-dropdown-permission-request {
+    display: block;
+    align-self: center;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .confirm:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
+
+  @media (max-width: v.$layout-break-6) {
+    .content {
+      margin: 0;
+      max-width: none;
+    }
+  }
+}
