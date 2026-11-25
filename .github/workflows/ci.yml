@@ -38,6 +38,15 @@ jobs:
       - run: npm run test:ci
       - run: npm run test:ci-policy
       - run: npm run test:tezos-encoding
+      - name: Verify a retained-quorum Tezos transfer signature without network access
+        run: |
+          rustup toolchain install 1.100.0 --profile minimal
+          cargo +1.100.0 build --locked --example exit_fixture --example exit_tz1_transfer \
+            --manifest-path experiments/ed25519-signing/Cargo.toml
+          parent_net=$(stat -Lc %i /proc/self/ns/net)
+          sudo unshare --net --setgid "$(id -g)" --setuid "$(id -u)" -- "$(command -v python3)" \
+            experiments/ed25519-signing/exit/check_tz1.py experiments/ed25519-signing/target/debug/examples \
+            "$(command -v node)" --parent-net-inode "$parent_net"
       - run: npx eslint experiments/browser-prf/probe.js && npx tsc --project experiments/browser-prf/tsconfig.json
 
   program:
@@ -58,7 +67,7 @@ jobs:
           node-version: 24.22.1
       - run: python -m pip install -r requirements-ci.txt
       - run: ruff check experiments/token_amounts experiments/web_limits experiments/library-build-check/run.py scripts/check-program-docs.py experiments/browser-prf/run.py experiments/ed25519-signing/browser/run.py tests
-      - run: ruff check experiments/recovery-model/check.py experiments/ed25519-signing/exit/check.py experiments/secp256k1-signing/exit/check.py
+      - run: ruff check experiments/recovery-model/check.py experiments/ed25519-signing/exit/check.py experiments/ed25519-signing/exit/check_tz1.py experiments/secp256k1-signing/exit/check.py
       - run: pyright
       - run: python -m unittest discover -s tests -v
       - run: ruff check experiments/web-wallet-performance

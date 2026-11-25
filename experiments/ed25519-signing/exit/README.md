@@ -35,3 +35,5 @@ Both user quorums signed and the independent verifier accepted both results. All
 The native SOL transfer drill uses the same retained quorum with a System Program transfer in LiteSVM. [Native SOL transfer drill](sol.md)
 
 The classic SPL Token replay uses the refreshed quorum to revoke an existing delegate and verifies the authority change in LiteSVM. [SPL delegate revocation](spl-revoke.md)
+
+The native Tezos replay uses a separate refreshed quorum to sign one fixed tz1 transfer. Taquito forges the operation independently and verifies the `edsig`. [Native Tezos signing conformance](tz1.md)
