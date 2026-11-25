@@ -46,3 +46,22 @@ The JSON includes the browser version, host settings, each raw timing, blocked r
 Each workflow reports attempted, successful, failed and skipped counts. Percentiles use nearest rank on successful samples in ascending order. For percentile `p` over `n` measurements, take the one-based element at `ceil(n × p / 100)`. The report also gives the conventional median and the minimum and maximum. At 100 successful measurements, p99 is the second-slowest sample. A small number of samples can reveal a broken flow. Use repeated matched runs to assess a timing difference.
 
 This fixture measures logged-out browser work with fallback fonts and a warm server and OS cache. Live RPC and authentication, cryptography, large asset lists, transaction approval and recovery require their own fixtures. Re-run on WebKit and a physical reference iPhone before comparing iOS performance.
+
+## Mobile navigation measurement, November 25, 2026
+
+At 390 × 650 CSS pixels, each of 120 alternating pairs started from a fresh context with accepted terms and no stored wallet. Chromium ran the optimized web app on a shared Linux host with a four-CPU quota. The runner used loopback HTTP, blocked external requests and checked the visible result of each action. One warm-up per build was excluded. [Raw trials, failures, host settings and bundle hashes](evidence/mobile-navigation-2026-11-25.json)
+
+| Revision | Workflow | Valid / failed / skipped | p50 ms | p90 ms | p95 ms | p99 ms | Range ms |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| 27f7bae0 | cold_home_ms | 120 / 0 / 0 | 2075.1 | 4078.1 | 4642.4 | 8392.1 | 1563.1 to 9475.6 |
+| 27f7bae0 | warm_menu_ms | 120 / 0 / 0 | 208.5 | 233.4 | 252.7 | 400.0 | 200.4 to 428.5 |
+| 27f7bae0 | warm_import_ms | 0 / 120 / 0 | - | - | - | - | - |
+| 27f7bae0 | warm_seed_form_ms | 0 / 0 / 120 | - | - | - | - | - |
+| 27f7bae0 | warm_seed_form_after_escape_ms | 120 / 0 / 0 | 43.4 | 57.9 | 78.1 | 194.2 | 26.4 to 253.7 |
+| 16859b5f | cold_home_ms | 120 / 0 / 0 | 2124.1 | 4106.7 | 5570.7 | 6606.3 | 1604.7 to 7898.2 |
+| 16859b5f | warm_menu_ms | 120 / 0 / 0 | 208.6 | 232.6 | 252.8 | 300.3 | 196.2 to 309.7 |
+| 16859b5f | warm_import_ms | 120 / 0 / 0 | 241.1 | 313.3 | 337.1 | 482.3 | 222.6 to 519.3 |
+| 16859b5f | warm_seed_form_ms | 120 / 0 / 0 | 43.9 | 48.3 | 66.2 | 115.3 | 27.0 to 179.1 |
+| 16859b5f | warm_seed_form_after_escape_ms | 0 / 0 / 120 | - | - | - | - | - |
+
+On the inherited build every Import attempt left the menu over the form. Pressing Escape made it possible to continue. Those Seed Words timings have their own row. With the menu fix, all 120 journeys reached the seed form directly. Host load changed substantially during the run. The cold-load and menu latency differences do not establish a speedup. These samples cover desktop Chromium at a mobile viewport. Physical iPhone and WebKit measurements remain open. [Menu fix](https://github.com/dvkam/kukai/pull/60)
