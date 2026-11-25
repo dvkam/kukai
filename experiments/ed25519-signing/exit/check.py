@@ -12,20 +12,29 @@ import tempfile
 from pathlib import Path
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("binaries", type=Path)
-    parser.add_argument("parent_net_inode", type=int)
-    args = parser.parse_args()
+def require_network_namespace(parent_net_inode: int) -> list[str]:
     interfaces = sorted(name for _, name in socket.if_nameindex())
-    if os.stat("/proc/self/ns/net").st_ino == args.parent_net_inode or interfaces != ["lo"]:
+    if os.stat("/proc/self/ns/net").st_ino == parent_net_inode or interfaces != ["lo"]:
         raise RuntimeError("expected a private network namespace with only loopback")
     # UDP connect tests route selection without sending a packet.
     with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as probe:
         if probe.connect_ex(("192.0.2.1", 9)) != errno.ENETUNREACH:
             raise RuntimeError("expected no route to an external address")
+    return interfaces
+
+
+def forbid_host_root() -> None:
     if os.geteuid() == 0 and Path("/proc/self/uid_map").read_text().split()[1] == "0":
         raise RuntimeError("refusing to run fixture tools as host root")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("binaries", type=Path)
+    parser.add_argument("parent_net_inode", type=int)
+    args = parser.parse_args()
+    interfaces = require_network_namespace(args.parent_net_inode)
+    forbid_host_root()
     signer = (args.binaries / "exit_sign").resolve(strict=True)
     fixture = (args.binaries / "exit_fixture").resolve(strict=True)
     outcomes: dict[str, str] = {}
