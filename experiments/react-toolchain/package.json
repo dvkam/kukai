@@ -11,7 +11,7 @@
     "format:check": "oxfmt --check",
     "format:write": "oxfmt --write",
     "styles:types": "tcm src --pattern \"**/*.module.css\" --allowArbitraryExtensions",
-    "typecheck": "pnpm run styles:types --listDifferent && tsc --noEmit",
+    "typecheck": "node check-css-declarations.ts && pnpm run styles:types --listDifferent && tsc --noEmit",
     "test": "vitest run"
   },
   "dependencies": {

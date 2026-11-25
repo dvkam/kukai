@@ -18,5 +18,5 @@
     "types": ["node", "vite/types/importMeta.d.ts"],
     "verbatimModuleSyntax": true
   },
-  "include": ["src", "*.config.ts"]
+  "include": ["src", "*.ts"]
 }
