@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "allowArbitraryExtensions": true,
+    "exactOptionalPropertyTypes": true,
+    "jsx": "react-jsx",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2023",
+    "types": ["node", "vite/types/importMeta.d.ts"],
+    "verbatimModuleSyntax": true
+  },
+  "include": ["src", "*.config.ts"]
+}

@@ -1,0 +1,2 @@
+# typed-css-modules writes one trailing blank line in its generated declarations.
+*.d.css.ts whitespace=-blank-at-eof

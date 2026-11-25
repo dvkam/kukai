@@ -37,3 +37,11 @@ P3-07 must establish a complete OCaml, Gospel, Cameleer, Why3, and solver combin
 | Independent cryptography and formal-methods reviewers | Unfilled for production under POC-001. | Actual scoped review, with reviewed source revisions and findings, before baseline admission. |
 
 All build observations are local feasibility evidence. Stable release numbers and declared version ranges do not establish security, mutual compatibility, or production suitability.
+
+## React and CSS Modules fixture
+
+The read-only React fixture runs on Node 26.13.1 and pnpm 12.23.0. Its CI job covers a frozen install, deduplication, Rust-backed type-aware lint, formatting, whole-project typechecking, tests and the Vite build. The job runs for pull requests and pushes to `production` or `main`. The fork's default branch is `production`. [Pinned fixture](../../../experiments/react-toolchain/README.md)
+
+Appendix W already selects CSS Modules and shared design tokens as CSS custom properties. The migration starts by agreeing on the `apps/web` initialization and its first read-only journey. The fixture checks the toolchain before that step. Keep Angular's npm lockfile, Karma and its Webpack patch until the inherited wallet is retired. Keep Pyright for the Python experiments that still use it. [Web foundation](../program-plan-v0.5.1.md#appendix-w-web-foundation-carried-from-plan-v2) · [Initialization decision](../decisions.md#proposals-awaiting-decisions)
+
+A separate TypeScript 7.1 beta trial resolved CSS class names directly through a Content Mapper. A misspelled class produced TS2551. The compiler requires explicit permission to execute the mapper through `--runExternalCode`. The fixture uses stable TypeScript and checks generated CSS Module declarations against the stylesheet. Revisit the mapper once TypeScript 7.1 is stable and the editor, bundler and lint backend agree on the same class names. [TypeScript announcement](https://devblogs.microsoft.com/typescript/announcing-typescript-7-1-beta/) · [Content Mapper implementation](https://github.com/microsoft/typescript-go/pull/4712)

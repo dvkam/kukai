@@ -1,0 +1,20 @@
+.panel {
+  max-width: 28rem;
+  margin: 3rem auto;
+  padding: 1.5rem;
+  border: 1px solid #d2dce8;
+  border-radius: 0.75rem;
+  background: #f5f8fc;
+  color: #14263b;
+  font-family: system-ui, sans-serif;
+}
+
+.heading {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+}
+
+.description {
+  margin: 0;
+  color: #465c73;
+}
