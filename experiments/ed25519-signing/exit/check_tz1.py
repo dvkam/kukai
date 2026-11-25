@@ -11,6 +11,8 @@ from pathlib import Path
 from check import forbid_host_root, require_network_namespace
 
 SHARE_FILES = ("device", "recovery", "public")
+# Bound stalled fixture processes independently of the measured signing latency.
+PROCESS_TIMEOUT_SECONDS = 60
 SIGNER_INPUTS = (*SHARE_FILES, "account")
 VERIFIER = Path(__file__).resolve().parents[3] / "tests" / "check-tezos-exit.cjs"
 
@@ -18,7 +20,7 @@ VERIFIER = Path(__file__).resolve().parents[3] / "tests" / "check-tezos-exit.cjs
 def replay(fixture: Path, signer: Path, node: Path) -> dict[str, object]:
     with tempfile.TemporaryDirectory() as setup:
         root = Path(setup) / "fixture"
-        subprocess.run([fixture, "prepare", root], cwd=setup, env={}, check=True, timeout=10)
+        subprocess.run([fixture, "prepare", root], cwd=setup, env={}, check=True, timeout=PROCESS_TIMEOUT_SECONDS)
         fresh = root / "fresh"
         if {path.name for path in fresh.iterdir()} != set(SHARE_FILES):
             raise AssertionError("unexpected refreshed fixture files")
@@ -32,11 +34,11 @@ def replay(fixture: Path, signer: Path, node: Path) -> dict[str, object]:
         folder = Path(run)
         for name, data in retained.items():
             (folder / name).write_bytes(data)
-        signed = subprocess.run([signer, *SIGNER_INPUTS], cwd=folder, env={}, capture_output=True, check=True, timeout=10)
+        signed = subprocess.run([signer, *SIGNER_INPUTS], cwd=folder, env={}, capture_output=True, check=True, timeout=PROCESS_TIMEOUT_SECONDS)
         if signed.stderr:
             raise AssertionError("signer emitted unexpected diagnostics")
         verified = subprocess.run([node, VERIFIER, "account"], cwd=folder, env={}, input=signed.stdout,
-                                  stdout=subprocess.PIPE, check=True, timeout=10)
+                                  stdout=subprocess.PIPE, check=True, timeout=PROCESS_TIMEOUT_SECONDS)
 
     refusals = {
         "extra_operation_input": (retained, ("raw-operation",), b"expected device, recovery"),
@@ -51,7 +53,7 @@ def replay(fixture: Path, signer: Path, node: Path) -> dict[str, object]:
             for name, data in files.items():
                 (Path(run) / name).write_bytes(data)
             result = subprocess.run([signer, *SIGNER_INPUTS, *extra], cwd=run, env={}, capture_output=True,
-                                    check=False, timeout=10)
+                                    check=False, timeout=PROCESS_TIMEOUT_SECONDS)
             if result.returncode != 1 or result.stdout or expected_error not in result.stderr:
                 raise AssertionError(f"{case}: expected refusal without signature output")
 
