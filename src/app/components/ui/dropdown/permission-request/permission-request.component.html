@@ -1,6 +1,7 @@
 <div class="dropdown" [class.expanded]="isOpen">
   <button #panelTrigger type="button" class="currentAddress" [attr.aria-expanded]="isOpen" [attr.aria-controls]="panelId"
-    [attr.aria-labelledby]="panelId + '-label ' + panelId + '-current'" [disabled]="!options?.length" (click)="toggleDropdown()">
+    [attr.aria-labelledby]="panelId + '-label ' + panelId + '-current'" [attr.aria-disabled]="options?.length ? null : 'true'"
+    (click)="toggleDropdown()">
     <span class="control-label" [id]="panelId + '-label'">Select account</span>
     <span class="identity" [id]="panelId + '-current'">
       <ng-container *ngIf="current; else noSelection">
@@ -12,7 +13,7 @@
   </button>
 
   <div class="dropdown-content" role="group" aria-label="Accounts" [id]="panelId" [walletPanelTrigger]="panelTrigger" [panelOpen]="isOpen">
-    <button *ngFor="let account of options; trackBy: trackAccount" type="button" class="option"
+    <button *ngFor="let account of options; trackBy: trackAccount" type="button" class="option" [attr.data-account-address]="account.address"
       [attr.aria-current]="account.address === current?.address ? 'true' : null" (click)="choose(account)">
       <span class="identity">
         <ng-container *ngTemplateOutlet="accountIdentity; context: { $implicit: account }"></ng-container>

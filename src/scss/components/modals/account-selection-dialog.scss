@@ -4,6 +4,7 @@
   .content {
     box-sizing: border-box;
     flex: none;
+    margin: clamp(1rem, 12vh, 6rem) auto auto;
     overflow: visible;
   }
 
@@ -34,6 +35,7 @@
 
   @media (max-width: v.$layout-break-6) {
     .content {
+      margin: 0;
       max-width: none;
     }
   }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
+import { Component, DoCheck, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { ImplicitAccount, TorusWallet } from '../../../../services/wallet/wallet';
 import { LookupService } from '../../../../services/lookup/lookup.service';
 import { WalletService } from '../../../../services/wallet/wallet.service';
@@ -8,7 +8,7 @@ import { WalletService } from '../../../../services/wallet/wallet.service';
   templateUrl: './permission-request.component.html',
   styleUrls: ['../../../../../scss/components/ui/dropdown/staged-account-select.component.scss']
 })
-export class PermissionRequestDropdownComponent {
+export class PermissionRequestDropdownComponent implements DoCheck {
   private static nextId = 0;
   readonly panelId = `staged-account-options-${PermissionRequestDropdownComponent.nextId++}`;
   @Input() options: readonly ImplicitAccount[] = [];
@@ -17,11 +17,21 @@ export class PermissionRequestDropdownComponent {
   @ViewChild('panelTrigger') private trigger: ElementRef<HTMLButtonElement>;
   isOpen = false;
 
-  constructor(
-    private readonly lookupService: LookupService,
-    private readonly walletService: WalletService,
-    private readonly host: ElementRef<HTMLElement>
-  ) {}
+  constructor(private readonly lookupService: LookupService, private readonly walletService: WalletService, private readonly host: ElementRef<HTMLElement>) {}
+
+  ngDoCheck(): void {
+    if (!this.isOpen) return;
+
+    // Wallet updates can mutate the accounts array in place. Move focus before a focused row is removed.
+    const host = this.host.nativeElement;
+    const focused = host.ownerDocument.activeElement;
+    const address = focused instanceof HTMLButtonElement && host.contains(focused) && focused.dataset.accountAddress;
+    if (address && !this.options?.some((account) => account.address === address)) {
+      this.closeAndFocusTrigger();
+    } else if (!this.options?.length) {
+      this.closeDropdown();
+    }
+  }
 
   getUsername(address: string): string {
     const wallet = this.walletService.wallet;
@@ -38,7 +48,7 @@ export class PermissionRequestDropdownComponent {
   }
 
   toggleDropdown(): void {
-    this.isOpen = !this.isOpen;
+    if (this.options?.length) this.isOpen = !this.isOpen;
   }
 
   closeDropdown(): void {

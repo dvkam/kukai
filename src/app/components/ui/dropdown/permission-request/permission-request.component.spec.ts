@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LookupService } from '../../../../services/lookup/lookup.service';
 import { ImplicitAccount } from '../../../../services/wallet/wallet';
 import { WalletService } from '../../../../services/wallet/wallet.service';
@@ -13,14 +12,12 @@ const second = new ImplicitAccount('tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb', '');
 
 @Component({
   template: `
-    <app-ui-dropdown-permission-request [options]="accounts" [current]="first" (dropdownResponse)="choose($event)">
-    </app-ui-dropdown-permission-request>
+    <app-ui-dropdown-permission-request [options]="accounts" [current]="accounts[0]" (dropdownResponse)="choose($event)"> </app-ui-dropdown-permission-request>
   `
 })
 class SelectorHost {
-  accounts = [first, second];
-  first = first;
-  choices: ImplicitAccount[] = [];
+  readonly accounts = [first, second];
+  readonly choices: ImplicitAccount[] = [];
 
   choose(account: ImplicitAccount): void {
     this.choices.push(account);
@@ -28,24 +25,48 @@ class SelectorHost {
 }
 
 describe('Staged account selector', () => {
-  it('opens the account choices without making a selection', () => {
+  let fixture: ComponentFixture<SelectorHost>;
+  let trigger: HTMLButtonElement;
+  let panel: HTMLElement;
+
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [PermissionRequestDropdownComponent, SelectorHost],
-      imports: [CommonModule, RouterTestingModule, TriggerPanelDirective],
+      imports: [CommonModule, TriggerPanelDirective],
       providers: [
         { provide: WalletService, useValue: {} },
         { provide: LookupService, useValue: { resolve: () => null } }
       ]
     });
     spyOn(window, 'matchMedia').and.returnValue({ matches: true } as MediaQueryList);
-    const fixture = TestBed.createComponent(SelectorHost);
+    fixture = TestBed.createComponent(SelectorHost);
     fixture.detectChanges();
 
     const host: HTMLElement = fixture.nativeElement;
-    host.querySelector<HTMLElement>('.currentAddress')!.click();
+    trigger = host.querySelector('button[aria-expanded]')!;
+    panel = host.querySelector(`#${trigger.getAttribute('aria-controls')}`)!;
+  });
+
+  it('opens the account choices without making a selection', () => {
+    trigger.click();
     fixture.detectChanges();
 
-    expect(host.querySelector<HTMLElement>('.dropdown-content')!.inert).toBeFalse();
+    expect(panel.inert).toBeFalse();
+    expect(fixture.componentInstance.choices).toEqual([]);
+  });
+
+  it('returns focus to the trigger when the focused account is removed', () => {
+    trigger.click();
+    fixture.detectChanges();
+    const choice = [...panel.querySelectorAll('button')].find((button) => button.textContent.includes(second.address))!;
+    choice.focus();
+    expect(document.activeElement).toBe(choice);
+
+    fixture.componentInstance.accounts.splice(1, 1);
+    fixture.detectChanges();
+
+    expect(trigger.getAttribute('aria-expanded')).toBe('false');
+    expect(document.activeElement).toBe(trigger);
     expect(fixture.componentInstance.choices).toEqual([]);
   });
 });

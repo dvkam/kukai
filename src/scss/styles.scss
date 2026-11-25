@@ -9,6 +9,6 @@
   }
 }
 
-body:has(.account-selection-dialog[open]) {
-  overflow: hidden;
+:is(html, body):has(.account-selection-dialog[open]) {
+  overflow-y: hidden !important;
 }
