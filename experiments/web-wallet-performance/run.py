@@ -61,7 +61,9 @@ def serve(directory: Path):
             thread.join()
 
 
-def elapsed(result: dict) -> float:
+def elapsed(result: object) -> float:
+    if not isinstance(result, dict):
+        raise TypeError("Browser timing result is missing or invalid")
     if result.get("error") == "menu-stayed-open":
         raise MenuStayedOpen("Navigation stayed open over the Import form")
     value = result.get("ms")
@@ -141,7 +143,7 @@ def measure(browser: Browser, origin: str, trial: int) -> dict:
             page.locator(".import-options span").filter(has_text=re.compile(r"^Seed Words$"))
         )
         values[step] = click(seed_method, WARM_SEED)
-    except (Error, ValueError) as error:
+    except (Error, TypeError, ValueError) as error:
         errors[step] = str(error).splitlines()[0]
     finally:
         context.close()

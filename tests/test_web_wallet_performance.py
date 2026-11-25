@@ -12,6 +12,10 @@ SPEC.loader.exec_module(runner)
 
 
 class WalletBenchmarkTests(unittest.TestCase):
+    def test_missing_browser_timer_is_a_validation_failure(self):
+        with self.assertRaisesRegex(TypeError, "Browser timing result is missing or invalid"):
+            runner.elapsed(None)
+
     def test_build_verification_rejects_a_swapped_script(self):
         with tempfile.TemporaryDirectory() as directory:
             build = Path(directory)
