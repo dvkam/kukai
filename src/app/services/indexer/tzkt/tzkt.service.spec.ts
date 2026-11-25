@@ -2,6 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { TzktService } from './tzkt.service';
 import { storageMock, contractMetadataBigMapMock, tokenMetadataBigMapMock, contractIpfsMock, tokenIpfsMock, expectedResult } from './tzkt.mock';
 import { CONSTANTS } from '../../../../environments/environment';
+import { ImplicitAccount, WatchWallet } from '../../wallet/wallet';
 
 describe('TzktService', () => {
   let service: TzktService;
@@ -9,6 +10,34 @@ describe('TzktService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(TzktService);
+  });
+
+  it('distinguishes an unindexed account from a failed account request', async () => {
+    const fetchResponse = spyOn(window, 'fetch').and.resolveTo(new Response(null, { status: 204 }));
+    await expectAsync(service.accountInfo('tz1Account', [])).toBeResolvedTo({ counter: '', tokens: [] });
+
+    fetchResponse.and.resolveTo(new Response(JSON.stringify({ message: 'Service unavailable' }), { status: 503 }));
+    await expectAsync(service.accountInfo('tz1Account', [])).toBeRejected();
+    expect(fetchResponse).toHaveBeenCalledTimes(2);
+  });
+
+  it('rejects a failed token transfer read even when the native operations list is empty', async () => {
+    const fetchResponse = spyOn(window, 'fetch').and.returnValues(Promise.resolve(new Response('[]')), Promise.resolve(new Response('[]', { status: 503 })));
+    await expectAsync(service.getOperations('tz1Account', [], new WatchWallet())).toBeRejected();
+    expect(fetchResponse).toHaveBeenCalledTimes(2);
+  });
+
+  it('returns empty activity for valid operation kinds intentionally filtered by the wallet', async () => {
+    const address = 'tz1Account';
+    const wallet = new WatchWallet();
+    wallet.implicitAccounts.push(new ImplicitAccount(address, ''));
+    const returnedOperations = [
+      { type: 'transaction', hasInternals: true, target: { address } },
+      { type: 'delegation', sender: { address: 'tz1Other' } }
+    ];
+    spyOn(window, 'fetch').and.returnValues(Promise.resolve(new Response(JSON.stringify(returnedOperations))), Promise.resolve(new Response('[]')));
+
+    await expectAsync(service.getOperations(address, [], wallet)).toBeResolvedTo({ operations: [], unknownTokenIds: [] });
   });
 
   it('should return token metadata', async () => {

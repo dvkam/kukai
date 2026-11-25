@@ -11,7 +11,7 @@ import { TokenService } from '../token/token.service';
 import { LookupService } from '../lookup/lookup.service';
 import { CONSTANTS } from '../../../environments/environment';
 import { SubjectService } from '../subject/subject.service';
-import { interval } from 'rxjs';
+import { interval, Subscription } from 'rxjs';
 import { SignalService } from '../indexer/signal/signal.service';
 import { UnlockableService } from '../unlockable/unlockable.service';
 import { DipDupService } from '../indexer/dipdup/dipdup.service';
@@ -24,6 +24,7 @@ export interface ScheduleData {
   state: State;
   interval: any;
   stateCounter: number;
+  update?: Subscription;
 }
 enum State {
   UpToDate,
@@ -33,7 +34,7 @@ enum State {
 
 @Injectable()
 export class CoordinatorService {
-  scheduler: Map<string, any> = new Map<string, any>(); // pkh + delay
+  scheduler = new Map<string, ScheduleData>();
   defaultDelayActivity = CONSTANTS.MAINNET ? 30000 : 15000; // 30/15s
   shortDelayActivity = 5000; // 5s
   longDelayActivity = 120000; // 2m
@@ -139,10 +140,14 @@ export class CoordinatorService {
     }
   }
   async update(pkh) {
+    const schedule = this.scheduler.get(pkh);
+    if (!schedule || schedule.update) {
+      return;
+    }
     this.setDelay(pkh, this.defaultDelayActivity);
-    this.activityService.updateTransactions(pkh).subscribe(
-      (ans: any) => {
-        switch (this.scheduler.get(pkh) ? this.scheduler.get(pkh).state : -1) {
+    const update = this.activityService.updateTransactions(pkh).subscribe(
+      (ans) => {
+        switch (schedule.state) {
           case State.UpToDate: {
             if (!ans.upToDate) {
               this.changeState(pkh, State.Updating);
@@ -171,7 +176,7 @@ export class CoordinatorService {
           }
         }
         const acc = this.walletService.wallet?.getAccount(pkh);
-        if (!isNaN(ans?.balance)) {
+        if (acc && !isNaN(ans.balance)) {
           this.updateAccountState(acc, ans);
         }
         if (acc?.activities?.length) {
@@ -194,6 +199,8 @@ export class CoordinatorService {
         console.error(err);
       }
     );
+    schedule.update = update;
+    update.add(() => (schedule.update = undefined));
   }
   updateAccountState(acc: Account, payload: any) {
     this.balanceService.updateAccountBalance(acc, payload);
@@ -233,9 +240,10 @@ export class CoordinatorService {
   }
   async stop(pkh) {
     console.log('Stop scheduler ' + this.accounts.findIndex((a) => a.address === pkh));
-    if (this.scheduler.get(pkh)) {
-      this.scheduler.get(pkh).interval.unsubscribe();
-      this.scheduler.get(pkh).interval = null;
+    const schedule = this.scheduler.get(pkh);
+    if (schedule) {
+      schedule.interval.unsubscribe();
+      schedule.update?.unsubscribe();
       this.scheduler.delete(pkh);
     }
   }

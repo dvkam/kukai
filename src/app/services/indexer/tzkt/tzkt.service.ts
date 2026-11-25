@@ -65,32 +65,49 @@ export class TzktService implements Indexer {
       });
   }
 
-  async getHashAndBlockByIds(transactionIds: number[]): Promise<any> {
+  private async fetchRecords(url: string, signal?: AbortSignal): Promise<any[]> {
+    const response = await fetch(url, { signal });
+    return this.readRecords(response);
+  }
+
+  private async readRecords(response: Response): Promise<any[]> {
+    if (!response.ok) {
+      throw new Error(`Indexer request failed (${response.status})`);
+    }
+    const records = await response.json();
+    if (!Array.isArray(records)) {
+      throw new Error('Invalid indexer list response');
+    }
+    return records;
+  }
+
+  async getHashAndBlockByIds(transactionIds: number[], signal?: AbortSignal): Promise<any> {
     if (!transactionIds?.length) {
       return {};
     }
-    return fetch(`${CONSTANTS.API_URL}/operations/transactions?id.in=${transactionIds.join(',')}`)
-      .then((res) => {
-        return res.json();
-      })
-      .then((o) => {
-        let res = {};
-        for (let i = 0; i < o.length; i++) {
-          if (o[i]?.id && o[i].hash && o[i].block) {
-            res[`t${o[i].id}`] = { hash: o[i].hash, block: o[i].block };
-          }
-        }
-        return res;
-      });
+    const transactions = await this.fetchRecords(`${CONSTANTS.API_URL}/operations/transactions?id.in=${transactionIds.join(',')}`, signal);
+    const result = {};
+    for (const transaction of transactions) {
+      if (transaction?.id && transaction.hash && transaction.block) {
+        result[`t${transaction.id}`] = { hash: transaction.hash, block: transaction.block };
+      }
+    }
+    return result;
   }
-  async accountInfo(address: string, knownTokenIds: string[]): Promise<any> {
+  async accountInfo(address: string, knownTokenIds: string[], signal?: AbortSignal): Promise<any> {
     const unknownTokenIds = [];
-    const response = await fetch(`${CONSTANTS.API_URL}/accounts/${address}`);
+    const response = await fetch(`${CONSTANTS.API_URL}/accounts/${address}`, { signal });
     if (response.status === 204) {
       return { counter: '', tokens: [] };
     }
+    if (!response.ok) {
+      throw new Error(`Indexer account request failed (${response.status})`);
+    }
     const data = await response.json();
-    const tokenBalances = address.startsWith('tz') ? await this.getAllTokenBalances(address) : [];
+    if (data?.address !== address) {
+      throw new Error('Invalid indexer account response');
+    }
+    const tokenBalances = address.startsWith('tz') ? await this.getAllTokenBalances(address, signal) : [];
     if (data) {
       if (tokenBalances?.length) {
         for (const token of tokenBalances) {
@@ -147,12 +164,16 @@ export class TzktService implements Indexer {
     const accountInfo = await (await fetch(`${CONSTANTS.API_URL}/accounts/${address}`)).json();
     return Boolean(accountInfo && (accountInfo?.type === 'user' || accountInfo?.balance || accountInfo?.tokenBalancesCount));
   }
-  async getOperations(address: string, knownTokenIds: string[], wallet: WalletObject): Promise<any> {
-    const ops = await fetch(`${CONSTANTS.API_URL}/accounts/${address}/operations?limit=20&type=delegation,origination,transaction,staking`)
-      .then((response) => response.json())
+  async getOperations(address: string, knownTokenIds: string[], wallet: WalletObject, signal?: AbortSignal): Promise<any> {
+    const operationTypes = ['delegation', 'origination', 'transaction', 'staking'];
+    const ops = await fetch(`${CONSTANTS.API_URL}/accounts/${address}/operations?limit=20&type=${operationTypes.join(',')}`, { signal })
+      .then((response) => this.readRecords(response))
       .then((data) =>
         data
           .map((op) => {
+            if (!operationTypes.includes(op?.type)) {
+              throw new Error('Invalid indexer operation type');
+            }
             if (!op.hasInternals || !wallet.getAccount(op.target.address)) {
               const status: OpStatus = op.status === 'applied' ? OpStatus.CONFIRMED : OpStatus.FAILED;
               let destination = { address: '' };
@@ -189,9 +210,6 @@ export class TzktService implements Indexer {
                   entrypoint = op.action;
                   amount = op.amount.toString();
                   break;
-                default:
-                  console.log(`Ignoring kind ${op.type}`);
-                  return null;
               }
               const activity: Activity = {
                 type: op.type,
@@ -212,7 +230,7 @@ export class TzktService implements Indexer {
           .filter((obj) => obj)
       );
     const unknownTokenIds: string[] = [];
-    const tokenTxs = await (await fetch(`${CONSTANTS.API_URL}/tokens/transfers?anyof.from.to=${address}&limit=20&offset=0&sort.desc=id`)).json();
+    const tokenTxs = await this.fetchRecords(`${CONSTANTS.API_URL}/tokens/transfers?anyof.from.to=${address}&limit=20&offset=0&sort.desc=id`, signal);
     const tokenArr = [];
     const opIds = [];
     for (let i = 0; i < tokenTxs.length; ++i) {
@@ -246,7 +264,7 @@ export class TzktService implements Indexer {
         tokenArr.push(activity);
       }
     }
-    const extra = await this.getHashAndBlockByIds(opIds);
+    const extra = await this.getHashAndBlockByIds(opIds, signal);
     for (const token of tokenArr) {
       if (extra[token?.opId]) {
         token.block = extra[token?.opId].block;
@@ -328,21 +346,16 @@ export class TzktService implements Indexer {
       return null;
     }
   }
-  async getAllTokenBalances(address: string): Promise<Array<Token>> {
+  async getAllTokenBalances(address: string, signal?: AbortSignal): Promise<Array<Token>> {
     const fetchToken = async (offset: number): Promise<Array<any>> => {
-      let res = await (
-        await fetch(`${CONSTANTS.API_URL}/tokens/balances?account=${address}&offset=${offset}&limit=${this.TZKT_TOKEN_QUERY_SIZE}&balance.ne=0`)
-      ).json();
-      if (res?.length) {
-        if (res.length === this.TZKT_TOKEN_QUERY_SIZE) {
-          // get more if limit reached
-          return [...res, ...(await fetchToken(offset + this.TZKT_TOKEN_QUERY_SIZE))];
-        } else {
-          return res;
-        }
-      } else {
-        return [];
+      const records = await this.fetchRecords(
+        `${CONSTANTS.API_URL}/tokens/balances?account=${address}&offset=${offset}&limit=${this.TZKT_TOKEN_QUERY_SIZE}&balance.ne=0`,
+        signal
+      );
+      if (records.length === this.TZKT_TOKEN_QUERY_SIZE) {
+        return [...records, ...(await fetchToken(offset + this.TZKT_TOKEN_QUERY_SIZE))];
       }
+      return records;
     };
     let tzktTokensResponse = await fetchToken(0);
     const tokenBalances: Token[] = [];
