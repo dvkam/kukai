@@ -110,8 +110,10 @@ export class TzktService implements Indexer {
     const tokenBalances = address.startsWith('tz') ? await this.getAllTokenBalances(address, signal) : [];
     if (data) {
       if (tokenBalances?.length) {
+        const knownIds = tokenBalances.length > 1 ? new Set(knownTokenIds) : null;
         for (const token of tokenBalances) {
-          if (!knownTokenIds.includes(token.tokenId)) {
+          const isKnown = knownIds?.has(token.tokenId) ?? knownTokenIds.includes(token.tokenId);
+          if (!isKnown) {
             unknownTokenIds.push(token.tokenId);
           }
         }

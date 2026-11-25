@@ -21,6 +21,25 @@ describe('TzktService', () => {
     expect(fetchResponse).toHaveBeenCalledTimes(2);
   });
 
+  it('preserves unknown token order and duplicates when checking known metadata', async () => {
+    const address = 'tz1Account';
+    const contract = 'KT1TokenContract';
+    const row = (tokenId: string, balance: string) => ({ token: { contract: { address: contract }, tokenId }, balance });
+    const balances = [row('2', '1'), row('0', '3'), row('1', '5'), row('2', '8')];
+    spyOn(window, 'fetch').and.returnValues(Promise.resolve(Response.json({ address, balance: 10, counter: 1 })), Promise.resolve(Response.json(balances)));
+
+    const known = `${contract}:0`;
+    const result = await service.accountInfo(address, [known, known]);
+
+    expect(result.unknownTokenIds).toEqual([`${contract}:2`, `${contract}:1`, `${contract}:2`]);
+    expect(result.tokens).toEqual([
+      { tokenId: known, balance: '3' },
+      { tokenId: `${contract}:1`, balance: '5' },
+      { tokenId: `${contract}:2`, balance: '1' },
+      { tokenId: `${contract}:2`, balance: '8' }
+    ]);
+  });
+
   it('rejects a failed token transfer read even when the native operations list is empty', async () => {
     const fetchResponse = spyOn(window, 'fetch').and.returnValues(Promise.resolve(new Response('[]')), Promise.resolve(new Response('[]', { status: 503 })));
     await expectAsync(service.getOperations('tz1Account', [], new WatchWallet())).toBeRejected();
