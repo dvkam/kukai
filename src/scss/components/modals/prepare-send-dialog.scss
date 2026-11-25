@@ -1,0 +1,59 @@
+@use "../../abstracts/variables" as v;
+
+.prepare-send-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  max-width: none;
+  max-height: none;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: transparent;
+  color: v.$base-font-color;
+
+  &:not([open]) { display: none; }
+  &::backdrop { background: #0006; }
+
+  > .content {
+    margin: auto;
+  }
+
+  & :is(button, input, textarea):focus-visible {
+    outline: 2px solid v.$base-blue-color;
+    outline-offset: -2px;
+  }
+
+  & .close {
+    padding: 0;
+    background: transparent;
+  }
+
+  & #paste { border: 0; padding: 0; background: transparent; }
+
+  & .error-message:empty { margin: 0; }
+  & .still-loader { display: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    & .motion-loader { display: none; }
+    & .still-loader { display: inline; }
+  }
+
+  @media (max-width: v.$layout-break-6) {
+    justify-content: flex-start;
+    background: v.$base-end-color;
+
+    > .content {
+      box-sizing: border-box;
+      margin: 0;
+      min-width: 0;
+      max-width: none;
+      width: 100%;
+    }
+  }
+}

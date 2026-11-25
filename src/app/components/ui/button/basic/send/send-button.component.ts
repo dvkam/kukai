@@ -14,6 +14,7 @@ export class SendButtonComponent extends BasicButtonComponent implements OnInit 
   @Input() tokenTransfer: string;
   @Input() symbol: string;
   @Input() override = false;
+  @Input() previousInvoker?: HTMLElement;
   asset = null;
   constructor(public tokenService: TokenService, private subjectService: SubjectService) {
     super();
@@ -22,11 +23,18 @@ export class SendButtonComponent extends BasicButtonComponent implements OnInit 
   ngOnInit(): void {
     this.asset = this.tokenService.getAsset(this.tokenTransfer);
   }
-  prepareTransaction(): void {
+  prepareTransaction(invoker: HTMLButtonElement): void {
+    const section = (this.previousInvoker ?? invoker).closest('app-balances, app-nfts');
     this.subjectService.prepareTokenTransfer.next({
       account: this.activeAccount,
       tokenTransfer: this.tokenTransfer,
-      symbol: this.symbol
+      symbol: this.symbol,
+      invocation: {
+        invoker,
+        invokerBounds: invoker.getBoundingClientRect(),
+        trackInvoker: !this.override,
+        focusAfterClose: [invoker, this.previousInvoker, section?.querySelector<HTMLElement>('[data-send-fallback]')]
+      }
     });
   }
 }

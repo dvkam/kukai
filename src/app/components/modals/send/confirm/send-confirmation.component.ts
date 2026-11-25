@@ -1,4 +1,4 @@
-import { EventEmitter, Input, OnChanges, OnDestroy, Output } from '@angular/core';
+import { ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Output, ViewChild } from '@angular/core';
 import { Component, OnInit, SimpleChanges } from '@angular/core';
 import { FullyPreparedTransaction, PrepareRequest } from '../../../misc/send/interfaces';
 import { TokenService } from '../../../../services/token/token.service';
@@ -16,6 +16,8 @@ import Big from 'big.js';
 import { ImplicitAccount, LedgerWallet, TorusWallet } from '../../../../services/wallet/wallet';
 import { InputValidationService } from '../../../../services/input-validation/input-validation.service';
 import { ModalComponent } from '../../modal.component';
+import type { DialogInvocation } from '../../invoked-dialog';
+import { restoreInvokerFocus } from '../../modal-focus';
 import { Subscription } from 'rxjs';
 import { TezosDomainsService } from '../../../../services/tezos-domains/tezos-domains.service';
 import { TokenBalancesService } from '../../../../services/token-balances/token-balances.service';
@@ -25,9 +27,12 @@ import { TzktService } from '../../../../services/indexer/tzkt/tzkt.service';
 @Component({
   selector: 'app-confirm-send',
   templateUrl: './send-confirmation.component.html',
-  styleUrls: ['../../../../../scss/components/modals/modal.scss']
+  styleUrls: ['../../../../../scss/components/modals/modal.scss'],
+  styles: ['.close { padding: 0; background: transparent; } .close:focus-visible { outline: 2px solid var(--base-blue-color); }']
 })
 export class ConfirmSendComponent extends ModalComponent implements OnInit, OnChanges, OnDestroy {
+  @ViewChild('confirmHeading') private confirmHeading: ElementRef<HTMLHeadingElement>;
+  private returnFocus?: DialogInvocation['focusAfterClose'];
   @Input() confirmRequest: PrepareRequest = null;
   @Output() operationResponse = new EventEmitter();
   syncSub: Subscription;
@@ -95,7 +100,6 @@ export class ConfirmSendComponent extends ModalComponent implements OnInit, OnCh
       });
       this.transactions = changes.confirmRequest.currentValue.transactions;
       this.token = this.tokenService.getAsset(this.tokenTransfer);
-      console.log('transactions', this.transactions);
       if (this.externalReq) {
         ModalComponent.currentModel.next({
           name: this.name,
@@ -112,11 +116,26 @@ export class ConfirmSendComponent extends ModalComponent implements OnInit, OnCh
   }
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+    this.returnFocus = undefined;
+    super.ngOnDestroy();
   }
   open(data: any): void {
     this.customGasLimit = data?.customGasLimit;
     this.customStorageLimit = data?.customStorageLimit;
+    this.returnFocus = data?.returnFocus;
     super.open();
+    if (data?.focusFromPrepare) {
+      requestAnimationFrame(() => {
+        if (this.isOpen && ModalComponent.currentModel.value.data === data) {
+          this.confirmHeading?.nativeElement.focus({ preventScroll: true });
+        }
+      });
+    }
+  }
+
+  override close(): void {
+    super.close();
+    this.returnFocus = undefined;
   }
   async init(): Promise<void> {
     await this.loadParameters();
@@ -577,7 +596,6 @@ export class ConfirmSendComponent extends ModalComponent implements OnInit, OnCh
   }
   // Only Numbers with Decimals
   sanitizeNumberInput(e, type = ''): void {
-    console.dir(this.token?.decimals, e.target);
     if (['gas', 'storage'].includes(type) || (type === 'amount' && this.token?.decimals == 0)) {
       e.target.value = e.target.value.replace(/[^0-9]/g, '');
     } else {
@@ -593,9 +611,11 @@ export class ConfirmSendComponent extends ModalComponent implements OnInit, OnCh
     }
   }
   closeModalAction(emit: string = null): void {
+    const returnFocus = this.returnFocus;
     ModalComponent.currentModel.next({ name: '', data: null });
     this.operationResponse.emit(emit);
     this.reset();
+    if (emit === null && returnFocus) restoreInvokerFocus(returnFocus);
   }
   reset(init = false): void {
     if (!init) {

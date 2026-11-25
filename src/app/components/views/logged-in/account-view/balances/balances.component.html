@@ -19,7 +19,7 @@
 
 <div class="main-container">
   <div class="flex-row top-container-balances">
-    <h1>Balances</h1>
+    <h1 tabindex="-1" data-send-fallback>Balances</h1>
     <div class="flex-row button right">
       <button *ngIf="account?.isImplicit()" class="swap-liquidity" (click)="openSwap()">Liquidity Baking</button>
     </div>

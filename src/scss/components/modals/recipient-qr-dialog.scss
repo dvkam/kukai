@@ -1,0 +1,46 @@
+@use "../../abstracts/variables" as v;
+
+.recipient-scan {
+  display: flex;
+  padding: 0.5em;
+  border: 0;
+  background: transparent;
+
+  img {
+    width: 2em;
+    height: 2em;
+    filter: v.$base-filter-brightness-5;
+  }
+}
+
+.recipient-qr-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: transparent;
+  color: v.$base-font-color;
+
+  &:not([open]) { display: none; }
+  &::backdrop { background: #0006; }
+
+  .content { margin: auto; }
+  .close { padding: 0; background: transparent; }
+
+  @media (max-width: v.$layout-break-6) {
+    .content { box-sizing: border-box; min-width: 0; width: 100%; }
+  }
+}
+
+:is(.recipient-scan, .recipient-qr-dialog .close):focus-visible {
+  outline: 2px solid v.$base-blue-color;
+  outline-offset: -2px;
+}

@@ -17,6 +17,7 @@ export class TokenDetail extends ModalComponent implements OnInit, OnDestroy {
   Object = Object;
   CONSTANTS = CONSTANTS;
   token = null;
+  previousInvoker?: HTMLElement;
   tokenFiltered: any = {};
   activeAccount = null;
   moreInfo = false;
@@ -79,10 +80,13 @@ export class TokenDetail extends ModalComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
+    this.previousInvoker = undefined;
+    super.ngOnDestroy();
   }
 
-  async open(data): Promise<void> {
-    this.token = data;
+  async open(data: { token: typeof this.token; invoker: HTMLElement }): Promise<void> {
+    this.token = data.token;
+    this.previousInvoker = data.invoker;
     !!this.token
       ? Object.keys(this.token)
           .filter((key) => !this.blacklistMeta.includes(key))
@@ -115,6 +119,7 @@ export class TokenDetail extends ModalComponent implements OnInit, OnDestroy {
   }
 
   close(): void {
+    this.previousInvoker = undefined;
     this.reset();
     super.close();
   }

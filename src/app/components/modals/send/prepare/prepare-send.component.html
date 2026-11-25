@@ -1,9 +1,11 @@
-<div *ngIf="isOpen" class="flex-column kukai-modal">
-  <div class="content">
+<dialog #dialog class="flex-column kukai-modal prepare-send-dialog" aria-labelledby="prepare-send-title"
+  (cancel)="cancel($event)" (keydown.tab)="wrapFocus($event)" (keydown.shift.tab)="wrapFocus($event)">
+  <div #content *ngIf="isOpen" class="content">
     <div class="flex-row top">
-      <div class="flex-row button close" (click)="closeModalAction()"><img class="x"
-          src="../../../assets/img/close-btn-x.png" /></div>
-      <h1 class="title">{{ !isNFT ? getTitle() : 'Send Token'}}</h1>
+      <h1 id="prepare-send-title" class="title" tabindex="-1" autofocus>{{ !isNFT ? getTitle() : 'Send Token'}}</h1>
+      <button type="button" class="flex-row close" aria-label="Close send draft" (click)="closeModalAction()">
+        <img class="x" src="assets/img/close-btn-x.png" alt="" />
+      </button>
     </div>
     <div class="flex-column prepare-send">
       <form autocomplete="off">
@@ -12,14 +14,15 @@
             <app-asset class="asset" [priorityList]="['thumbnailAsset', 'displayAsset']" [assets]="token"></app-asset>
             <span class="title">{{token?.name}}</span>
           </div>
-          <span *ngIf="!this.token || !(this.token?.isBooleanAmount || this.token?.balance == 1)"
-            class="flex-row label title">ENTER {{!isNFT ? 'AMOUNT' :
-            'QUANTITY'}}:</span>
+          <label *ngIf="!this.token || !(this.token?.isBooleanAmount || this.token?.balance == 1)"
+            for="prepare-send-amount" class="flex-row label title">Enter {{!isNFT ? 'amount' : 'quantity'}}:</label>
           <div *ngIf="!this.token || !(this.token?.isBooleanAmount || this.token?.balance == 1)"
             class="flex-row amount">
-            <input #amountInput inputmode="decimal" name="none" [placeholder]="token?.decimals == 0 ? '0' : '0.00'" [(ngModel)]="amount"
-              name="none" (mousedown)="sendMax = false; default"
-              (input)="sendMax = false; sanitizeNumberInput($event, 'amount'); amountChange()"
+            <input #amountInput id="prepare-send-amount" inputmode="decimal" name="none"
+              [attr.aria-invalid]="invalidField === 'amount' ? 'true' : null"
+              [attr.aria-describedby]="invalidField === 'amount' ? 'prepare-send-error' : null"
+              [placeholder]="token?.decimals == 0 ? '0' : '0.00'" [(ngModel)]="amount" (mousedown)="sendMax = false"
+              (input)="clearFieldError('amount'); sendMax = false; sanitizeNumberInput($event, 'amount'); amountChange()"
               (paste)="sanitizeNumberInput($event, 'amount')" (change)="amountChange()"
               [disabled]="isMultipleDestinations" />
             <button *ngIf="!this.isMultipleDestinations" type="button" class="small" [class.max]="sendMax"
@@ -31,8 +34,9 @@
               '0.00')
               }}
             </span>
-            <span class="amount-fee"><span>FEE{{ getTotalBurn() > 0 ? ' & STORAGE COST' : ''}}:&nbsp;</span><img
-                *ngIf="simSemaphore" src="../../../../assets/img/feeLoader.gif">{{ getTotalCost() != 0 ? (getTotalCost()
+            <span class="amount-fee"><span>FEE{{ getTotalBurn() > 0 ? ' & STORAGE COST' : ''}}:&nbsp;</span>
+              <img *ngIf="simSemaphore" class="motion-loader" src="assets/img/feeLoader.gif" alt="Estimating fee">
+              <span *ngIf="simSemaphore" class="still-loader">Estimating fee&#8230;</span>{{ getTotalCost() != 0 ? (getTotalCost()
               |
               number:'1.0-6') + ' tez' : '--'
               }}</span>
@@ -41,32 +45,39 @@
       </form>
       <form class="to" autocomplete="off">
         <div *ngIf="!this.isMultipleDestinations" class="flex-column">
-          <span class="label title">SEND TO:</span>
+          <label for="prepare-send-recipient" class="label title">Send to:</label>
           <div class="address">
-            <div *ngIf="!toPkh" class="flex-column tool" id="paste" (click)="pasteToPkh()">
-              <img src="assets/img/paste.svg" />
-            </div>
+            <button *ngIf="!toPkh" type="button" class="flex-column tool" id="paste" aria-label="Paste recipient" (click)="pasteToPkh()">
+              <img src="assets/img/paste.svg" alt="" />
+            </button>
             <app-qr-scanner *ngIf="!toPkh" [override]="true" class="flex-column tool" id="qr" (scanResponse)="handleScanResponse($event)"></app-qr-scanner>
             <app-ui-dropdown-prepare-send [torusVerifier]="torusVerifier" [torusVerifierName]="torusVerifierName"
               (dropdownResponse)="dropdownResponse($event)"></app-ui-dropdown-prepare-send>
-            <input type="text" placeholder="Recipient" class="text" (input)="updateDefaultValues($event)"
+            <input #recipient id="prepare-send-recipient" type="text" placeholder="Recipient" class="text"
+              [attr.aria-invalid]="invalidField === 'recipient' ? 'true' : null"
+              [attr.aria-describedby]="invalidField === 'recipient' ? 'prepare-send-error' : null"
+              (input)="clearFieldError('recipient'); updateDefaultValues($event)"
               (change)="toPkhChange()" name="toPkh" [(ngModel)]="toPkh">
           </div>
           <div class="flex-row address-display">
             <span [style.display]="!torusPendingLookup && torusLookupAddress ? '' : 'none'">{{ torusLookupAddress
-              }}</span><span [style.display]="torusPendingLookup ? '' : 'none'"><img
-                src="../../../../assets/img/feeLoader.gif"></span>
+              }}</span><span *ngIf="torusPendingLookup">
+                <img class="motion-loader" src="assets/img/feeLoader.gif" alt="Looking up recipient">
+                <span class="still-loader">Looking up recipient&#8230;</span>
+              </span>
           </div>
         </div>
         <div *ngIf="this.isMultipleDestinations" class="flex-column">
-          <label class="label">Addresses and amounts <span class="batchInfo">{{ batchSpace() }}</span></label>
-          <textarea name="none" type="text" class="text" (input)="updateDefaultValues()" rows="3"
-            [(ngModel)]="toMultipleDestinationsString" name="none"
+          <label class="label" for="prepare-send-batch">Addresses and amounts <span class="batchInfo">{{ batchSpace() }}</span></label>
+          <textarea id="prepare-send-batch" name="none" class="text" (input)="clearFieldError('batch'); updateDefaultValues()" rows="3"
+            [attr.aria-invalid]="invalidField === 'batch' ? 'true' : null"
+            [attr.aria-describedby]="invalidField === 'batch' ? 'prepare-send-error' : null"
+            [(ngModel)]="toMultipleDestinationsString"
             placeholder="address1 amount1 ; &#10;address2 amount2 ; &#10;address3 ..."></textarea>
         </div>
         <div class="flex-column">
           <app-ui-toggle-advanced style="width: calc(100% - 1.5em);margin: 1rem 0;" [default]="false"
-            (stateChange)="advancedForm = $event"></app-ui-toggle-advanced>
+            mode="disclosure" controls="prepare-send-fees" [(state)]="advancedForm"></app-ui-toggle-advanced>
           <button *ngIf="!isNFT && advancedForm" type="button" class="small multiple-destinations" (click)="toggleDestination()">
             <span>
               <ng-container *ngIf="!this.isMultipleDestinations">Multiple transactions</ng-container>
@@ -75,32 +86,38 @@
           </button>
         </div>
       </form>
-      <form autocomplete="off" *ngIf="advancedForm" class="flex-column advanced-form">
+      <form id="prepare-send-fees" autocomplete="off" *ngIf="advancedForm" class="flex-column advanced-form">
         <div class="flex-row">
           <div class="flex-column">
-            <label class="label">Gas limit</label>
-            <input inputmode="decimal" name="none" type="text" class="text" (input)="sanitizeNumberInput($event, 'gas')"
+            <label class="label" for="prepare-send-gas">Gas limit</label>
+            <input id="prepare-send-gas" [attr.aria-invalid]="invalidField === 'gas' ? 'true' : null"
+              [attr.aria-describedby]="invalidField === 'gas' ? 'prepare-send-error' : null"
+              inputmode="decimal" name="none" type="text" class="text" (input)="clearFieldError('gas'); sanitizeNumberInput($event, 'gas')"
               (paste)="sanitizeNumberInput($event, 'gas')" placeholder={{this.defaultTransactionParams.gas.toString()}}
               [(ngModel)]="customGasLimit" name="none">
           </div>
           <div class="flex-column">
-            <label class="label">Fee</label>
-            <input inputmode="decimal" name="none" type="text" (input)="sanitizeNumberInput($event); updateMaxAmount()"
+            <label class="label" for="prepare-send-fee">Fee</label>
+            <input id="prepare-send-fee" [attr.aria-invalid]="invalidField === 'fee' ? 'true' : null"
+              [attr.aria-describedby]="invalidField === 'fee' ? 'prepare-send-error' : null"
+              inputmode="decimal" name="none" type="text" (input)="clearFieldError('fee'); sanitizeNumberInput($event); updateMaxAmount()"
               (paste)="sanitizeNumberInput($event); updateMaxAmount()" class="text"
               placeholder={{this.defaultTransactionParams.fee.toString()}} [(ngModel)]="customFee" name="none">
           </div>
         </div>
         <div class="flex-row">
           <div class="flex-column">
-            <label class="label">Storage limit</label>
-            <input inputmode="decimal" name="none" type="text" (input)="sanitizeNumberInput($event, 'storage'); updateMaxAmount()"
+            <label class="label" for="prepare-send-storage">Storage limit</label>
+            <input id="prepare-send-storage" [attr.aria-invalid]="invalidField === 'storage' ? 'true' : null"
+              [attr.aria-describedby]="invalidField === 'storage' ? 'prepare-send-error' : null"
+              inputmode="decimal" name="none" type="text" (input)="clearFieldError('storage'); sanitizeNumberInput($event, 'storage'); updateMaxAmount()"
               (paste)="sanitizeNumberInput($event, 'storage'); updateMaxAmount()" class="text"
               placeholder={{this.defaultTransactionParams.storage.toString()}} [(ngModel)]="customStorageLimit"
               name="none">
           </div>
           <div class="flex-column">
-            <label class="label">Max storage cost</label>
-            <input inputmode="decimal" name="none" type="text" class="text read-only" [value]="burnAmount() ? burnAmount() : '0 tez'"
+            <label class="label" for="prepare-send-storage-cost">Max storage cost</label>
+            <input id="prepare-send-storage-cost" inputmode="decimal" name="none" type="text" class="text read-only" [value]="burnAmount() ? burnAmount() : '0 tez'"
               tabindex=-1 readonly>
           </div>
         </div>
@@ -108,11 +125,9 @@
       <br />
       <div class="flex-column bottom">
         <div class="seperator"></div>
-        <span *ngIf="formInvalid !== ''" class="label danger">
-          {{ formInvalid }}
-        </span>
-        <button class="confirm" (click)="preview()">Preview</button>
+        <p id="prepare-send-error" role="status" class="error-message" [class.label]="formInvalid" [class.danger]="formInvalid">{{ formInvalid }}</p>
+        <button type="button" class="confirm" (click)="preview()">Preview</button>
       </div>
     </div>
   </div>
-</div>
+</dialog>

@@ -1,6 +1,9 @@
+import { restoreInvokerFocus } from './modal-focus';
+
 export interface DialogInvocation {
   invoker: HTMLButtonElement;
   invokerBounds?: DOMRectReadOnly;
+  trackInvoker?: boolean;
   focusAfterClose?: readonly (HTMLElement | undefined)[];
 }
 
@@ -30,7 +33,7 @@ export class InvokedDialog {
   close({ animate = false, restoreFocus = false } = {}): void {
     const invocation = this.invocation;
     const wasOpen = this.dialog.open;
-    const from = this.readMotionFrame();
+    const from = animate ? this.readMotionFrame() : undefined;
     this.clearMotion();
     const animateExit = wasOpen && animate && this.shouldAnimate();
     // Leave the top layer immediately. The inert panel can finish painting its exit.
@@ -41,11 +44,7 @@ export class InvokedDialog {
     else this.releaseInvocation();
 
     if (wasOpen && restoreFocus && invocation) {
-      for (const element of invocation.focusAfterClose ?? [invocation.invoker]) {
-        if (!element?.isConnected || !element.getClientRects().length || element.closest('[hidden], [inert]')) continue;
-        element.focus({ preventScroll: true });
-        if (document.activeElement === element) break;
-      }
+      restoreInvokerFocus(invocation.focusAfterClose ?? [invocation.invoker]);
     }
   }
 
@@ -78,8 +77,8 @@ export class InvokedDialog {
 
   private readonly alignOrigin = (): void => {
     if (!this.invocation || !this.invokerBounds) return;
-    const { invoker, invokerBounds } = this.invocation;
-    if (!invokerBounds && invoker.getClientRects().length && !invoker.closest('[inert]')) {
+    const { invoker, invokerBounds, trackInvoker = !invokerBounds } = this.invocation;
+    if (trackInvoker && invoker.getClientRects().length && !invoker.closest('[inert]')) {
       this.invokerBounds = invoker.getBoundingClientRect();
     }
     const trigger = this.invokerBounds;

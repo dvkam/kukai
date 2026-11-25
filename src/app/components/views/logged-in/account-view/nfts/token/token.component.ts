@@ -33,8 +33,8 @@ export class NftsTokenComponent implements OnInit, OnChanges {
       this.isNew = true;
     }
   }
-  viewToken(token): void {
-    ModalComponent.currentModel.next({ name: 'token-detail', data: token });
+  viewToken(event: MouseEvent): void {
+    ModalComponent.currentModel.next({ name: 'token-detail', data: { token: this.token, invoker: event.currentTarget as HTMLElement } });
   }
   balanceChangeTimer(): void {
     setTimeout(() => {

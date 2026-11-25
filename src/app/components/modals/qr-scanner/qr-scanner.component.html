@@ -1,12 +1,24 @@
 <button *ngIf="!override" class="scan" (click)="openModal()">Scan QR code</button>
-<img *ngIf="override" class="scan override" (click)="openModal()" src="assets/img/qr.svg" />
-<div *ngIf="isOpen" class="flex-column kukai-modal">
+<button *ngIf="override" #recipientTrigger type="button" class="scan recipient-scan" aria-label="Scan recipient QR code" (click)="openModal()">
+  <img src="assets/img/qr.svg" alt="" />
+</button>
+<dialog *ngIf="override" #recipientDialog class="flex-column kukai-modal recipient-qr-dialog"
+  aria-labelledby="prepare-send-scan-title" (cancel)="cancelRecipient($event)"
+  (keydown.tab)="$event.preventDefault()" (keydown.shift.tab)="$event.preventDefault()">
+  <ng-container *ngIf="isOpen" [ngTemplateOutlet]="scannerContent"></ng-container>
+</dialog>
+<div *ngIf="!override && isOpen" class="flex-column kukai-modal" [ngTemplateOutlet]="scannerContent"></div>
+<ng-template #scannerContent>
   <form autocomplete="off">
-    <div class="content">
+    <div #scannerPanel class="content">
       <div class="flex-row top">
-        <div class="flex-row button close" (click)="closeModal()"><img class="x"
-            src="../../../assets/img/close-btn-x.png" /></div>
-        <h1 class="title">QR-Scanner</h1>
+        <button *ngIf="override; else pairingClose" type="button" class="flex-row close" autofocus aria-label="Close recipient scanner" (click)="closeModal()">
+          <img class="x" src="assets/img/close-btn-x.png" alt="" />
+        </button>
+        <ng-template #pairingClose>
+          <div class="flex-row button close" (click)="closeModal()"><img class="x" src="assets/img/close-btn-x.png" /></div>
+        </ng-template>
+        <h1 class="title" [attr.id]="override ? 'prepare-send-scan-title' : null">{{ override ? 'Scan recipient QR code' : 'QR-Scanner' }}</h1>
       </div>
       <div class="seperator"></div>
       <div class="flex-column qr-scanner">
@@ -14,13 +26,15 @@
           <video #videoPlayer>
             Browser not supported
           </video>
-          <p class="no-cam" *ngIf="!qrScanner">No camera detected</p>
-          <p class="no-cam" *ngIf="!!errorMessage">{{ errorMessage }}</p>
-          <p class="no-cam" *ngIf="!!errorMessage">Please check site permissions</p>
+          <div role="status">
+            <p class="no-cam" *ngIf="loadingCam">Starting camera&#8230;</p>
+            <p class="no-cam" *ngIf="!loadingCam && !qrScanner && !errorMessage">No camera detected</p>
+            <p class="no-cam" *ngIf="errorMessage">{{ errorMessage }}. Please check site permissions.</p>
+          </div>
         </div>
         <input *ngIf="!override" name="none" type="text" [(ngModel)]="manualInput" class="text" (paste)="handlePaste($event)" (input)="handleInput($event)"
           placeholder="...or paste pairing string here">
       </div>
     </div>
   </form>
-</div>
+</ng-template>

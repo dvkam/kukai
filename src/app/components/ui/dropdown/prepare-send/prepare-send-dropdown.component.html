@@ -1,24 +1,24 @@
-<div #panelTrigger class="flex-row dropdown" [class.expanded]="isOpen" (click)="toggleDropdown()" [id]="ecmpId">
-  <img class="button icon-torus"
-    [src]="torusVerifier === '' ? 'assets/img/tezos-xtz-logo.svg' :  'assets/img/' + torusVerifier.toLowerCase() + '-logo.svg'" />
-  <input readonly [(ngModel)]="torusVerifierName" /><img class="button icon-db"
-    src="../../../assets/img/down-arrow.svg" />
-  <div class="flex-column dropdown-content" [walletPanelTrigger]="panelTrigger" [panelOpen]="isOpen">
-    <a [class.selected]="torusVerifierName === 'Tezos Address'"
-      (click)="torusVerifier = ''; torusVerifierName = 'Tezos Address';">
-      Tezos Address
-    </a>
-    <a *ngIf="!tezosDomains.unsupportedNetwork" [class.selected]="torusVerifierName === 'Tezos Domains'"
-      (click)="torusVerifier = 'domain'; torusVerifierName = 'Tezos Domains'">
-      Tezos Domains
-    </a>
+<div class="flex-row dropdown" [class.expanded]="isOpen" [id]="ecmpId"
+  (keydown.escape)="onEscape($event)" (focusout)="onFocusOut($event)">
+  <button #trigger type="button" class="flex-row recipient-type-trigger"
+    [attr.aria-label]="'Recipient type: ' + torusVerifierName" [attr.aria-expanded]="isOpen"
+    aria-controls="prepare-send-recipient-types" (click)="toggleDropdown()">
+    <img class="icon-torus" alt=""
+      [src]="torusVerifier === '' ? 'assets/img/tezos-xtz-logo.svg' : 'assets/img/' + torusVerifier.toLowerCase() + '-logo.svg'" />
+    <span class="trigger-text">{{ torusVerifierName }}</span>
+    <img class="icon-db" src="assets/img/down-arrow.svg" alt="" />
+  </button>
+  <div id="prepare-send-recipient-types" class="flex-column dropdown-content" role="group" aria-label="Recipient types"
+    [walletPanelTrigger]="trigger" [panelOpen]="isOpen">
+    <button type="button" [class.selected]="torusVerifierName === 'Tezos Address'"
+      [attr.aria-pressed]="torusVerifierName === 'Tezos Address'" (click)="select('', 'Tezos Address')">Tezos Address</button>
+    <button type="button" *ngIf="!tezosDomains.unsupportedNetwork" [class.selected]="torusVerifierName === 'Tezos Domains'"
+      [attr.aria-pressed]="torusVerifierName === 'Tezos Domains'" (click)="select('domain', 'Tezos Domains')">Tezos Domains</button>
     <ng-container *ngFor="let key of torusService.verifierMapKeys">
-      <ng-container *ngIf="torusService.verifierMap[key].lookups">
-        <a [class.selected]="torusVerifierName === torusService.verifierMap[key].name"
-          (click)="torusVerifier = key; torusVerifierName = torusService.verifierMap[key].name">
-          {{ torusService.verifierMap[key].name }}
-        </a>
-      </ng-container>
+      <button type="button" *ngIf="torusService.verifierMap[key].lookups"
+        [class.selected]="torusVerifierName === torusService.verifierMap[key].name"
+        [attr.aria-pressed]="torusVerifierName === torusService.verifierMap[key].name"
+        (click)="select(key, torusService.verifierMap[key].name)">{{ torusService.verifierMap[key].name }}</button>
     </ng-container>
   </div>
 </div>
