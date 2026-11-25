@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, SimpleChanges, OnChanges, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { WalletService } from '../../../../services/wallet/wallet.service';
 import { Account } from '../../../../services/wallet/wallet';
@@ -14,6 +14,8 @@ import { SubjectService } from '../../../../services/subject/subject.service';
 import { Subscription } from 'rxjs';
 import { DeeplinkService } from '../../../../services/deeplink/deeplink.service';
 import { UnlockableService } from '../../../../services/unlockable/unlockable.service';
+import { MobileMenuDropdownComponent } from '../../../ui/dropdown/mobile-menu/mobile-menu.component';
+import type { ReceiveData } from '../../../modals/receive/receive.component';
 
 @Component({
   selector: 'app-header',
@@ -24,6 +26,8 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
   window = window;
   document = document;
   @Input() activeAccount: Account;
+  @ViewChild('desktopReceive') private desktopReceive?: ElementRef<HTMLButtonElement>;
+  @ViewChild(MobileMenuDropdownComponent) private mobileMenu?: MobileMenuDropdownComponent;
   accounts: Account[];
   delegateName = '';
   readonly CONSTANTS = _CONSTANTS;
@@ -107,10 +111,15 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
   newAccount(): void {
     ModalComponent.currentModel.next({ name: 'new-implicit', data: null });
   }
-  receive(): void {
+  receive(invoker: HTMLButtonElement): void {
+    if (!this.activeAccount?.address) return;
     ModalComponent.currentModel.next({
       name: 'receive',
-      data: { address: this.activeAccount.address }
+      data: {
+        address: this.activeAccount.address,
+        invoker,
+        fallback: [this.mobileMenu?.navigationTrigger, this.desktopReceive?.nativeElement]
+      } satisfies ReceiveData
     });
   }
 

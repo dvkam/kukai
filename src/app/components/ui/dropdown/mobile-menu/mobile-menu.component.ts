@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { NavigationStart, Router } from '@angular/router';
 import { WalletService } from '../../../../services/wallet/wallet.service';
 import { Account } from '../../../../services/wallet/wallet';
@@ -24,7 +24,7 @@ export class MobileMenuDropdownComponent extends DropdownComponent implements On
   @Input() activeAccount: Account;
   @Input() delegateName;
   @Input() newAccount;
-  @Input() receive;
+  @Output() receiveAddress = new EventEmitter<HTMLButtonElement>();
   readonly CONSTANTS = _CONSTANTS;
 
   constructor(
@@ -55,6 +55,15 @@ export class MobileMenuDropdownComponent extends DropdownComponent implements On
   returnToTrigger(): void {
     this.isOpen = false;
     this.panelTrigger.nativeElement.focus();
+  }
+
+  get navigationTrigger(): HTMLButtonElement {
+    return this.panelTrigger.nativeElement;
+  }
+
+  openReceive(invoker: HTMLButtonElement): void {
+    this.isOpen = false;
+    this.receiveAddress.emit(invoker);
   }
 
   @HostListener('focusout', ['$event'])

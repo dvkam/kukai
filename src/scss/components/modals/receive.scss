@@ -1,27 +1,93 @@
-& .receive {
-  justify-content: center;
+@use "../../abstracts/variables" as v;
+@use "../../abstracts/mixins" as m;
+
+.kukai-modal {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: transparent;
+  color: v.$base-font-color;
+  justify-content: flex-start;
+
+  &::backdrop {
+    background: #0006;
+  }
+
+  &:not([open]) {
+    pointer-events: none;
+
+    &:not(.closing) {
+      display: none;
+    }
+  }
+
+  & .content {
+    margin: auto;
+
+    & .close {
+      padding: 0;
+      font: inherit;
+      background: transparent;
+    }
+  }
+
+  & button:focus-visible {
+    outline: 2px solid v.$base-blue-color;
+    outline-offset: -2px;
+  }
+
+  @media (max-width: v.$layout-break-6) {
+    &::backdrop {
+      background: v.$base-end-color;
+    }
+
+    & .content {
+      margin: 0;
+      min-width: 0;
+      width: 100%;
+    }
+  }
+}
+
+.receive {
   align-items: center;
-  margin: 1em 0 0 0;
+  margin: 1em 0 0;
 
-  & label {
+  & .qr-label {
     @include m.multiply("font-size", 1.125, "em");
-    margin: 0 0 1em 0;
+    margin: 0 0 1em;
   }
 
-  & img.qr-icon {
-    width: 1em;
-    height: 1em;
-    cursor: pointer;
-    vertical-align: baseline;
+  & .address {
+    max-width: 100%;
+    margin-top: 1em;
+    overflow-wrap: anywhere;
   }
 
-  & img.copy {
-    cursor: pointer;
-    margin: 0 0 0 0.5rem;
-    filter: v.$base-filter-invert-1
+  & .copy {
+    flex: none;
+    margin-left: 0.5rem;
+    padding: 0.5em;
+    background: transparent;
+    border: 0;
+
+    & img {
+      display: block;
+      filter: v.$base-filter-invert-1;
+    }
   }
 
-  & span.value {
-    margin: 1em 0;
+  & .copy-status {
+    min-height: 1.25em;
+    margin: 0.25em 0 1em;
   }
 }

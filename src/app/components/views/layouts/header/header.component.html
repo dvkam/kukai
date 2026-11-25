@@ -28,12 +28,11 @@
           <div class="description">COPY ADDRESS</div>
         </div>
       </div>
-      <div class="button icon receive" (click)="receive()">
-        <img src="../../../assets/img/qr.svg" />
-        <div class="tooltip">
-          <div class="description">ADDRESS QR</div>
-        </div>
-      </div>
+      <button #desktopReceive type="button" class="button icon receive" aria-label="Receive address" aria-haspopup="dialog"
+        (click)="receive(desktopReceive)">
+        <img src="../../../assets/img/qr.svg" alt="" />
+        <span class="tooltip" aria-hidden="true"><span class="description">ADDRESS QR</span></span>
+      </button>
       <div *ngIf="walletService.isHdWallet() || walletService.isLedgerWallet()" class="button icon" (click)="newAccount()">
         <img src="../../../assets/img/add.svg" />
         <div class="tooltip">
@@ -75,5 +74,6 @@
     <app-ui-dropdown-account [options]="accounts" [current]="activeAccount" style="width: 100%;">
     </app-ui-dropdown-account>
   </div>
-  <app-ui-mobile-menu [activeAccount]="activeAccount" [delegateName]="delegateName" [newAccount]="newAccount" [receive]="receive"></app-ui-mobile-menu>
+  <app-ui-mobile-menu [activeAccount]="activeAccount" [delegateName]="delegateName" [newAccount]="newAccount"
+    (receiveAddress)="receive($event)"></app-ui-mobile-menu>
 </div>
