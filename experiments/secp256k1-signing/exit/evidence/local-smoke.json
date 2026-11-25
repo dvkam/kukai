@@ -1,0 +1,18 @@
+{
+  "mode": "unisolated_smoke",
+  "interfaces": null,
+  "external_ipv4_route": null,
+  "signer_sha256": "aedea9482729dca10474c79306dcfd8455455411c66470e01b6031cee384c82d",
+  "fixture_sha256": "a8abdaf4a88221380ca3a42404f84e9d4e55a13c50cc36d6c8ca34c0c4b38c4f",
+  "cases": {
+    "chain_1": "Alloy and k256 verified; changed value, chain ID and encoding rejected",
+    "chain_8453": "Alloy and k256 verified; changed value, chain ID and encoding rejected",
+    "device_only": "refused",
+    "recovery_only": "refused",
+    "swapped_roles": "refused",
+    "duplicated_device": "refused",
+    "wrong_account": "refused",
+    "foreign_recovery": "refused",
+    "truncated_recovery": "refused"
+  }
+}

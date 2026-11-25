@@ -37,3 +37,7 @@ unshare --user --map-root-user --net -- python experiments/secp256k1-signing/exi
 The runner requires loopback as its only interface, a different network namespace inode from the parent, and an unreachable external IPv4 route. Hosted CI creates the private namespace and drops to the runner's UID and GID before Python starts. The isolation applies to networking. The processes share the host kernel and filesystem. The crate manifest and lockfile pin the dependencies. [Cargo manifest](../Cargo.toml) · [Cargo lockfile](../Cargo.lock)
 
 The local `--unisolated-smoke` flag runs the same positive and negative cases without checking or blocking the network. Its JSON output identifies the mode. Use the network namespace run for isolation evidence. Issue #29 and the G3 exit gate remain open.
+
+## Recorded run
+
+The hosted Linux job passed its private-namespace step for both chain IDs and all seven refusal cases. The local smoke ran the same cases without network isolation. Its file lists the local binary digests. [Hosted namespace job](https://github.com/dvkam/kukai/actions/runs/45615444596/job/139209513695) · [Run record](evidence/run.json) · [Local smoke output](evidence/local-smoke.json)
