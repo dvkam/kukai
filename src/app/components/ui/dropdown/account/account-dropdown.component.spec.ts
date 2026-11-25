@@ -12,12 +12,22 @@ import { AccountDropdownComponent } from './account-dropdown.component';
 @Component({ template: '' })
 class AccountPage {}
 
+@Component({
+  template: `
+    <app-ui-dropdown-account [current]="accounts[0]" [options]="accounts"></app-ui-dropdown-account>
+    <app-ui-dropdown-account [current]="accounts[0]" [options]="accounts"></app-ui-dropdown-account>
+  `
+})
+class HeaderFixture {
+  accounts: ImplicitAccount[] = [];
+}
+
 describe('Header account picker', () => {
   it('associates each trigger with its own panel and returns focus after selection or Escape', fakeAsync(() => {
     const first = new ImplicitAccount('tz1burnburnburnburnburnburnburjAYjjX', '');
     const second = new ImplicitAccount('tz1VSUr8wwNhLAzempoch5d6hLRiTh8Cjcjb', '');
     TestBed.configureTestingModule({
-      declarations: [AccountDropdownComponent, AccountPage],
+      declarations: [AccountDropdownComponent, AccountPage, HeaderFixture],
       imports: [CommonModule, TriggerPanelDirective, RouterTestingModule.withRoutes([{ path: 'account/:address', component: AccountPage }])],
       providers: [
         { provide: WalletService, useValue: {} },
@@ -28,22 +38,19 @@ describe('Header account picker', () => {
     const router = TestBed.inject(Router);
     router.navigateByUrl('/account/' + first.address);
     tick();
-    const fixtures = [TestBed.createComponent(AccountDropdownComponent), TestBed.createComponent(AccountDropdownComponent)];
-    for (const fixture of fixtures) {
-      fixture.componentRef.setInput('current', first);
-      fixture.componentRef.setInput('options', [first, second]);
-      fixture.detectChanges();
-    }
-    const [desktop, mobile] = fixtures;
-    const trigger = desktop.nativeElement.querySelector('button.currentAddress') as HTMLButtonElement;
-    const panel = desktop.nativeElement.querySelector('.dropdown-content') as HTMLElement;
-    const otherTrigger = mobile.nativeElement.querySelector('button.currentAddress') as HTMLButtonElement;
+    const fixture = TestBed.createComponent(HeaderFixture);
+    fixture.componentInstance.accounts = [first, second];
+    fixture.detectChanges();
+    const headers = (fixture.nativeElement as HTMLElement).querySelectorAll('app-ui-dropdown-account');
+    const trigger = headers[0].querySelector<HTMLButtonElement>('button.currentAddress')!;
+    const otherTrigger = headers[1].querySelector<HTMLButtonElement>('button.currentAddress')!;
+    const panel = headers[0].querySelector<HTMLElement>('.dropdown-content')!;
     expect(trigger.getAttribute('aria-controls')).toBe(panel.id);
     expect(otherTrigger.getAttribute('aria-controls')).not.toBe(panel.id);
     expect(trigger.getAttribute('aria-label')).toContain(first.address);
     expect(panel.inert).toBeTrue();
     trigger.click();
-    desktop.detectChanges();
+    fixture.detectChanges();
     expect(panel.inert).toBeFalse();
     expect(trigger.getAttribute('aria-expanded')).toBe('true');
     const [current, alternative] = Array.from(panel.querySelectorAll('a'));
@@ -51,15 +58,15 @@ describe('Header account picker', () => {
     expect(alternative.getAttribute('aria-current')).toBeNull();
     current.focus();
     current.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
-    desktop.detectChanges();
+    fixture.detectChanges();
     expect(document.activeElement).toBe(trigger);
     expect(panel.inert).toBeTrue();
 
     trigger.click();
-    desktop.detectChanges();
+    fixture.detectChanges();
     alternative.click();
     tick();
-    desktop.detectChanges();
+    fixture.detectChanges();
     expect(router.url).toBe('/account/' + second.address);
     expect(panel.inert).toBeTrue();
     expect(document.activeElement).toBe(trigger);

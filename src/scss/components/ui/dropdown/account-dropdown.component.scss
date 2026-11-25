@@ -286,6 +286,13 @@ $border-width-dark-only: v.$border-width-dark-only;
     }
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    .currentAddress,
+    .icon-db {
+      transition: none;
+    }
+  }
+
   :is(.currentAddress, .option):focus-visible {
     outline: 2px solid var(--account-picker-focus-ring);
     outline-offset: -3px;
