@@ -51,6 +51,15 @@ def serve(directory: Path):
         def log_message(self, *_args):
             pass
 
+        def send_head(self):
+            # Serve account deep links as documents. Missing assets still return 404.
+            if (
+                self.headers.get("Sec-Fetch-Mode") == "navigate"
+                and re.fullmatch(r"/account/[A-Za-z0-9]+/?", urlsplit(self.path).path)
+            ):
+                self.path = "/index.html"
+            return super().send_head()
+
     with ThreadingHTTPServer(("127.0.0.1", 0), QuietHandler) as server:
         thread = Thread(target=server.serve_forever)
         thread.start()
@@ -159,10 +168,10 @@ def measure(browser: Browser, origin: str, trial: int) -> dict:
     }
 
 
-def summarize(trials: list[dict]) -> dict:
+def summarize(trials: list[dict], steps: tuple[str, ...] = STEPS) -> dict:
     completed = sum(trial["completed"] for trial in trials)
     workflows = {}
-    for step in STEPS:
+    for step in steps:
         attempted = [trial for trial in trials if step in trial["timings_ms"] or step in trial["errors"]]
         values = sorted(trial["timings_ms"][step] for trial in attempted
                         if step in trial["timings_ms"] and not trial["runtime_errors"])

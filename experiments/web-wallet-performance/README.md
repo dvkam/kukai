@@ -2,6 +2,8 @@
 
 Measure cold Home and warm mobile navigation on the inherited web wallet. Use the same runner, network conditions and viewport for each revision. The release targets and reference-device protocol are tracked in [issue #10](https://github.com/dvkam/kukai/issues/10). Report local runs in [issue #52](https://github.com/dvkam/kukai/issues/52).
 
+For warm account switching after wallet restoration, see the [returning-account fixture and measurements](returning-accounts.md).
+
 ## Run
 
 Use Node 24.22.1, Python 3.12, and Chrome or Chromium on Linux. Install the wallet's locked Node dependencies in each checkout and install Playwright with `python -m pip install -r requirements-ci.txt`. The runner looks for `chromium` or `google-chrome`. Set `CHROME_BIN` to choose a specific binary.
