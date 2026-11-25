@@ -1,20 +1,32 @@
 import { Injectable } from '@angular/core';
 import { WalletService } from '../wallet/wallet.service';
-import { of, Observable, from as fromPromise } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
-import { delay, takeUntil } from 'rxjs/operators';
-import { Activity, Account, OpStatus } from '../wallet/wallet';
+import { BehaviorSubject, defer, EMPTY, from, Observable, of } from 'rxjs';
+import { delay, finalize, map, switchMap, takeUntil, tap, timeout } from 'rxjs/operators';
+import { Activity, Account, OpStatus, Token, WalletObject } from '../wallet/wallet';
 import { MessageService } from '../message/message.service';
 import { LookupService } from '../lookup/lookup.service';
 import { IndexerService } from '../indexer/indexer.service';
 import { TokenService } from '../token/token.service';
-import { BehaviorSubject } from 'rxjs';
 import { SubjectService } from '../subject/subject.service';
+
+export type ActivityState = 'loading' | 'empty' | 'ready' | 'stale' | 'unavailable';
+const ACTIVITY_REFRESH_TIMEOUT_MS = 10000;
+
+interface ActivityRefreshResult {
+  upToDate: boolean;
+  balance: number;
+  delegate: string;
+  stakedBalance: number;
+  unstakedBalance: number;
+  availableBalance: number;
+}
 
 @Injectable()
 export class ActivityService {
   readonly maxTransactions = 10;
   public tokenBalanceUpdated = new BehaviorSubject(null);
+  private readonly failedRefreshes = new WeakSet<Account>();
+  private readonly activeRefreshes = new WeakSet<Account>();
   constructor(
     private walletService: WalletService,
     private messageService: MessageService,
@@ -23,59 +35,77 @@ export class ActivityService {
     private tokenService: TokenService,
     private subjectService: SubjectService
   ) {}
-  updateTransactions(pkh): Observable<any> {
-    try {
-      const account = this.walletService.wallet.getAccount(pkh);
-      return this.getTransactonsCounter(account).pipe(
-        flatMap((ans: any) => {
-          return of(ans);
+  getActivityState(account: Account): ActivityState {
+    if (this.failedRefreshes.has(account)) {
+      return Array.isArray(account.activities) ? 'stale' : 'unavailable';
+    }
+    if (!Array.isArray(account.activities)) {
+      return 'loading';
+    }
+    return account.activities.length ? 'ready' : 'empty';
+  }
+
+  isRefreshing(account: Account): boolean {
+    return this.activeRefreshes.has(account);
+  }
+
+  updateTransactions(pkh: string): Observable<ActivityRefreshResult> {
+    return defer(() => {
+      const wallet = this.walletService.wallet;
+      const account = wallet?.getAccount(pkh);
+      if (!account || this.isRefreshing(account)) {
+        return EMPTY;
+      }
+      const controller = new AbortController();
+      this.activeRefreshes.add(account);
+      return this.getTransactionsCounter(account, wallet, controller.signal).pipe(
+        timeout(ACTIVITY_REFRESH_TIMEOUT_MS),
+        tap({
+          next: () => this.failedRefreshes.delete(account),
+          error: () => this.failedRefreshes.add(account)
+        }),
+        finalize(() => {
+          this.activeRefreshes.delete(account);
+          controller.abort();
         })
       );
-    } catch (e) {
-      console.log(e);
-    }
+    });
   }
-  getTransactonsCounter(account: Account): Observable<any> {
-    const knownTokenIds: string[] = this.tokenService.knownTokenIds();
-    return fromPromise(this.indexerService.accountInfo(account.address, knownTokenIds)).pipe(
-      flatMap((data) => {
-        const counter = data.counter;
-        const unknownTokenIds = data.unknownTokenIds ? data.unknownTokenIds : [];
-        this.tokenService.searchAllMetadata(unknownTokenIds);
-        this.tokenService.recheckMetadata(data?.tokens);
-        if (account.state !== counter) {
-          if (data.tokens) {
-            this.updateTokenBalances(account, data.tokens);
-          } else {
-            this.updateTokenBalances(account, []);
-          }
-          return this.getAllTransactions(account, counter, data);
-        } else {
-          if (!account.state) {
-            if (!account.activities || !account.tokens) {
-              if (!account.activities) {
-                account.activities = [];
-              }
-              if (!account.tokens) {
-                account.tokens = [];
-              }
-              this.updateTokenBalances(account, []);
-              this.walletService.storeWallet();
-            }
-          }
-          return of({
-            upToDate: true,
-            balance: data?.balance ?? 0,
-            delegate: data?.delegate ?? '',
-            stakedBalance: data?.stakedBalance ?? 0,
-            unstakedBalance: data?.unstakedBalance ?? 0,
-            availableBalance: data?.availableBalance ?? 0
-          });
+
+  private getTransactionsCounter(account: Account, wallet: WalletObject, signal: AbortSignal): Observable<ActivityRefreshResult> {
+    return defer(() => this.indexerService.accountInfo(account.address, this.tokenService.knownTokenIds(), signal)).pipe(
+      switchMap((data) => {
+        if (wallet !== this.walletService.wallet) {
+          return EMPTY;
         }
+        if (typeof data?.counter !== 'string') {
+          throw new Error('Invalid indexer account response');
+        }
+        const { counter } = data;
+        this.tokenService.searchAllMetadata(data.unknownTokenIds ?? []);
+        this.tokenService.recheckMetadata(data.tokens);
+        const upToDate = account.state === counter && (Array.isArray(account.activities) || !counter);
+        const result: ActivityRefreshResult = {
+          upToDate,
+          balance: data.balance ?? 0,
+          delegate: data.delegate ?? '',
+          stakedBalance: data.stakedBalance ?? 0,
+          unstakedBalance: data.unstakedBalance ?? 0,
+          availableBalance: data.availableBalance ?? 0
+        };
+        if (!upToDate) {
+          this.updateTokenBalances(account, data.tokens ?? []);
+          return this.getAllTransactions(account, wallet, counter, signal).pipe(map(() => result));
+        }
+        if (!counter && (!account.activities || !account.tokens)) {
+          account.activities ??= [];
+          this.updateTokenBalances(account, []);
+        }
+        return of(result);
       })
     );
   }
-  async updateTokenBalances(account, tokens) {
+  private updateTokenBalances(account: Account, tokens: Token[]): void {
     if (Array.isArray(tokens)) {
       const idsWithBalance: string[] = [];
       if (!tokens.length) {
@@ -98,52 +128,33 @@ export class ActivityService {
       this.walletService.storeWallet();
     }
   }
-  getAllTransactions(account: Account, counter: string, data: any): Observable<any> {
-    const knownTokenIds: string[] = this.tokenService.knownTokenIds();
-    return fromPromise(this.indexerService.getOperations(account.address, knownTokenIds, this.walletService.wallet)).pipe(
-      flatMap((resp) => {
-        const operations = resp.operations;
-        this.tokenService.searchAllMetadata(resp.unknownTokenIds);
-        if (Array.isArray(operations)) {
-          const oldActivities = account.activities;
-          const unconfirmedOps = [];
-          if (oldActivities && oldActivities.length) {
-            for (let op of oldActivities) {
-              if (op.status === OpStatus.UNCONFIRMED || op.status === OpStatus.HALF_CONFIRMED) {
-                let save = true;
-                for (const opNew of operations) {
-                  if (opNew.hash === op.hash) {
-                    save = false;
-                    break;
-                  }
-                }
-                if (save) {
-                  unconfirmedOps.push(op);
-                }
-              }
-            }
-          }
-          account.activities = unconfirmedOps.concat(operations);
-          const oldState = account.state;
-          account.state = counter;
-          this.walletService.storeWallet();
-          if (oldState !== '') {
-            // Exclude inital loading
-            this.promptNewActivities(account, oldActivities, operations);
-          }
-          for (const activity of operations) {
-            const counterParty = this.getCounterparty(activity, account, false);
-            this.lookupService.check(counterParty);
-          }
+  private getAllTransactions(account: Account, wallet: WalletObject, counter: string, signal: AbortSignal): Observable<void> {
+    const knownTokenIds = this.tokenService.knownTokenIds();
+    return from(this.indexerService.getOperations(account.address, knownTokenIds, wallet, signal)).pipe(
+      switchMap((response) => {
+        if (wallet !== this.walletService.wallet) {
+          return EMPTY;
         }
-        return of({
-          upToDate: false,
-          balance: data?.balance ?? 0,
-          delegate: data?.delegate ?? 0,
-          stakedBalance: data?.stakedBalance ?? 0,
-          unstakedBalance: data?.unstakedBalance ?? 0,
-          availableBalance: data?.availableBalance ?? 0
-        });
+        if (!Array.isArray(response?.operations)) {
+          throw new Error('Invalid indexer activity response');
+        }
+        const operations: Activity[] = response.operations;
+        this.tokenService.searchAllMetadata(response.unknownTokenIds ?? []);
+        const oldActivities = account.activities;
+        const unconfirmedOps = (oldActivities ?? []).filter(
+          (op) => (op.status === OpStatus.UNCONFIRMED || op.status === OpStatus.HALF_CONFIRMED) && !operations.some((incoming) => incoming.hash === op.hash)
+        );
+        const oldState = account.state;
+        account.activities = unconfirmedOps.concat(operations);
+        account.state = counter;
+        this.walletService.storeWallet();
+        if (oldState && oldActivities) {
+          this.promptNewActivities(account, oldActivities, operations);
+        }
+        for (const activity of operations) {
+          this.lookupService.check(this.getCounterparty(activity, account, false));
+        }
+        return of(undefined);
       })
     );
   }

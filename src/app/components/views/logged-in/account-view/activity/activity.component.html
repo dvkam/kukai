@@ -6,15 +6,24 @@
       <!-- <img class="button icon" src="../../../../assets/img/info.svg" /> -->
     </div>
   </div>
-  <div class="selectable" id="operations-container" *ngIf="this.translate.store.translations.en">
-    <ng-container *ngIf="account.activities; else loading">
-      <ng-container *ngIf="!account.activities.length">
-        <div class="line"><span>No activity yet</span></div>
-      </ng-container>
-      <ng-container *ngFor="let activity of account.activities | slice:0:10; trackBy: trackEvent">
-        <app-event [activity]="activity" [account]="account"></app-event>
-      </ng-container>
+  <div class="selectable" id="operations-container">
+    <div role="status" [ngSwitch]="state">
+      <div *ngSwitchCase="'loading'">Loading activity...</div>
+      <div *ngSwitchCase="'empty'" class="line">No activity yet</div>
+      <div *ngSwitchCase="'unavailable'">{{ refreshing ? 'Retrying activity...' : 'Recent activity is unavailable.' }}</div>
+      <div *ngSwitchCase="'stale'">{{ refreshing ? 'Refreshing activity...' : 'Recent activity may be out of date.' }}</div>
+    </div>
+    <button
+      *ngIf="state === 'unavailable' || state === 'stale'"
+      class="activity-retry"
+      type="button"
+      [attr.aria-disabled]="refreshing ? 'true' : null"
+      (click)="retry()"
+    >
+      Retry activity
+    </button>
+    <ng-container *ngFor="let activity of account.activities | slice:0:10; trackBy: trackEvent">
+      <app-event [activity]="activity" [account]="account"></app-event>
     </ng-container>
-    <ng-template #loading>Loading activity...</ng-template>
   </div>
 </div>
