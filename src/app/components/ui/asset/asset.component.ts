@@ -40,7 +40,6 @@ export class AssetComponent implements OnInit, AfterViewInit {
   @ViewChild('postImage') postImage;
   @ViewChild('audio') audio;
   @ViewChild('video') video;
-  @ViewChild('model') model;
   @Input() assets: any;
   @Input() size = Size.medium;
   @Input() priorityList = ['displayAsset', 'thumbnailAsset'];
@@ -107,11 +106,12 @@ export class AssetComponent implements OnInit, AfterViewInit {
     } else if (this.isVideo() && (this.requires.includes('video') || this.requires.includes('all'))) {
       this.display = Display.video;
     } else if (this.is3D() && (this.requires.includes('model') || this.requires.includes('all'))) {
-      if (!AppComponent.hasWebGL) {
-        this.evaluateInvalid();
-        return;
-      }
       this.display = Display.threeD;
+      if (!customElements.get('model-viewer')) {
+        import('@google/model-viewer').catch(() => {
+          if (this.display === Display.threeD) this.evaluateInvalid();
+        });
+      }
     } else {
       this.display = Display.none;
     }
@@ -236,6 +236,10 @@ export class AssetComponent implements OnInit, AfterViewInit {
   }
 
   setSrc(asset): void {
+    if (this.is3D() && !AppComponent.hasWebGL) {
+      this.evaluateInvalid();
+      return;
+    }
     this.updateDisplay();
     if (this.isAudio() || this.isVideo() || this.is3D()) {
       this.isAudio() ? this.load.emit() : undefined;
