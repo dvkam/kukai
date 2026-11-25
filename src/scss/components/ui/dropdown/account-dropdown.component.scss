@@ -209,7 +209,7 @@ $border-width-dark-only: v.$border-width-dark-only;
       bottom: 0;
       left: 0;
       & span {
-        color: $base-blue-color-lightened;
+        color: var(--account-picker-action-text, #{$base-blue-color-lightened});
       }
     }
   }
@@ -252,5 +252,51 @@ $border-width-dark-only: v.$border-width-dark-only;
         font-size: 1.5em;
       }
     }
+  }
+}
+
+:host(app-ui-dropdown-account) {
+  --account-picker-focus-ring: var(--base-font-color);
+  --account-picker-action-text: var(--base-font-color);
+
+  button.currentAddress,
+  button.show-all {
+    appearance: none;
+    font-family: inherit;
+    text-transform: none;
+    letter-spacing: normal;
+    color: inherit;
+    text-align: start;
+  }
+
+  button.currentAddress {
+    box-sizing: content-box;
+
+    &:disabled {
+      cursor: text;
+      opacity: 1;
+    }
+  }
+
+  button.show-all {
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+
+    span {
+      text-decoration: underline;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dropdown .currentAddress,
+    .dropdown .icon-db {
+      transition: none;
+    }
+  }
+
+  :is(.currentAddress, .option):focus-visible {
+    outline: 2px solid var(--account-picker-focus-ring);
+    outline-offset: -3px;
   }
 }

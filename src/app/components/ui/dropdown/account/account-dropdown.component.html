@@ -1,21 +1,25 @@
 <div *ngIf="router.url.indexOf('/account/') > -1" class="flex-row dropdown" [class.expanded]="isOpen"
   [style.cursor]="['', 'domain'].includes(getVerifier()) ? '' : 'text'" [id]="ecmpId">
-  <div #panelTrigger class="flex-row currentAddress" (click)="['', 'domain'].includes(getVerifier()) ? toggleDropdown() : ''"><img
+  <button #panelTrigger type="button" class="flex-row currentAddress" [disabled]="!['', 'domain'].includes(getVerifier())"
+    [attr.aria-label]="(panelTrigger.disabled ? 'Current account ' : 'Switch account, current account ') + (getUsername(current?.address) || current?.shortAddress() || '') + ', ' + (current?.address || '')"
+    [attr.aria-expanded]="panelTrigger.disabled ? null : isOpen" [attr.aria-controls]="panelTrigger.disabled ? null : ecmpId + '-options'"
+    (click)="toggleDropdown()"><img alt=""
       *ngIf="!!getUsername(current?.address)" class="logo"
       src="../../../../assets/img/{{ getVerifier() }}-logo.svg" /><span class="address">{{
-      getUsername(current?.address) || "&nbsp;&nbsp;&nbsp;&nbsp;" + current?.shortAddress() }}</span><img
+      getUsername(current?.address) || "&nbsp;&nbsp;&nbsp;&nbsp;" + current?.shortAddress() }}</span><img alt=""
       *ngIf="['', 'domain'].includes(getVerifier())" class="button icon-db"
       src="../../../../assets/img/down-arrow.svg" />
-  </div>
-  <div class="flex-column dropdown-content" [walletPanelTrigger]="panelTrigger" [panelOpen]="isOpen">
+  </button>
+  <div [id]="ecmpId + '-options'" class="flex-column dropdown-content" [walletPanelTrigger]="panelTrigger" [panelOpen]="isOpen">
     <div class="flex-column body">
       <ng-container *ngFor="let account of list; trackBy: trackAccount">
         <a class="option" routerLink="/account/{{account?.address}}{{postfix}}"
           [class.selected]="account?.address === current?.address"
           [style.padding]="!getUsername(current?.address) ? '0.75rem 1.125rem 0.75rem calc(2.5rem - var(--border-width))' : ''"
-          (click)="toggleDropdown()">
+          [attr.aria-current]="account?.address === current?.address ? 'page' : null" [attr.aria-label]="(getUsername(account?.address) || account?.shortAddress()) + ', ' + account?.address"
+          (click)="returnToTrigger()">
           <ng-container *ngIf="getUsername(account?.address)">
-            <div class="flex-row alias"><img class="logo"
+            <div class="flex-row alias"><img alt="" class="logo"
                 src="../../../../assets/img/{{ getVerifier() }}-logo.svg" /><span>{{
                 getUsername(account?.address) }}</span></div>
           </ng-container>
@@ -23,8 +27,8 @@
         </a>
       </ng-container>
     </div>
-    <div *ngIf="list?.length > 1" class="option show-all" [style.padding]="!getUsername(current?.address) ? '0.75rem 1.125rem 0.75rem calc(2.5rem - var(--border-width))' : ''" (click)="showAll()">
+    <button type="button" *ngIf="(list?.length ?? 0) > 1" class="option show-all" [style.padding]="!getUsername(current?.address) ? '0.75rem 1.125rem 0.75rem calc(2.5rem - var(--border-width))' : ''" (click)="showAll()">
       <span>Show All</span>
-    </div>
+    </button>
   </div>
 </div>

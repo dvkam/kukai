@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="flex-column left" [class.no-delegation]="CONSTANTS.TEZOS_X">
-      <app-ui-dropdown-account [options]="accounts" [current]="activeAccount"></app-ui-dropdown-account>
+      <app-ui-dropdown-account (pickerHidden)="focusAccountPicker()" [options]="accounts" [current]="activeAccount"></app-ui-dropdown-account>
       <div class="delegation" *ngIf="!CONSTANTS.TEZOS_X">
         <div class="flex-row outside-container" *ngIf="!beaconMode">
           <div class="flex-row button" routerLink="/account/{{activeAccount?.address}}/stakers">
@@ -71,7 +71,7 @@
     <img class="icon" src="../../../assets/img/header-logo.svg" />
   </a>
   <div *ngIf="router.url.indexOf('/account/') > -1" class="flex-row center">
-    <app-ui-dropdown-account [options]="accounts" [current]="activeAccount" style="width: 100%;">
+    <app-ui-dropdown-account (pickerHidden)="focusAccountPicker()" [options]="accounts" [current]="activeAccount" style="width: 100%;">
     </app-ui-dropdown-account>
   </div>
   <app-ui-mobile-menu [activeAccount]="activeAccount" [delegateName]="delegateName" [newAccount]="newAccount"
