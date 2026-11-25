@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ToggleComponent } from '../toggle.component';
 
 @Component({
@@ -6,10 +6,6 @@ import { ToggleComponent } from '../toggle.component';
   templateUrl: './advanced.component.html',
   styleUrls: ['../../../../../../scss/components/ui/button/toggle.component.scss']
 })
-export class AdvancedToggleComponent extends ToggleComponent implements OnInit {
-  constructor() {
-    super();
-  }
-
-  ngOnInit(): void {}
+export class AdvancedToggleComponent extends ToggleComponent {
+  @Input() controls: string;
 }

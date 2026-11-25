@@ -6,7 +6,6 @@ import { MessageService } from '../../../../../services/message/message.service'
 import { InputValidationService } from '../../../../../services/input-validation/input-validation.service';
 import { WalletService } from '../../../../../services/wallet/wallet.service';
 import { utils } from '../../../../../libraries/index';
-import { LedgerWallet } from '../../../../../services/wallet/wallet';
 
 @Component({
   selector: 'app-connect-ledger',
@@ -18,6 +17,7 @@ export class ConnectLedgerComponent implements OnInit {
   defaultPath = "44'/1729'/0'/0'";
   defaultText = 'Account Discovery (recommended)';
   path: string;
+  pathError = '';
   isHDDerivationPathCustom = false;
   browser = 'unknown';
 
@@ -48,6 +48,10 @@ export class ConnectLedgerComponent implements OnInit {
     }
   }
   async getPk(): Promise<void> {
+    if (this.browser === 'safari' || this.messageService.spinnerOn) {
+      return;
+    }
+    this.pathError = '';
     const path: string = this.path.replace(this.defaultText, this.defaultPath);
     if (this.inputValidationService.derivationPath(path)) {
       try {
@@ -71,7 +75,7 @@ export class ConnectLedgerComponent implements OnInit {
         this.messageService.stopSpinner();
       }
     } else {
-      this.messageService.addWarning('Invalid derivation path');
+      this.pathError = `Enter a valid derivation path, such as ${this.defaultPath}.`;
     }
   }
   async importFromPk(pk: string, path: string): Promise<Boolean> {
@@ -87,12 +91,9 @@ export class ConnectLedgerComponent implements OnInit {
     }
     return false;
   }
-  setDefaultPath(v): void {
-    if (this.isHDDerivationPathCustom) {
-      this.path = this.defaultText;
-    } else {
-      this.path = this.defaultPath;
-    }
-    this.isHDDerivationPathCustom = v;
+  setDefaultPath(custom: boolean): void {
+    this.isHDDerivationPathCustom = custom;
+    this.path = custom ? this.defaultPath : this.defaultText;
+    this.pathError = '';
   }
 }

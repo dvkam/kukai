@@ -31,6 +31,7 @@ $base-background-color: v.$base-background-color;
     & a {
       text-decoration: none;
 
+      &.back,
       & .back {
         @include m.multiply("font-size", 1);
         position: absolute;
@@ -258,135 +259,171 @@ $base-background-color: v.$base-background-color;
       }
 
       .import-options {
-        @include m.multiply("font-size", 2);
         width: 100%;
-        margin: 0 0 4rem 0;
-        align-items: flex-end;
-      }
-
-      .import-options {
+        margin: 0 0 2rem;
         border-bottom: 1px solid $border-color;
 
-        &>span {
-          width: 30%;
-          text-align: center;
-          cursor: pointer;
-          text-transform: uppercase;
-          font-weight: 600;
-          color: $base-font-color-secondary;
-          letter-spacing: 0.06em;
-
-          &.selected {
-            @include m.base-relative;
-            color: $base-blue-color-lightened;
-            margin: 0;
-            padding: 2rem 0 calc(2rem + 1px) 0;
-            top: 1px;
-
-            &:after {
-              content: "";
-              position: absolute;
-              bottom: 0;
-              left: 0;
-              height: 3px;
-              width: 100%;
-              background-color: $base-blue-color-lightened;
-            }
-          }
-        }
-      }
-
-      & input#file {
-        display: none;
-      }
-
-      & .input-file {
-        @include m.multiply("font-size", 2);
-        width: 100%;
-        max-width: calc(100% - 6rem);
-        margin: 0.5rem;
-        border: none;
-        justify-content: space-between;
-        border-radius: v.$border-radius;
-        height: calc(100% - 3rem);
-        background-color: #e5e9ed;
-        padding: 1rem 2.5rem;
-
-        &.loaded {
-          background-color: $base-end-color;
-          box-shadow: v.$box-shadow;
-        }
-
-        & .body {
-          width: calc(100% - 5rem);
-          justify-content: flex-start;
-        }
-
-        & .filename {
-          @include m.ellipsis;
-          color: $base-blue-color-lightened;
-          align-items: center;
-          display: block;
-          max-width: 100%;
-
-          & img {
-            padding: 0 0.5rem 0.25rem 0;
-          }
-        }
-
-        & .b {
+        button {
           position: relative;
-          top: 0;
-          left: 0;
+          flex: 1 1 0;
+          min-width: 0;
+          min-height: 44px;
+          padding: 0.75em 0.25em;
+          border: 0;
+          border-radius: 0;
+          background: transparent;
+          color: $base-font-color-secondary;
+          font-size: max(1.125rem, 14px);
+          overflow-wrap: anywhere;
 
-          &::after {
-            content: "";
-            width: 100%;
-            height: 2px;
-            background-color: #d3d9e0;
-            position: absolute;
-            top: 2rem;
-            left: 0;
+          &[aria-selected='true'] {
+            color: $base-font-color;
+            font-weight: 600;
+            box-shadow: inset 0 -3px $base-blue-color;
+          }
+        }
+      }
+
+      .import-switch-hint {
+        align-self: center;
+        margin: 0 0 1.5em;
+        font-size: max(1.125rem, 14px);
+        text-align: center;
+      }
+
+      .import-panel {
+        width: 100%;
+      }
+
+      .import-form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: min(100%, 36rem);
+        margin: 0 auto;
+
+        label, .import-help, .import-error,
+        textarea.import-field, input.import-field {
+          font-size: max(1.25rem, 16px);
+          line-height: 1.45;
+        }
+
+        label {
+          display: block;
+          margin-bottom: 0.375em;
+          font-weight: 500;
+        }
+
+        .import-help {
+          margin: 0 0 0.5em;
+        }
+
+        .import-error {
+          align-self: stretch;
+          color: $base-font-color;
+          margin: 0 0 1.5em;
+          overflow-wrap: anywhere;
+
+          &:empty {
+            margin: 0;
+          }
+
+          &:not(:empty) {
+            border-inline-start: 3px solid v.$base-red-color;
+            padding-inline-start: 0.75em;
           }
         }
 
-        & img {
-          width: 1.75rem;
-          height: 1.75rem;
-          object-fit: scale-down;
-        }
-
-        & span {
-          margin: 0;
-        }
-
-        &-wrapper {
+        textarea.import-field, input.import-field {
+          box-sizing: border-box;
           width: 100%;
-          justify-content: space-between;
+          max-width: none;
+          min-height: 44px;
+          padding: 0.5em 0.75em;
+          margin: 0;
+          text-align: left;
+
+          &[aria-invalid='true'] {
+            border-color: v.$base-red-color;
+          }
+        }
+
+        textarea.import-field {
+          min-height: 5em;
+          resize: vertical;
+        }
+
+        .import-group {
+          width: 100%;
+          margin: 0 0 1.5em;
+          font-size: max(1rem, 16px);
+        }
+
+        #recovery-advanced > input:first-of-type {
+          margin-bottom: 1.5em;
+        }
+
+        .next {
+          font-size: max(1.125rem, 16px);
+          min-height: 44px;
+          height: auto;
+          width: auto;
+          min-width: 50%;
+          max-width: 100%;
+          overflow-wrap: anywhere;
+        }
+
+        .input-file-wrapper {
+          width: 100%;
           border: v.$border-width dashed #3333;
           border-radius: v.$border-radius;
-          margin: 0 0 4rem 0;
-          height: 7rem;
-        }
-      }
-
-      & .import-option-1 {
-        justify-content: center;
-
-        & input {
-          max-width: calc(100% - 2rem);
+          margin: 0 0 1em;
         }
 
-        &>div {
-          width: calc(50% - 2rem);
-          height: 10rem;
+        .input-file {
+          width: calc(100% - 1em);
+          max-width: none;
+          min-height: 44px;
+          height: auto;
           justify-content: space-between;
-          align-items: center;
-          padding: 0 1rem;
+          gap: 0.5em;
+          margin: 0.5em;
+          padding: 0.5em 0.75em;
+          border: none;
+          border-radius: v.$border-radius;
+          font-size: max(1.125rem, 16px);
+          color: $base-font-color;
+          background-color: v.$color-lightened-6;
 
-          & span {
-            text-align: center;
-            text-transform: uppercase;
+          &.loaded {
+            background-color: $base-end-color;
+            box-shadow: v.$box-shadow;
+          }
+
+          .body {
+            min-width: 0;
+            justify-content: flex-start;
+            gap: 0.5em;
+          }
+
+          .filename {
+            @include m.ellipsis;
+            display: block;
+            max-width: calc(100% - 2em);
+            color: $base-font-color;
+            text-transform: none;
+          }
+
+          img {
+            width: 1.25em;
+            height: 1.25em;
+            flex-shrink: 0;
+            object-fit: contain;
+          }
+
+          span {
+            margin: 0;
+            font-size: inherit;
           }
         }
       }
@@ -464,26 +501,38 @@ $base-background-color: v.$base-background-color;
           width: calc(100% - 6rem);
         }
 
-        & .import-option-1 {
-          flex-direction: column;
-
-          &>div {
-            width: 100%;
-            height: 100%;
-            padding: 0;
-          }
-
-          &>div.radios {
-            margin: 0 0 2rem 0;
-            width: 85%;
-          }
-        }
       }
 
+      & a.back,
       & a .back {
         position: unset;
         margin: 0 0 4rem 0;
       }
+    }
+  }
+}
+
+:host .card {
+  .back-link {
+    align-items: center;
+    min-height: 44px;
+    box-sizing: border-box;
+    font-size: max(1rem, 14px);
+  }
+
+  .back-link:focus-visible,
+  .import-options button:focus-visible,
+  .import-form :is(button, input, textarea):focus-visible {
+    outline: 2px solid v.$base-blue-color;
+    outline-offset: 3px;
+  }
+}
+
+@media (max-width: v.$font-break-5) {
+  :host .card .body .import-form {
+    label, .import-help, .import-error, .import-group,
+    textarea.import-field, input.import-field {
+      font-size: max(2rem, 16px);
     }
   }
 }
