@@ -23,7 +23,7 @@
         </ng-template>
       </div>
       <br />
-      <app-ui-toggle-advanced style="width: calc(100% - 1em);" [default]="false" (stateChange)="advanced = $event">
+      <app-ui-toggle-advanced style="width: calc(100% - 1em);" mode="disclosure" [(state)]="advanced">
       </app-ui-toggle-advanced>
       <br />
       <br />

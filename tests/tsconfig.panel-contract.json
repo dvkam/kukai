@@ -1,7 +1,0 @@
-{
-  "extends": "../tsconfig.json",
-  "compilerOptions": { "strict": true, "noEmit": true, "types": ["jasmine"] },
-  "angularCompilerOptions": { "strictTemplates": true },
-  "files": ["../src/app/components/ui/dropdown/trigger-panel.directive.spec.ts"],
-  "include": []
-}

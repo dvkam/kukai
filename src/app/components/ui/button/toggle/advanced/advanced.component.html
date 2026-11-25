@@ -1,7 +1,8 @@
 <div class="flex-row advanced">
-  <button type="button" class="switch-container" role="switch" [attr.aria-label]="text"
-    [attr.aria-checked]="state" [attr.aria-controls]="controls" (click)="toggle()">
-    <span class="value" aria-hidden="true">{{ text }}</span>
+  <button type="button" class="switch-container" [attr.role]="mode === 'disclosure' ? null : 'switch'" [attr.aria-label]="label"
+    [attr.aria-checked]="mode === 'disclosure' ? null : state" [attr.aria-expanded]="mode === 'disclosure' ? state : null"
+    [attr.aria-controls]="controls?.trim() || null" (click)="toggle()">
+    <span class="value" aria-hidden="true">{{ label }}</span>
     <span class="flex-row switch" aria-hidden="true">
       <span class="key">{{ state ? 'ON' : 'OFF' }}</span>
       <span class="slider" [class.active]="state"><span class="round"></span></span>

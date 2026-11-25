@@ -194,6 +194,30 @@ describe('Wallet import controls', () => {
     expect(root.querySelector('input[type=password]')).toBeNull();
   });
 
+  it('reports whether seed passphrase options are visible and keeps focus on the disclosure', () => {
+    root.querySelectorAll<HTMLButtonElement>('button[role=tab]')[1].click();
+    fixture.detectChanges();
+    const button = root.querySelector<HTMLButtonElement>('button[aria-label="Seed passphrase options"]');
+    const panel = root.querySelector<HTMLElement>('#recovery-advanced');
+    expect(button.getAttribute('aria-controls')).toBe(panel.id);
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+    expect(button.hasAttribute('role')).toBeFalse();
+    expect(button.hasAttribute('aria-checked')).toBeFalse();
+    expect(panel.hidden).toBeTrue();
+
+    button.focus();
+    button.click();
+    fixture.detectChanges();
+    expect(document.activeElement).toBe(button);
+    expect(button.getAttribute('aria-expanded')).toBe('true');
+    expect(panel.hidden).toBeFalse();
+
+    fixture.componentInstance.advancedForm = false;
+    fixture.detectChanges();
+    expect(button.getAttribute('aria-expanded')).toBe('false');
+    expect(panel.hidden).toBeTrue();
+  });
+
   it('exposes a named switch which enables and disables the labelled Ledger derivation input', async () => {
     const ledger = TestBed.createComponent(ConnectLedgerComponent);
     ledger.detectChanges();

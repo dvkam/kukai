@@ -57,8 +57,8 @@
             </div>
             <ng-container *ngIf="index === 1">
               <div class="import-group">
-                <app-ui-toggle-advanced [default]="false" [state]="advancedForm" [controls]="'recovery-advanced'"
-                  (stateChange)="advancedForm = $event"></app-ui-toggle-advanced>
+                <app-ui-toggle-advanced mode="disclosure" text="Seed passphrase options" controls="recovery-advanced"
+                  [(state)]="advancedForm"></app-ui-toggle-advanced>
               </div>
               <div id="recovery-advanced" class="import-group" [hidden]="!advancedForm">
                 <label for="recovery-passphrase">Seed passphrase</label>

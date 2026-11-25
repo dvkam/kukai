@@ -9,7 +9,8 @@
       </p>
       <div class="import-form">
         <div class="import-group">
-          <app-ui-toggle-advanced [default]="false" text="Custom derivation path" controls="ledger-derivation-path"
+          <app-ui-toggle-advanced mode="switch" text="Custom derivation path" controls="ledger-derivation-path"
+            [state]="isHDDerivationPathCustom"
             (stateChange)="setDefaultPath($event)"></app-ui-toggle-advanced>
         </div>
         <div class="import-group">

@@ -76,10 +76,10 @@
       <span *ngIf="isNFT && token?.floorPrice" class="floor-price">Collection Floor Price: <span>{{ token?.floorPrice + ' tez' }}</span></span>
       <ng-container *ngFor="let type of Object.keys(CONSTANTS.FEATURE_CONTRACTS)">
         <ng-container *ngFor="let feat of Object.keys(CONSTANTS.FEATURE_CONTRACTS[type])">
-          <app-ui-toggle-advanced
+          <app-ui-toggle-advanced mode="switch"
             *ngIf="CONSTANTS.FEATURE_CONTRACTS[type][feat]?.includes(token?.contractAddress + ':' + token?.id)"
             [class]="'feat ' + feat" style="width: 100%; margin: 0 0 1em 0" (stateChange)="toggleFeature(type, feat)"
-            [text]="(feat + ' Mode').toUpperCase()" [state]="theme === feat" [default]="theme === feat">
+            [text]="(feat + ' Mode').toUpperCase()" [state]="theme === feat">
           </app-ui-toggle-advanced>
         </ng-container>
       </ng-container>
