@@ -1,6 +1,6 @@
 # Kukai provenance and reuse boundary
 
-Research record for [P0-02](https://github.com/dvkam/kukai/issues/2), retrieved on 20 November 2026. Accountable owner and current PoC reviewer: `dvkam`. This is an engineering inventory, not a legal opinion or completed license audit.
+Research record for [P0-02](https://github.com/dvkam/kukai/issues/2). The inventory dates to 20 November 2026. The Figtree and Taquito follow-up checks ran on 25 November 2026. The accountable owner and current PoC reviewer is `dvkam`.
 
 ## Source inventory
 
@@ -21,7 +21,7 @@ Every manifest file license is `NOASSERTION`. This is an SPDX sentinel for unres
 
 ## Copied code and asset questions
 
-All findings below belong to `dvkam`. They remain open under issue #2 until source and notice evidence resolves them. A future reuse PR must identify the exact source, preserve its notices, assign the file identifier, and link the review outcome.
+Reuse decisions remain with `dvkam` under issue #2. A future reuse PR must identify the exact source, preserve its notices, assign the file identifier, and link the review outcome.
 
 | Source and path | Observed evidence | Current treatment |
 | --- | --- | --- |
@@ -30,9 +30,9 @@ All findings below belong to `dvkam`. They remain open under issue #2 until sour
 | Web `src/assets/fonts/Roboto/Flex.ttf` and `Flex.woff2` | Font binaries without a companion license in the tracked tree. | Exclude these copies until the exact source, version, and font license are verified. |
 | Web `src/serviceworker/sw.js` | Authentication redirect implementation without a file-level license header. | Reference only. The new authentication design does not reuse the legacy flow. |
 | Swift core `Sources/KukaiCoreSwift/Services/ledger_app_tezos.js` | Header credits Ledger, 2016-2017, under Apache-2.0. The enclosing repository declares MIT. | Preserve the Ledger header. Do not label the bundle MIT from the root grant. Complete bundled-dependency provenance remains unresolved. |
-| Swift core `Sources/KukaiCoreSwift/Services/taquito_local_forging.js` | Header references `taquito_local_forging.js.LICENSE.txt`. That sidecar is absent from the pinned tree. | Exclude until the bundle's build inputs and complete notices are recovered. |
+| Swift core `Sources/KukaiCoreSwift/Services/taquito_local_forging.js` | [Byte-identical match to Taquito 23.0.1](taquito-local-forging.md). A replay produced the Webpack sidecar omitted from the release archive and Swift tree. | Exclude pending review of the complete bundled dependency notices. |
 | Swift core `Sources/KukaiCoreSwift/Services/kukai-dex-calculations.js` | Minified bundle contains a `bigInt` implementation and no license header. | Exclude. Identify all bundled inputs before assigning a license. |
-| iOS `Kukai Mobile/Fonts/Figtree-*.ttf` | Four font binaries embed 2022 Figtree Project Authors copyright, the upstream project URL, and a SIL Open Font License 1.1 declaration and URL in their name tables. No standalone font license file was found. | Retain this evidence. Exclude these copies until the exact upstream version and complete redistribution notices are verified. |
+| iOS `Kukai Mobile/Fonts/Figtree-*.ttf` | [All four fonts reproduce byte for byte from pinned Figtree 2.000 source](figtree.md). The upstream copyright notice and SIL Open Font License 1.1 text are retained. | Exclude from the PoC pending reuse review. |
 | CustomAuth and test-dapp | CustomAuth declares MIT in package.json but has no license file. test-dapp has neither a package license declaration nor a root license file, and also bundles fonts. | Reference only. Recover complete grant and notice evidence before considering copying. |
 
 This inspection found specific unresolved files. It is not an exhaustive determination of every file's origin. The `NOASSERTION` status protects against treating the uninspected remainder as cleared. Package-lock files and Swift manifests identify further third-party dependencies that need their own notices when selected.
