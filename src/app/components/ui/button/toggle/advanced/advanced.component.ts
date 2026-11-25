@@ -7,5 +7,10 @@ import { ToggleComponent } from '../toggle.component';
   styleUrls: ['../../../../../../scss/components/ui/button/toggle.component.scss']
 })
 export class AdvancedToggleComponent extends ToggleComponent {
-  @Input() controls: string;
+  @Input() mode: 'switch' | 'disclosure' = 'switch';
+  @Input() controls?: string | null;
+
+  get label(): string {
+    return this.text?.trim() || 'Advanced:';
+  }
 }

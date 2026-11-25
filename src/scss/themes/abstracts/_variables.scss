@@ -80,6 +80,8 @@
     --moonpay-iframe-filter: unset;
 
     //UI
+    --focus-ring: var(--base-blue-color);
+    --motion-toggle-duration: 250ms;
     --dropdown-icon-invert: invert(1);
 
     --send-button-border-color: var(--border-color);

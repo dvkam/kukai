@@ -87,7 +87,7 @@
             CALL:
           </span><span class="key">{{ parameters?.entrypoint }}</span></div>
         <app-ui-toggle-advanced style="width: calc(100% - 1em);margin: 0 0 2.5em 0;" *ngIf="externalReq"
-          [default]="false" (stateChange)="advancedForm = $event">
+          mode="disclosure" [(state)]="advancedForm">
         </app-ui-toggle-advanced>
       </form>
       <div *ngIf="advancedForm" class="advanced-form">

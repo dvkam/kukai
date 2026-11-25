@@ -56,7 +56,7 @@ $border-color: v.$border-color;
     letter-spacing: normal;
 
     &:focus-visible {
-      outline: 2px solid v.$base-blue-color;
+      outline: 2px solid var(--focus-ring);
       outline-offset: 3px;
     }
 
@@ -93,12 +93,12 @@ $border-color: v.$border-color;
           left: 0.25em;
           bottom: 0.25em;
           background-color: v.$border-color;
-          transition: transform 0.25s, background-color 0.25s;
-
-        @media (prefers-reduced-motion: reduce) {
-          transition: none;
-        }
+          transition: transform var(--motion-toggle-duration), background-color var(--motion-toggle-duration);
           border-radius: v.$border-radius-hardest;
+
+          @media (prefers-reduced-motion: reduce) {
+            transition: none;
+          }
         }
       }
     }

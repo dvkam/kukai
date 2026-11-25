@@ -28,7 +28,14 @@
       }
     },
     {
-      "files": ["**/mobile-menu.component.html", "**/account-dropdown.component.html", "**/start.component.html", "**/send-button.component.html", "**/404.component.html", "**/500.component.html"],
+      "files": ["**/advanced.component.html"],
+      "rules": {
+        "@angular-eslint/template/accessibility-elements-content": "error",
+        "@angular-eslint/template/button-has-type": "error"
+      }
+    },
+    {
+      "files": ["**/advanced.component.html", "**/mobile-menu.component.html", "**/account-dropdown.component.html", "**/start.component.html", "**/send-button.component.html", "**/404.component.html", "**/500.component.html"],
       "parser": "@angular-eslint/template-parser",
       "plugins": ["@angular-eslint/template"],
       "rules": {
