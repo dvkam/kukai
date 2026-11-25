@@ -1,14 +1,10 @@
-# Phase 0 to 3 ticket drafts
+# Phase 0 to 3 ticket archive
 
-These 32 drafts describe the decisions and experiments required by [program plan v0.5.1](../program-plan-v0.5.1.md). All 32 were published as GitHub issues under the dvkam account on 20 November 2026. The [GitHub issue index](github-issues.md) maps the local IDs to issues 1 through 32. The local Markdown files preserve the original publication bodies. GitHub issues and linked pull requests track subsequent execution.
+The 32 local ticket files preserve the specifications published on 20 November 2026 for program plan v0.5.1. Their Draft and Unassigned fields record the original state. GitHub issues and linked pull requests track current status and results. [Program plan](../program-plan-v0.5.1.md) · [GitHub issue index](github-issues.md)
 
-The plan is the accepted planning baseline. A draft ticket does not accept a proposal, assign a person, pass a gate or authorize implementation. The repository still contains the existing Kukai application.
+## Current execution
 
-## Start here
-
-The owner authorized execution and assigned `dvkam` to P0-01. The [charter](../charter.md) records the accepted scope. The Phase 0 tickets then establish ownership, provenance, evidence, capacity and review rules. The baseline requires G0 for later-phase work. The owner's subsequent [POC-001 decision](../poc-scope.md) permits PoC investigations while production dependencies remain deferred. Phase 1 and Phase 2 can run in parallel where their listed dependencies permit it.
-
-The original ticket bodies below retain their Draft status. P0-01 now has an execution record in the [charter](../charter.md). No experiment has run and no gate has passed. The [owner register](../owners.md) assigns question and risk accountability. P0-04 must settle delivery roles, reviewer capacity, timeboxes, and dates before G0. Ticket IDs are local identifiers, not GitHub issue numbers.
+The charter records P0-01 and the owner register assigns the open questions and risks. The owner authorized a solo proof of concept while production prerequisites remain deferred. Experiments have run under that scope. Release 1 remains blocked. [Charter](../charter.md) · [Owner register](../owners.md) · [PoC scope](../poc-scope.md) · [Experiment records](../README.md) · [Release verdict](../v1-done.md)
 
 ## Tickets
 
