@@ -1,0 +1,14 @@
+{
+  "case_id": "SOLANA-RECIPIENT-ATA",
+  "run_id": "9a408dc0-1e73-43c9-a085-b74ea4677bba",
+  "date_utc": "2026-11-25",
+  "tested_commit": "2ca28dd236d1afe8c3982b8929abac48864ce120",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "python": "3.12.14",
+  "solders": "0.26.0",
+  "dependency_lock_sha256": "aac26767b0e0cb3c4ecab1c647b9ac1e5a7e0ca436ec370b7f11c39dbc85cdbd",
+  "working_directory": "repository root",
+  "command": "/tmp/n23-svm-env/bin/python experiments/solana-fees/check.py",
+  "exit_code": 0,
+  "output_sha256": "6504fcbe9e81d94e8d86bb3384f58608138121777174f354a0ac27d145c5c2e4"
+}

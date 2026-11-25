@@ -31,4 +31,4 @@ python -m venv /tmp/kukai-solana-fees
 /tmp/kukai-solana-fees/bin/python experiments/solana-fees/check.py
 ```
 
-[Per-case output](evidence/results.txt) · [Run record](evidence/run.json)
+[Existing-account results](evidence/results.txt) · [Existing-account run](evidence/run.json) · [New-recipient results](evidence/recipient-account-results.txt) · [New-recipient run](evidence/recipient-account-run.json)
