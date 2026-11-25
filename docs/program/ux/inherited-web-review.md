@@ -41,7 +41,7 @@ For any menu, picker, tooltip, disclosure, sheet or dialog launched by a control
 
 | Family | Examples in the inherited wallet | What to check |
 | --- | --- | --- |
-| Navigation and pickers | Mobile hamburger, account selector, session and permission account selectors, prepare-send asset list, swap options | Open the same panel from each available invoker. Check opening and closing on both sides of a placement flip. Recalculate after scroll or resize. Reverse quickly and confirm the final state. |
+| Navigation and pickers | Mobile hamburger, account selector, session and permission account selectors, Prepare Send recipient types, swap options | Open the same panel from each available invoker. Check opening and closing on both sides of a placement flip. Recalculate after scroll or resize. Reverse quickly and confirm the final state. |
 | Account and asset dialogs | Receive QR from header or mobile menu, account list, token details, new account, Send, buy, swap, delegation and settings backup | Animate the content from the invoking control. Keep overlay geometry and hit testing stable. Test close, route changes, nested dialogs and an invoker that disappears. Return focus to its logical successor when necessary. |
 | Inline disclosures and hover help | Import Advanced, custom Ledger path, fee details, account action tooltips, asset actions and chart values | Expand at the row or point that requested more information. Open help on focus as well as hover. Keep repeated keyboard interactions immediate. Offer equivalent information on touch. |
 | Prompts without a local trigger | First-run consent, service status, incoming dApp permission/sign requests and embedded requests | Show the reason and caller. Give the dialog initial focus and explicit safe dismissal where permitted. Do not animate from an unrelated pointer position. |
@@ -57,3 +57,57 @@ Have CI compile representative consumer templates and lint external HTML. Includ
 Re-run these flows with signed test fixtures, slow and restored network, long account names, unknown token values, screen readers and physical devices as those become available. Validate recovery and unilateral exit on the proposed wallet separately. Those flows have their own acceptance evidence. [Release 1 definition of done](../v1-done.md)
 
 Review references include Emil Kowalski's design engineering, break-ui, mobile-native, animation performance and animation review standards. The public sources were available in this environment. [Emil's skills at the reviewed revision](https://github.com/emilkowalski/skills/tree/64eb3deb9a5fbfa041faf783e0bc3fd635872e9c/skills)
+
+## Retest on November 25, 2026
+
+The original observations above identify the inherited build. The retests below used a local Chromium profile, synthetic accounts and intercepted external requests. They cover keyboard and emulated touch at desktop and narrow widths. Physical iPhone, VoiceOver and user testing remain open.
+
+| Journey | Reproduced outcome | Evidence |
+| --- | --- | --- |
+| First visit and consent | The terms dialog has a name and confines focus. Declining offers a way to reconsider, and accepting resumes the requested route. Reduced motion removes the entry fade. | [Consent](https://github.com/dvkam/kukai/pull/59) |
+| Mobile navigation | Previously, the open menu covered the Import form in all 120 attempts. The fixed menu closed and allowed all 120 journeys to reach Seed Words. Escape, same-route navigation, keyboard and touch were checked separately. | [Menu](https://github.com/dvkam/kukai/pull/60) · [Raw trials](https://github.com/dvkam/kukai/pull/68) |
+| Import and Ledger | Tab reaches the import methods and file picker. Moving between tabs by arrow preserves the existing draft until the user activates a method. File-picker cancellation and a wrong keystore password leave a recovery path. The Ledger toggle exposes its state. | [Import and Ledger](https://github.com/dvkam/kukai/pull/67) |
+| Sign-in, balances and error pages | Home, sign-in, store and balance actions have accessible names. Send and Get tez can be reached by Tab. Both error pages provide a route Home. | [Actions and error pages](https://github.com/dvkam/kukai/pull/61) |
+| Receive | The dialog opens from the desktop or mobile QR button and restores focus on dismissal. The decoded QR and copied value matched the visible address. At 320 px with enlarged text the address and both actions remained usable. | [Receive](https://github.com/dvkam/kukai/pull/69) |
+| Recent Activity | A disconnected indexer leaves existing rows visible and offers Retry. A verified empty response has its own state. A slow response for the previous wallet cannot replace the active wallet's rows. | [Recent Activity](https://github.com/dvkam/kukai/pull/64) |
+| Edit a send draft | With a synthetic balance of 2.5 tez, Enter kept the typed 0.25. Explicit MAX selected 2.499999. Editing that amount kept the new input. Enter in Recipient kept the single draft and Enter in a batch textarea added a newline. | [Send draft](https://github.com/dvkam/kukai/pull/72) |
+
+### Remaining interaction checks
+
+To reproduce a pointer collision at 390 px, open Wallet navigation and double-click Create New Wallet. The first click can close the menu and expose the Back link beneath the pointer. The second click then returns Home. This was reproduced with a mouse and emulated touch from Import and from New Wallet itself. A separate failure occurred when Enter in the verification field activated the nested Back button. The revised Back is one link with a 44 px hit target. All 16 repeated mouse and touch cases that failed on the original passed on the revised build. The 50-case retest included a fresh click at the original position, a moved tap, keyboard Back and browser history. Enter in seed verification stayed on that step. [Fix and retest](https://github.com/dvkam/kukai/pull/85) [Reproduction and retest history](https://github.com/dvkam/kukai/issues/55)
+
+The permission and session panels already animate from their triggers. The November 25 checks below found failures in keyboard selection, dismissal and the permission picker’s highlighted account.
+
+### Account selection
+
+Before the header fix, keyboard users could tab past the displayed address without opening the picker. At 390 px a touch user could open it, but Escape left it open. Changing from desktop to mobile and back could leave focus on the document body and expose the stale desktop panel again.
+
+The fixed picker opens by keyboard or touch. Selecting an account from Settings preserves the route suffix and returns focus. Crossing the responsive breakpoint closes the old panel and focuses the visible trigger. At 390 px the mixed-case shortened address, including its identifying suffix, fit the control. A read-only social account stayed visible and exposed no action. The final optimized build measured selected-row focus-ring contrast of 9.56:1 in light mode and 5.69:1 in dark mode. At 320 px, reduced motion stopped both the panel and the chevron. [Header picker, checks and retest](https://github.com/dvkam/kukai/pull/76)
+
+### Show All accounts
+
+At 320, 390 and 1280 px, open the header account picker and choose Show All. On the earlier build focus stayed in the header, Escape left Accounts open and Tab reached background controls. The native Accounts dialog now names itself and keeps focus inside. Copying an address leaves the account and route unchanged. Selecting a row keeps the current account subpage, query and fragment. Closing after a breakpoint change returns focus to the visible header control. Copy, close and account targets remained usable at double text size. [Accounts dialog and regression checks](https://github.com/dvkam/kukai/pull/80)
+
+### Shared controls
+
+Use a switch for a persistent setting and a disclosure for content that opens in place. The Advanced control documents the two modes, their keyboard behavior and semantic focus and motion tokens. CI compiles real template bindings and checks that the intentionally invalid examples fail for the expected reason. [Contract, examples and CI](https://github.com/dvkam/kukai/pull/78)
+
+### Prepare a payment
+
+On the inherited form, focus stayed on Send. Tab reached the wallet behind the draft, Escape left it open, and input errors did not name the affected field. In the revised form, open Send from a balance row, a token detail and a collectible. Tab and Shift+Tab stay in the named draft. Open the recipient-type selector and press Escape, then repeat with the QR scanner. The inner control closes first. Paste an invalid address and choose Preview. The recipient field receives focus, announces its error and keeps the entered amount. Explicit cancellation returns to the initiating control or its asset. [Send draft and browser retest](https://github.com/dvkam/kukai/pull/84)
+
+With the synthetic simulation response accepted, Preview moves focus to the Confirmation heading. Its Close control returns to the original Send action. Test confirmation of external requests separately. The broader confirmation overlay still needs a full keyboard and screen-reader review. Reference iPhone, camera permission prompts on a physical device and VoiceOver remain open. [Recurring review](https://github.com/dvkam/kukai/issues/53)
+
+### Returning to another account
+
+The returning-wallet fixture checked 100 keyboard and 100 pointer round trips. Each selection had to finish on the requested account with its full address in the button's accessible name, the picker hidden and inert, and focus restored to the visible trigger. A wrong account or missing focus fails the measurement. Both accounts were synthetic watch-only fixtures. [Protocol and all four percentiles](https://github.com/dvkam/kukai/pull/83)
+
+### Choose the account for a permission request or session
+
+In the inherited web wallet, present a synthetic connection request with two accounts. Tab from the preceding page control. The chooser and Close are skipped, focus reaches Connect and can leave the prompt. Clicking the chooser opens it. Its trigger exposes neither a control name nor an expanded state, its entries have no tab stop, and Escape leaves it open. An incoming request keeps focus on the previous page control. [Permission selector](https://github.com/dvkam/kukai/blob/06387174b7ac29835d01a62d805fd064a15ab68e/src/app/components/ui/dropdown/permission-request/permission-request.component.html#L2)
+
+Choose the second account by pointer and reopen the permission chooser. The trigger and the parent’s staged account change, but the first row stays highlighted. The review dismissed the prompt before granting a permission. In the separate session chooser, the staged account and selected row agree. From Settings, Tab skips the unnamed Edit image that opens that chooser. A pointer can open it, but Escape does not close it and focus can return to the document body. [Settings entry](https://github.com/dvkam/kukai/blob/06387174b7ac29835d01a62d805fd064a15ab68e/src/app/components/views/logged-in/settings/settings.component.html#L76) · [Reproduction and acceptance checks](https://github.com/dvkam/kukai/issues/87)
+
+![At 390 CSS pixels, the permission trigger says reserve-fixture.tez while the open list still highlights everyday-fixture.tez.](permission-account-selection.png)
+
+At 320 CSS pixels, a long synthetic alias clipped by about 68 px in the permission list and 55 px in the session list. Its full address remained visible on the next line. Retest both narrow layouts, verify the selected address visually and with a screen reader, and confirm that browsing or cancelling leaves authorization unchanged. [Account selection follow-up](https://github.com/dvkam/kukai/issues/87)
