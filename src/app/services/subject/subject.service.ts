@@ -2,14 +2,9 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { TokenData } from '../token/token.service';
 import { ContractAlias, DiscoverItem } from '../kukai/kukai.service';
-import { Account } from '../wallet/wallet';
 import { CONSTANTS } from '../../../environments/environment';
+import type { PrepareRequest } from '../../components/misc/send/interfaces';
 
-interface PrepareTokenTransfer {
-  account: Account;
-  tokenTransfer: string;
-  symbol: string;
-}
 export enum BuyProvider {
   Coinbase = 0,
   Transak,
@@ -42,7 +37,7 @@ export class SubjectService {
   public metadataUpdated: BehaviorSubject<MetadataUpdated>;
   public refreshTokens: BehaviorSubject<null>;
   public confirmedOp: Subject<string>;
-  public prepareTokenTransfer: Subject<PrepareTokenTransfer>;
+  public prepareTokenTransfer: Subject<PrepareRequest>;
   public nftsUpdated: BehaviorSubject<any>;
   public origin: BehaviorSubject<string>;
   public beaconResponse: Subject<boolean>;
@@ -66,7 +61,7 @@ export class SubjectService {
     this.metadataUpdated = new BehaviorSubject<MetadataUpdated>(null);
     this.refreshTokens = new BehaviorSubject<any>([]);
     this.confirmedOp = new Subject<string>();
-    this.prepareTokenTransfer = new Subject<PrepareTokenTransfer>();
+    this.prepareTokenTransfer = new Subject<PrepareRequest>();
     this.refreshTokens = new BehaviorSubject<null>(null);
     this.nftsUpdated = new BehaviorSubject<any>(undefined);
     this.origin = new BehaviorSubject<string>(null);

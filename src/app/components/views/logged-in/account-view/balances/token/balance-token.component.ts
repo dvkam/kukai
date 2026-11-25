@@ -55,11 +55,11 @@ export class BalanceTokenComponent implements OnInit {
     }
   }
 
-  viewToken(): void {
+  viewToken(event: MouseEvent): void {
     if (this.token?.name !== 'tezos') {
       ModalComponent.currentModel.next({
         name: 'token-detail',
-        data: this.token
+        data: { token: this.token, invoker: event.currentTarget as HTMLElement }
       });
     }
   }

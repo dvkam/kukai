@@ -1,9 +1,11 @@
 import { Account } from '../../../services/wallet/wallet';
 import { Template } from 'kukai-embed';
+import type { DialogInvocation } from '../../modals/invoked-dialog';
 export interface PrepareRequest {
   account: Account;
   tokenTransfer: string;
   symbol: string;
+  invocation?: DialogInvocation;
 }
 export interface TemplateRequest {
   template: Template;

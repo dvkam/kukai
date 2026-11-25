@@ -1,16 +1,17 @@
-import { Component, ViewChild, ElementRef, Input, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, ViewChild, ElementRef, Input, EventEmitter, Output } from '@angular/core';
 import { BeaconService } from '../../../services/beacon/beacon.service';
 import QrScanner from 'qr-scanner';
 import { DeeplinkService } from '../../../services/deeplink/deeplink.service';
 import { CONSTANTS as _CONSTANTS, environment } from '../../../../environments/environment';
 import { MessageService } from '../../../services/message/message.service';
 import { ModalComponent } from '../modal.component';
+import { InvokedDialog } from '../invoked-dialog';
 import { WalletConnectService } from '../../../services/wallet-connect/wallet-connect.service';
 
 @Component({
   selector: 'app-qr-scanner',
   templateUrl: './qr-scanner.component.html',
-  styleUrls: ['../../../../scss/components/modals/modal.scss']
+  styleUrls: ['../../../../scss/components/modals/modal.scss', '../../../../scss/components/modals/recipient-qr-dialog.scss']
 })
 export class QrScannerComponent extends ModalComponent {
   readonly CONSTANTS = _CONSTANTS;
@@ -19,50 +20,60 @@ export class QrScannerComponent extends ModalComponent {
     private beaconService: BeaconService,
     private deeplinkService: DeeplinkService,
     private messageService: MessageService,
-    private walletConnectService: WalletConnectService
+    private walletConnectService: WalletConnectService,
+    private changeDetector: ChangeDetectorRef
   ) {
     super();
   }
   @Output('scanResponse') scanResponse = new EventEmitter();
   @ViewChild('videoPlayer') videoplayer: ElementRef;
+  @ViewChild('recipientDialog') private recipientDialog: ElementRef<HTMLDialogElement>;
+  @ViewChild('recipientTrigger') private recipientTrigger: ElementRef<HTMLButtonElement>;
+  @ViewChild('scannerPanel') private scannerPanel: ElementRef<HTMLElement>;
+  private recipientMotion?: InvokedDialog;
   @Input() override = false;
   qrScanner: QrScanner;
   manualInput = '';
   name = 'qr-scanner';
   loadingCam = false;
   errorMessage = '';
+  private scanSession = 0;
   openModal(): void {
     if (!this.override) {
       ModalComponent.currentModel.next({ name: this.name, data: null });
     } else {
-      super.open();
+      if (this.isOpen) return;
+      this.isOpen = true;
+      this.changeDetector.detectChanges();
+      this.recipientMotion = new InvokedDialog(this.recipientDialog.nativeElement, this.scannerPanel.nativeElement);
+      this.recipientMotion.open({ invoker: this.recipientTrigger.nativeElement });
     }
     this.scan();
   }
   async scan(): Promise<void> {
+    const session = ++this.scanSession;
     this.loadingCam = true;
-    const hasCamera = await QrScanner.hasCamera();
-    if (hasCamera && this.videoplayer?.nativeElement) {
-      this.errorMessage = '';
-      try {
-        this.qrScanner = new QrScanner(this.videoplayer?.nativeElement, (result: QrScanner.ScanResult) => this.handleQrCode(result), {});
-        await this.qrScanner.start();
-        if (!this.isOpen) {
-          this.qrScanner.stop();
-          this.qrScanner.destroy();
-          this.qrScanner = null;
-        }
-      } catch (e) {
-        this.errorMessage = e;
-      }
-    } else {
-      console.warn('no camera found');
+    this.errorMessage = '';
+    try {
+      const hasCamera = await QrScanner.hasCamera();
+      const video = this.videoplayer?.nativeElement;
+      if (session !== this.scanSession || !this.isOpen || !hasCamera || !video) return;
+      this.qrScanner = new QrScanner(
+        video,
+        (result: QrScanner.ScanResult) => {
+          if (session === this.scanSession) this.handleQrCode(result);
+        },
+        {}
+      );
+      await this.qrScanner.start();
+    } catch (error) {
+      if (session === this.scanSession) this.errorMessage = error instanceof Error ? error.message : String(error);
+    } finally {
+      if (session === this.scanSession) this.loadingCam = false;
     }
-    this.loadingCam = false;
   }
   handleQrCode(scanResult: QrScanner.ScanResult): void {
     const qrString = scanResult.data;
-    console.log('QR Code', qrString);
     try {
       const pairingInfo = this.deeplinkService.QRtoPairingJson(qrString);
       if (pairingInfo && !this.override) {
@@ -106,17 +117,38 @@ export class QrScannerComponent extends ModalComponent {
       }
     }
   }
-  closeModal(): void {
-    // restore body scrollbar
-    if (this.qrScanner && !this.loadingCam) {
-      this.qrScanner.stop();
+  cancelRecipient(event: Event): void {
+    event.preventDefault();
+    this.closeModal();
+  }
+
+  override close(): void {
+    this.scanSession++;
+    this.loadingCam = false;
+    if (this.qrScanner) {
       this.qrScanner.destroy();
       this.qrScanner = null;
     }
+    if (this.override) {
+      this.recipientMotion?.close();
+      this.recipientMotion = undefined;
+      this.isOpen = false;
+    } else {
+      super.close();
+    }
+  }
+
+  override ngOnDestroy(): void {
+    if (this.isOpen) this.close();
+    super.ngOnDestroy();
+  }
+
+  closeModal(): void {
     if (!this.override) {
       ModalComponent.currentModel.next({ name: '', data: null });
     } else {
-      super.close();
+      this.close();
+      this.recipientTrigger?.nativeElement.focus({ preventScroll: true });
     }
     this.manualInput = '';
   }

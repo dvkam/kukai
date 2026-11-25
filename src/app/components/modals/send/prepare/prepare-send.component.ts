@@ -1,4 +1,7 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationStart, Router } from '@angular/router';
+import { filter } from 'rxjs/operators';
 import { TokenService } from '../../../../services/token/token.service';
 import { EstimateService } from '../../../../services/estimate/estimate.service';
 import { DefaultTransactionParams } from '../../../../interfaces';
@@ -11,6 +14,7 @@ import { WalletService } from '../../../../services/wallet/wallet.service';
 import { InputValidationService } from '../../../../services/input-validation/input-validation.service';
 import assert from 'assert';
 import { TezosDomainsService } from '../../../../services/tezos-domains/tezos-domains.service';
+import { InvokedDialog } from '../../invoked-dialog';
 import { ModalComponent } from '../../modal.component';
 import { TokenBalancesService } from '../../../../services/token-balances/token-balances.service';
 
@@ -20,15 +24,32 @@ const zeroTxParams: DefaultTransactionParams = {
   fee: 0,
   burn: 0
 };
+
+type DraftField = 'recipient' | 'amount' | 'batch' | 'fee' | 'gas' | 'storage';
+
+class DraftFieldError extends Error {
+  constructor(readonly field: DraftField, message: string) {
+    super(message);
+  }
+}
+
+function assertDraftField(condition: unknown, field: DraftField, message: string): asserts condition {
+  if (!condition) throw new DraftFieldError(field, message);
+}
+
 @Component({
   selector: 'app-prepare-send',
   templateUrl: './prepare-send.component.html',
-  styleUrls: ['../../../../../scss/components/modals/modal.scss']
+  styleUrls: ['../../../../../scss/components/modals/modal.scss', '../../../../../scss/components/modals/prepare-send-dialog.scss']
 })
 export class PrepareSendComponent extends ModalComponent implements OnInit, OnChanges {
   @Input() prepareRequest: PrepareRequest = null;
   @Output() prepareResponse = new EventEmitter();
   @ViewChild('destType') public destType: ElementRef;
+  @ViewChild('dialog', { static: true }) private dialog: ElementRef<HTMLDialogElement>;
+  @ViewChild('content') private content: ElementRef<HTMLElement>;
+  @ViewChild('recipient') private recipient: ElementRef<HTMLInputElement>;
+  private invokedDialog?: InvokedDialog;
   activeAccount: Account = null;
   tokenTransfer: string = null;
   token = null;
@@ -55,6 +76,7 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
   toMultipleDestinationsString = '';
 
   formInvalid = '';
+  invalidField: DraftField | null = null;
   latestSimError = '';
   prevEquiClass = '';
 
@@ -76,9 +98,17 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
     private walletService: WalletService,
     public tezosDomains: TezosDomainsService,
     private inputValidationService: InputValidationService,
-    private tokenBalancesService: TokenBalancesService
+    private tokenBalancesService: TokenBalancesService,
+    private changeDetector: ChangeDetectorRef,
+    router: Router
   ) {
     super();
+    router.events
+      .pipe(
+        filter((event) => event instanceof NavigationStart),
+        takeUntilDestroyed()
+      )
+      .subscribe(() => this.closeModalAction(false));
   }
 
   ngOnInit(): void {}
@@ -99,10 +129,82 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
     ModalComponent.currentModel.next({ name: this.name, data: null });
     this.estimateService.preLoadData(this.activeAccount.pkh, this.activeAccount.pk);
   }
-  closeModalAction() {
-    this.prepareResponse.emit(null);
-    ModalComponent.currentModel.next({ name: '', data: null });
+
+  override open(): void {
+    this.isOpen = true;
+    this.changeDetector.detectChanges();
+    const dialog = this.dialog.nativeElement;
+    const invocation = this.prepareRequest?.invocation;
+    if (invocation) {
+      // Only draft dismissal restores the Send focus. Preview and route changes move it elsewhere.
+      const active = dialog.ownerDocument.activeElement;
+      if (active instanceof HTMLElement) active.blur();
+      this.invokedDialog = new InvokedDialog(dialog, this.content.nativeElement);
+      this.invokedDialog.open(invocation);
+    } else {
+      dialog.inert = false;
+      dialog.showModal();
+    }
+  }
+
+  override close(restoreFocus = false): void {
+    if (!this.isOpen) return;
+    this.isOpen = false;
     this.reset();
+    // Clear recipient, fees and scanner content before the dialog leaves the top layer.
+    this.changeDetector.detectChanges();
+    this.closeDialog(restoreFocus);
+  }
+
+  override ngOnDestroy(): void {
+    this.isOpen = false;
+    this.reset();
+    this.closeDialog();
+    super.ngOnDestroy();
+  }
+
+  private closeDialog(restoreFocus = false): void {
+    if (this.invokedDialog) {
+      this.invokedDialog.close({ restoreFocus });
+      this.invokedDialog = undefined;
+    } else {
+      this.dialog?.nativeElement.close();
+    }
+  }
+
+  cancel(event: Event): void {
+    event.preventDefault();
+    this.closeModalAction();
+  }
+
+  wrapFocus(event: KeyboardEvent): void {
+    const dialog = this.dialog.nativeElement;
+    const active = event.target as HTMLElement;
+    if (active.closest('dialog') !== dialog) return;
+    const controls = Array.from(dialog.querySelectorAll<HTMLElement>('button, input, textarea, a[href], [tabindex]')).filter(
+      (element) => element.tabIndex >= 0 && !element.matches(':disabled') && !element.closest('[inert]') && element.getClientRects().length
+    );
+    const boundary = event.shiftKey ? controls[0] : controls.at(-1);
+    if (active === boundary) {
+      event.preventDefault();
+      (event.shiftKey ? controls.at(-1) : controls[0])?.focus();
+    }
+  }
+
+  closeModalAction(restoreFocus = true): void {
+    if (!this.isOpen) return;
+    this.close(restoreFocus);
+    this.prepareResponse.emit(null);
+    if (ModalComponent.currentModel.value.name === this.name) {
+      ModalComponent.currentModel.next({ name: '', data: null });
+    }
+  }
+
+  clearFieldError(field: DraftField): void {
+    if (this.invalidField === field) {
+      this.invalidField = null;
+      this.formInvalid = '';
+    }
   }
 
   reset(init = false) {
@@ -126,6 +228,7 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
     this.toMultipleDestinationsString = '';
 
     this.formInvalid = '';
+    this.invalidField = null;
     this.latestSimError = '';
     this.prevEquiClass = '';
     this.torusVerifierName = 'Tezos Address';
@@ -205,14 +308,18 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
         this.latestSimError = '';
         this.prevEquiClass = equiClass;
         this.simSemaphore++; // Put lock on 'Preview and 'Send max'
+        const request = this.prepareRequest;
         const callback = (res) => {
+          if (!this.isOpen || this.prepareRequest !== request) return;
           if (res) {
             if (res.error) {
+              this.invalidField = null;
               this.formInvalid = res.error.message;
               this.latestSimError = res.error.message;
             } else {
               this.defaultTransactionParams = res;
               this.formInvalid = '';
+              this.invalidField = null;
               this.latestSimError = '';
               this.updateMaxAmount();
             }
@@ -224,7 +331,7 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
         this.estimateService.estimateTransactions(JSON.parse(JSON.stringify(txs)), this.activeAccount.address, this.tokenTransfer, callback);
       } else {
         this.latestSimError = prevSimError;
-        this.formInvalid = this.latestSimError;
+        if (!this.invalidField) this.formInvalid = this.latestSimError;
       }
     } else {
       this.latestSimError = prevSimError;
@@ -256,7 +363,6 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
     2. create basic transaction array
   */
   sanitizeNumberInput(e, type = ''): void {
-    console.dir(this.token?.decimals, e.target);
     if (['gas', 'storage'].includes(type) || (type === 'amount' && this.token?.decimals == 0)) {
       e.target.value = e.target.value.replace(/[^0-9]/g, '');
     } else {
@@ -302,7 +408,7 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
   getMinimalPreparedTxs(finalCheck = false): PartiallyPreparedTransaction[] {
     if (!this.isMultipleDestinations) {
       if (this.torusVerifier) {
-        assert(!this.invalidTorusAccount(), this.invalidTorusAccount());
+        assertDraftField(!this.invalidTorusAccount(), 'recipient', this.invalidTorusAccount());
         assert(this.torusReady(), 'Pending lookup');
         this.checkTx(this.torusLookupAddress, this.amount, finalCheck);
         const meta: any = {
@@ -337,20 +443,23 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
     }
   }
   checkTx(toPkh: string, amount: string, finalCheck: boolean): void {
-    assert(
+    assertDraftField(
       this.torusVerifier || !(!this.inputValidationService.address(toPkh) || toPkh === this.activeAccount.address),
+      this.isMultipleDestinations ? 'batch' : 'recipient',
       this.translate.instant('SENDCOMPONENT.INVALIDRECEIVERADDRESS')
     );
-    assert(
+    assertDraftField(
       !this.torusVerifier ||
         !(!this.inputValidationService.torusAccount(this.toPkh, this.torusVerifier) || this.torusLookupAddress === this.activeAccount.address),
+      this.isMultipleDestinations ? 'batch' : 'recipient',
       'Invalid recipient'
     );
-    assert(
+    assertDraftField(
       !(
         !this.inputValidationService.amount(amount, this.token ? this.token.decimals : undefined) ||
         (finalCheck && (amount === '0' || amount === '') && toPkh.slice(0, 3) !== 'KT1')
       ),
+      this.isMultipleDestinations ? 'batch' : 'amount',
       this.translate.instant('SENDCOMPONENT.INVALIDAMOUNT')
     );
   }
@@ -365,9 +474,9 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
             .split(' ')
             .map((col) => col.trim())
             .filter((col) => col);
-          assert(cols?.length === 2, `Transaction ${i + 1} has invalid number of arguments. Expected 2, but got ${cols?.length}.`);
-          assert(this.inputValidationService.address(cols[0]), `Transaction ${i + 1} contains an invalid destination.`);
-          assert(this.inputValidationService.amount(cols[1]), `Transaction ${i + 1} contains an invalid amount.`);
+          assertDraftField(cols?.length === 2, 'batch', `Transaction ${i + 1} has invalid number of arguments. Expected 2, but got ${cols?.length}.`);
+          assertDraftField(this.inputValidationService.address(cols[0]), 'batch', `Transaction ${i + 1} contains an invalid destination.`);
+          assertDraftField(this.inputValidationService.amount(cols[1]), 'batch', `Transaction ${i + 1} contains an invalid amount.`);
           this.checkTx(cols[0], cols[1], finalCheck);
           const tx: PartiallyPreparedTransaction = {
             kind: 'transaction',
@@ -384,9 +493,9 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
     assert(!this.simSemaphore && (!this.torusVerifier || this.torusReady()), this.formInvalid ? this.formInvalid : 'Awaiting request');
     const minimalTxs = this.getMinimalPreparedTxs(true);
     this.transactions = minimalTxs;
-    assert(this.inputValidationService.fee(this.customFee), 'Invalid fee');
-    assert(this.inputValidationService.gas(this.customGasLimit), 'Invalid gas limit');
-    assert(this.inputValidationService.gas(this.customStorageLimit), 'Invalid storage limit');
+    assertDraftField(this.inputValidationService.fee(this.customFee), 'fee', 'Invalid fee');
+    assertDraftField(this.inputValidationService.gas(this.customGasLimit), 'gas', 'Invalid gas limit');
+    assertDraftField(this.inputValidationService.gas(this.customStorageLimit), 'storage', 'Invalid storage limit');
     assert(!this.checkBalance(), this.checkBalance());
     assert(
       minimalTxs.length === this.defaultTransactionParams.customLimits?.length,
@@ -439,6 +548,7 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
   }
   sendEntireBalance(event: Event): void {
     event.stopPropagation();
+    this.clearFieldError('amount');
     this.sendMax = true;
     this.checkMaxAmount();
     this.amountChange();
@@ -451,6 +561,7 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
     this.transactions = [];
     this.toMultipleDestinationsString = '';
     this.formInvalid = '';
+    this.invalidField = null;
     this.toPkh = '';
     this.amount = '';
     this.customFee = '';
@@ -556,6 +667,7 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
     // resimulate?
   }
   async torusLookup(): Promise<any> {
+    const request = this.prepareRequest;
     const lookupInput = `${this.torusVerifier}:${this.toPkh}`;
     let formInvalid = '';
     if (!this.torusService.verifierMapKeys.includes(this.torusVerifier) && this.torusVerifier !== 'domain') {
@@ -586,7 +698,7 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
               formInvalid = e;
               return '';
             });
-      if (lookupInput !== `${this.torusVerifier}:${this.toPkh}`) {
+      if (!this.isOpen || this.prepareRequest !== request || lookupInput !== `${this.torusVerifier}:${this.toPkh}`) {
         // Lookup input values have changed. So we can ignore this response from lookupPkh().
         return;
       }
@@ -622,18 +734,25 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
     let txs: FullyPreparedTransaction[];
     try {
       txs = this.getFullyPreparedTxs();
-      this.prepareResponse.emit(txs);
-      ModalComponent.currentModel.next({
-        name: 'confirm-send',
-        data: {
-          customGasLimit: this.customGasLimit,
-          customStorageLimit: this.customStorageLimit
-        }
-      });
-      this.reset();
     } catch (e) {
       this.formInvalid = e.message;
+      this.invalidField = e instanceof DraftFieldError ? e.field : null;
+      if (this.invalidField) {
+        if (['gas', 'fee', 'storage'].includes(this.invalidField)) this.advancedForm = true;
+        this.changeDetector.detectChanges();
+        this.dialog.nativeElement.querySelector<HTMLElement>('#prepare-send-' + this.invalidField)?.focus();
+      }
+      return;
     }
+    const data = {
+      customGasLimit: this.customGasLimit,
+      customStorageLimit: this.customStorageLimit,
+      focusFromPrepare: true,
+      returnFocus: this.prepareRequest?.invocation?.focusAfterClose
+    };
+    this.close();
+    this.prepareResponse.emit(txs);
+    ModalComponent.currentModel.next({ name: 'confirm-send', data });
   }
   dynSize(): string {
     const size = this.amount ? this.amount.length : 0;
@@ -652,19 +771,32 @@ export class PrepareSendComponent extends ModalComponent implements OnInit, OnCh
   dropdownResponse(data): void {
     if (data?.torusVerifier !== this.torusVerifier) {
       console.log(this.torusVerifier + ' -> ' + data.torusVerifier);
+      this.clearFieldError('recipient');
       this.torusVerifier = data.torusVerifier;
       this.torusVerifierName = data.torusVerifierName;
       this.verifierChange();
     }
   }
-  pasteToPkh(): void {
-    navigator.clipboard.readText().then((clipText) => {
-      this.toPkh = clipText;
-      this.updateDefaultValues({ target: { value: this.toPkh } });
-    });
+  async pasteToPkh(): Promise<void> {
+    const request = this.prepareRequest;
+    try {
+      const text = await navigator.clipboard.readText();
+      if (this.isOpen && !this.isMultipleDestinations && this.prepareRequest === request) this.handleScanResponse({ pkh: text });
+    } catch {
+      if (this.isOpen && !this.isMultipleDestinations && this.prepareRequest === request) {
+        this.invalidField = 'recipient';
+        this.formInvalid = 'Could not read the clipboard. Paste directly into the recipient field.';
+        this.recipient?.nativeElement.focus();
+      }
+    }
   }
   handleScanResponse(ev): void {
+    const request = this.prepareRequest;
+    this.clearFieldError('recipient');
     this.toPkh = ev?.pkh || '';
     this.updateDefaultValues({ target: { value: this.toPkh } });
+    queueMicrotask(() => {
+      if (this.isOpen && this.prepareRequest === request) this.recipient?.nativeElement.focus();
+    });
   }
 }

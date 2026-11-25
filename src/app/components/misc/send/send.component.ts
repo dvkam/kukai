@@ -308,7 +308,6 @@ export class SendComponent implements OnInit, OnChanges, OnDestroy {
   handlePrepareResponse(preparedTransactions: FullyPreparedTransaction[]): void {
     this.prepareRequest = null;
     if (preparedTransactions) {
-      console.log('PrepareResponse', JSON.stringify(preparedTransactions));
       this.confirmTransactions(preparedTransactions, false);
     }
   }

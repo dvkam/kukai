@@ -1,4 +1,4 @@
-<div class="flex-row token" (click)="viewToken(token)">
+<div class="flex-row token" tabindex="-1" (click)="viewToken($event)">
   <div class="dot"></div>
   <div class="wrapper">
     <app-asset class="asset" (inView)="balanceChangeTimer()" [assets]="token" [size]="'small'" [muted]="true" [autoplay]="true" [playsinline]="true" [loop]="true" [priorityList]="['thumbnailAsset', 'displayAsset']"></app-asset>

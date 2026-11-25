@@ -122,7 +122,7 @@
       </div>
       <div *ngIf="!token?.isUnknownToken" class="flex-column bottom">
         <div class="seperator"></div>
-        <app-send-button class="send" [override]="true" [activeAccount]="activeAccount"
+        <app-send-button class="send" [override]="true" [activeAccount]="activeAccount" [previousInvoker]="previousInvoker"
           [tokenTransfer]="!token ? null : token['contractAddress']+':'+token['id']"
           [symbol]="!token ? 'tez' : token?.symbol">
         </app-send-button>
