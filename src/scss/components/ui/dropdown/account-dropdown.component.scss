@@ -209,7 +209,7 @@ $border-width-dark-only: v.$border-width-dark-only;
       bottom: 0;
       left: 0;
       & span {
-        color: $base-blue-color-lightened;
+        color: var(--account-picker-action-text, #{$base-blue-color-lightened});
       }
     }
   }
@@ -257,6 +257,7 @@ $border-width-dark-only: v.$border-width-dark-only;
 
 :host(app-ui-dropdown-account) {
   --account-picker-focus-ring: var(--base-font-color);
+  --account-picker-action-text: var(--base-font-color);
 
   button.currentAddress,
   button.show-all {
@@ -283,14 +284,13 @@ $border-width-dark-only: v.$border-width-dark-only;
     margin: 0;
 
     span {
-      color: v.$base-font-color;
       text-decoration: underline;
     }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .currentAddress,
-    .icon-db {
+    .dropdown .currentAddress,
+    .dropdown .icon-db {
       transition: none;
     }
   }
