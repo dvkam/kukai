@@ -1,21 +1,24 @@
-<div *ngIf="displayAgreement" class="agreement-wrapper fade-in">
-  <div class="agreement-body">
-    <div class="agreement-footer fade-in">
-      <p>By Accessing, Continuing to Use & Browse this Website including its Services provided therein (“Kukai Wallet”),
-        you agree that you have read and reviewed our <a href="./terms-of-use" target="_blank">Terms of Use</a> and <a
-          href="./privacy-policy" target="_blank">Privacy Policy</a>.</p>
-      <div>
-        <div class="flex-column accept">
-          <button class="fade-in" (click)="accept()">Accept</button>
-          <p>I have reviewed the Terms of Use and Privacy Policy, I hereby Accept and Agree to the Terms of Use and
-            Privacy Policy.</p>
-        </div>
-        <div class="flex-column decline">
-          <a class="flex-column" href="about:blank"><button>Decline</button></a>
-          <p>I have reviewed the Terms of Use and Privacy Policy, I hereby DO NOT Accept and Agree to the Terms of Use
-            and Privacy Policy.</p>
-        </div>
+<dialog #agreement class="agreement" aria-labelledby="agreement-heading" (cancel)="$event.preventDefault()">
+  <h2 #heading id="agreement-heading" tabindex="-1">{{ declined ? 'Wallet access declined' : 'Wallet terms' }}</h2>
+  <ng-container *ngIf="!declined; else declinedState">
+    <p>By Accessing, Continuing to Use & Browse this Website including its Services provided therein (“Kukai Wallet”),
+      you agree that you have read and reviewed our <a href="./terms-of-use" target="_blank" rel="noopener">Terms of Use</a>
+      and <a href="./privacy-policy" target="_blank" rel="noopener">Privacy Policy</a>.</p>
+    <div class="actions">
+      <div class="accept">
+        <button type="button" (click)="accept()">Accept</button>
+        <p>I have reviewed the Terms of Use and Privacy Policy, I hereby Accept and Agree to the Terms of Use and
+          Privacy Policy.</p>
+      </div>
+      <div class="decline">
+        <button type="button" (click)="setDeclined(true)">Decline</button>
+        <p>I have reviewed the Terms of Use and Privacy Policy, I hereby DO NOT Accept and Agree to the Terms of Use
+          and Privacy Policy.</p>
       </div>
     </div>
-  </div>
-</div>
+  </ng-container>
+  <ng-template #declinedState>
+    <p>You declined the wallet terms. You can close this tab or review the terms again to use the wallet.</p>
+    <button type="button" (click)="setDeclined(false)">Review terms again</button>
+  </ng-template>
+</dialog>

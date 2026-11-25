@@ -1,122 +1,55 @@
-@use "../../../../abstracts/mixins" as m;
 @use "../../../../abstracts/variables" as v;
 
-/* Add Animation */
-@-webkit-keyframes fadein {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fadein {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-div.agreement-wrapper {
-  position: fixed;
-  width: 100%;
-  height: 120%;
-  overflow: hidden;
-  top: 0;
-  left: 0;
-  background-color: #0003;
-  z-index: 5000;
-}
-
-div.agreement-body {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  top: 0;
-  left: 0;
-}
-
-.agreement-footer {
-  background: white;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  width: 32rem;
-  border-radius: v.$border-radius;
-  box-shadow: v.$box-shadow-dark;
-  overflow: hidden;
+.agreement {
+  box-sizing: border-box;
+  width: min(36rem, calc(100% - 2rem));
+  max-height: calc(100% - 2rem);
+  margin: auto;
   padding: 2rem;
+  overflow: auto;
+  overscroll-behavior: contain;
+  border: 0;
+  border-radius: v.$border-radius;
+  background: v.$base-end-color;
+  color: v.$base-font-color;
+  box-shadow: v.$box-shadow-dark;
+  text-align: center;
 
-  & p {
-    text-align: center;
+  &::backdrop {
+    background: #0006;
+  }
+
+  h2, p {
     margin: 0.5rem;
-    color: v.$base-font-color;
     line-height: 1.5;
-    font-size: 1.75rem;
   }
 
-  & a {
-    color: v.$base-blue-color-lightened;
-    text-decoration: none;
-    background-color: transparent;
+  h2 { font-size: 2rem; }
+  p { font-size: 1.75rem; }
+  a { color: v.$base-font-color; text-decoration: underline; }
+  button {
+    margin: 1rem 0;
+    color: v.$base-end-color-static;
+    background-color: v.$base-blue-color;
   }
 
-  & button {
-    width: calc(100% - 2rem);
-    margin: 1rem;
+  :is(a, button):focus-visible {
+    outline: 2px solid v.$base-blue-color;
+    outline-offset: 2px;
   }
 
-  & > div p {
-    font-size: 1rem;
-  }
-
-  & > div {
-    background: v.$base-end-color-static;
-    color: v.$base-font-color;
+  .actions {
     display: flex;
-    flex-direction: row;
+    gap: 1rem;
 
-    & > div {
-      background: v.$base-end-color-static;
-      color: v.$base-font-color;
-      display: flex;
-      flex-direction: column;
-      width: 50%;
-      padding: 0rem;
-      align-items: center;
-    }
-
-    & .accept button {
-      border: v.$border-width solid v.$base-blue-color;
-    }
-
-    & .decline button {
-      border: v.$border-width solid v.$base-blue-color;
-      background-color: v.$base-end-color-static;
-      color: v.$base-blue-color;
-    }
+    > div { flex: 1; }
+    button { width: 100%; }
+    p { font-size: 1.25rem; }
   }
 
-  & div div a {
-    text-decoration: none;
-    width: 100%;
-    align-items: center;
+  .decline button {
+    border: v.$border-width solid v.$base-blue-color;
+    color: v.$base-font-color;
+    background: v.$base-end-color;
   }
-}
-
-button.fade-in {
-  animation-name: fadein;
-  -webkit-animation-name: fadein;
-  animation-delay: 0s;
-  -webkit-animation-delay: 0s;
-  animation-duration: 0.75s;
-  -webkit-animation-duration: 0.75s;
 }
