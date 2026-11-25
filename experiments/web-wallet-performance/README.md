@@ -41,7 +41,7 @@ A menu that stays open over the Import form fails the Import attempt. The runner
 
 ## Read the result
 
-The JSON includes the browser version, host settings, each raw timing, blocked request counts and validation failures. Each step has a 15-second completion timeout. A failed validation has no timing for that action. Uncaught page errors and failed local requests invalidate the trial's timings. A failed journey makes the command exit nonzero after writing its report. If a warm-up cannot render Home, the runner skips the timed attempts.
+The JSON includes the browser version, host settings, each raw timing, blocked request counts and validation failures. The runner checks the JavaScript, CSS and index digests before and after measuring. Earlier manifests carry hashes observed at measurement time. Each step has a 15-second completion timeout. A failed validation has no timing for that action. Uncaught page errors and failed local requests invalidate the trial's timings. A failed journey makes the command exit nonzero after writing its report. If a warm-up cannot render Home, the runner skips the timed attempts.
 
 Each workflow reports attempted, successful, failed and skipped counts. Percentiles use nearest rank on successful samples in ascending order. For percentile `p` over `n` measurements, take the one-based element at `ceil(n × p / 100)`. The report also gives the conventional median and the minimum and maximum. At 100 successful measurements, p99 is the second-slowest sample. A small number of samples can reveal a broken flow. Use repeated matched runs to assess a timing difference.
 

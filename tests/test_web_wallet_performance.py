@@ -1,4 +1,6 @@
 import importlib.util
+import json
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -10,6 +12,31 @@ SPEC.loader.exec_module(runner)
 
 
 class WalletBenchmarkTests(unittest.TestCase):
+    def test_build_verification_rejects_a_swapped_script(self):
+        with tempfile.TemporaryDirectory() as directory:
+            build = Path(directory)
+            (build / "index.html").write_text('<script src="main.js"></script>', encoding="utf8")
+            script = build / "main.js"
+            script.write_text('console.log("original");', encoding="utf8")
+            manifest = build / "benchmark-build.json"
+            digest = runner.bundle_digests(build)
+            manifest.write_text(json.dumps({"bundle_sha256": digest}), encoding="utf8")
+            self.assertEqual(runner.read_build(build)["bundle_sha256"], digest)
+
+            script.write_text('console.log("replacement");', encoding="utf8")
+            with self.assertRaisesRegex(ValueError, "Bundle digest mismatch"):
+                runner.read_build(build)
+
+    def test_legacy_build_hashes_are_recorded_as_observations(self):
+        with tempfile.TemporaryDirectory() as directory:
+            build = Path(directory)
+            (build / "index.html").write_text("<title>Older build</title>", encoding="utf8")
+            (build / "benchmark-build.json").write_text("{}", encoding="utf8")
+            record = runner.read_build(build)
+            self.assertNotIn("bundle_sha256", record)
+            self.assertIn("index.html", record["observed_bundle_sha256"])
+            self.assertIn("observed at measurement time", record["bundle_provenance"])
+
     def test_nearest_rank_uses_successful_measurements(self):
         trials = [
             {"completed": True, "timings_ms": {runner.COLD_HOME: sample}, "errors": {}, "runtime_errors": []}

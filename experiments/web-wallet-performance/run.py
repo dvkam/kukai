@@ -1,6 +1,7 @@
 """Measure the logged-out mobile wallet in headless Chromium using a loopback build."""
 
 import argparse
+import hashlib
 import json
 import math
 import os
@@ -192,6 +193,33 @@ def linux_setting(path: str) -> str | None:
         return None
 
 
+def bundle_digests(directory: Path) -> dict[str, str]:
+    digests = {}
+    for path in sorted(directory.iterdir()):
+        if path.is_file() and (path.name == "index.html" or path.suffix in (".js", ".css")):
+            with path.open("rb") as bundle:
+                digests[path.name] = hashlib.file_digest(bundle, "sha256").hexdigest()
+    return digests
+
+
+def read_build(directory: Path) -> dict:
+    manifest = directory / "benchmark-build.json"
+    if not (directory / "index.html").is_file() or not manifest.is_file():
+        raise ValueError(f"{directory} is missing index.html or benchmark-build.json. Run build.cjs first.")
+    build = json.loads(manifest.read_text(encoding="utf8"))
+    if not isinstance(build, dict):
+        raise TypeError(f"{manifest} must contain a JSON object.")
+    observed = bundle_digests(directory)
+    if "bundle_sha256" not in build:
+        build["bundle_provenance"] = "legacy manifest; bundle hashes observed at measurement time"
+        build["observed_bundle_sha256"] = observed
+    elif build["bundle_sha256"] != observed:
+        raise ValueError(f"Bundle digest mismatch in {directory}. Rebuild before measuring.")
+    else:
+        build["bundle_provenance"] = "build-time bundle hashes verified before measurement"
+    return build
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("baseline", type=Path, help="output directory of build.cjs")
@@ -209,9 +237,11 @@ def main() -> int:
         builds["candidate"] = args.candidate
     results = {}
     for name, path in builds.items():
-        if not (path / "index.html").is_file() or not (path / "benchmark-build.json").is_file():
-            parser.error(f"{path} is missing index.html or benchmark-build.json. Run build.cjs first.")
-        results[name] = {"build": json.loads((path / "benchmark-build.json").read_text()), "trials": []}
+        try:
+            build = read_build(path)
+        except (OSError, TypeError, ValueError) as error:
+            parser.error(str(error))
+        results[name] = {"build": build, "trials": []}
 
     cpu_info = linux_setting("/proc/cpuinfo") or ""
     output = {
@@ -254,7 +284,11 @@ def main() -> int:
                 print(f"Completed {trial}/{args.samples} attempts per build", file=stderr, flush=True)
 
     output["load_average_end"] = os.getloadavg()
-    for result in results.values():
+    for name, result in results.items():
+        build = result["build"]
+        recorded = build.get("bundle_sha256", build.get("observed_bundle_sha256"))
+        if bundle_digests(builds[name]) != recorded:
+            parser.error(f"Bundle bytes changed while measuring {name}.")
         result["summary"] = summarize(result["trials"])
     print(json.dumps(output, indent=2, allow_nan=False))
     return int(any(not result["warmup"]["completed"] or result["summary"]["failed"] for result in results.values()))

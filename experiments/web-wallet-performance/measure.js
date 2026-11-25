@@ -16,11 +16,11 @@
     menu.getAnimations({ subtree: true }).every((animation) => animation.playState === 'finished');
   const browseReady = () =>
     Array.from(document.querySelectorAll('input[type="file"]')).some((field) => {
-      if (field.disabled || !field.accept.includes('.tez')) return false;
+      if (field.matches(':disabled') || field.closest('[inert]') || !field.accept.includes('.tez')) return false;
       // Older builds activate the file field through its label. Current builds use a button.
-      return Array.from(field.labels).some((label) => visible(label) && text(label) === 'Browse') ||
-        Array.from(field.form?.querySelectorAll('button:not([disabled])') ?? [])
-          .some((button) => visible(button) && text(button) === 'Browse');
+      return Array.from(field.labels).some((label) => visible(label) && !label.closest('[inert]') && text(label) === 'Browse') ||
+        Array.from(field.form?.querySelectorAll('button:not(:disabled)') ?? [])
+          .some((button) => visible(button) && !button.closest('[inert]') && text(button) === 'Browse');
     });
   const seedFormReady = () => {
     const tab = Array.from(document.querySelectorAll('[role="tab"][aria-selected="true"]'))
@@ -31,7 +31,8 @@
     return Array.from((recoveryPanel || document).querySelectorAll('textarea')).some((field) => {
       const labelledRecovery = Array.from(field.labels).some((label) => text(label) === 'Recovery (seed) words');
       return (labelledRecovery || field.placeholder === 'Seed Words (required)') &&
-        visible(field) && field.value === '' && !field.readOnly && !field.disabled;
+        visible(field) && field.value === '' && !field.readOnly &&
+        !field.matches(':disabled') && !field.closest('[inert]');
     });
   };
 
