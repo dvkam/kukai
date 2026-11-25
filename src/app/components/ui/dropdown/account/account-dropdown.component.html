@@ -27,7 +27,7 @@
         </a>
       </ng-container>
     </div>
-    <button type="button" *ngIf="(list?.length ?? 0) > 1" class="option show-all" [style.padding]="!getUsername(current?.address) ? '0.75rem 1.125rem 0.75rem calc(2.5rem - var(--border-width))' : ''" (click)="showAll()">
+    <button #showAllButton type="button" aria-haspopup="dialog" *ngIf="!panelTrigger.disabled && (list?.length ?? 0) > 1" class="option show-all" [style.padding]="!getUsername(current?.address) ? '0.75rem 1.125rem 0.75rem calc(2.5rem - var(--border-width))' : ''" (click)="showAll(showAllButton)">
       <span>Show All</span>
     </button>
   </div>

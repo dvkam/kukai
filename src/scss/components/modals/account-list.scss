@@ -1,197 +1,131 @@
 @use "../../abstracts/variables" as v;
-@use "../../abstracts/mixins" as m;
 
-$base-font-color: v.$base-font-color;
-$base-font-color-secondary: v.$base-font-color-secondary;
-$base-end-color: v.$base-end-color;
-$color-lightened-6: v.$color-lightened-6;
-$color-lightened-65: v.$color-lightened-65;
-$color-lightened-7: v.$color-lightened-7;
-$base-blue-color-lightened: v.$base-blue-color-lightened;
-$border-width: v.$border-width;
-$border-color: v.$border-color;
-$border-radius: v.$border-radius;
-$box-shadow: v.$box-shadow;
-$box-shadow-dark: v.$box-shadow-dark;
-$base-filter-brightness-5: v.$base-filter-brightness-5;
+:host {
+  --account-current-surface: #{v.$color-lightened-6};
+  --account-hover-surface: #{v.$color-lightened-65};
+  --account-text-secondary: #{v.$base-font-color-secondary-half};
+  --account-divider: #{v.$border-color};
+  display: block;
+}
 
-.list {
-  background: $base-end-color;
-  border: none;
-  overflow-x: hidden;
-  overflow-y: auto;
-  max-height: calc(100vh - 24em);
-  min-width: 66em;
-  max-width: 95vw;
+.account-viewport {
+  position: relative;
+  max-height: 55vh;
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.accounts {
+  margin: 0;
   padding: 0;
-  margin: 0 -2em;
+}
 
-  &::-webkit-scrollbar-track {
-    margin: 0;
-  }
+.account-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.25em;
+  padding: 0 0.75em 0 0;
+  border-bottom: v.$border-width solid var(--account-divider);
 
-  &.right {
-    margin-top: -1.1em;
-  }
-
-  & .sep {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    border-top: 1px solid #0004;
-    border-bottom: 1px solid #0004;
-  }
-
-  & a.option {
-    text-decoration: none;
-    align-self: flex-start;
-    justify-content: flex-start;
-    cursor: pointer;
-    padding: 1em 2.25em 1em 2.5em;
-    margin: 0;
-    width: calc(100% - 4.5em);
-    border-bottom: $border-width solid $border-color;
-
-    & .left {
-      align-self: center;
-
-      & .alias {
-        width: auto;
-        justify-content: flex-start;
-        margin: 0 1em 0 0;
-
-        & img:not(.copy) {
-          width: 1.5em;
-          height: 1.5em;
-          margin: 0 1em 0 -0.5em;
-        }
-
-        & span.name {
-          color: v.$base-font-color;
-          @include m.multiply("font-size", 1.5, "em", 1.3);
-          font-weight: 400;
-        }
-      }
-
-      & span.addr {
-        margin: 0 0 0 2em;
-        width: auto;
-        color: v.$base-font-color-secondary;
-        @include m.multiply("font-size", 1.125, "em", 1.3);
-        font-family: "Roboto Mono";
-
-        &.default {
-          color: v.$base-font-color;
-          @include m.multiply("font-size", 1.5, "em", 1.3);
-        }
-      }
-    }
-
-    & .copy {
-      cursor: pointer;
-      margin: 0 0.5em;
-      align-self: center;
-      filter: $base-filter-brightness-5 v.$base-filter-invert-1;
-      @include m.multiply("width", 1, "em", 1.75);
-      @include m.multiply("height", 1, "em", 1.75);
-    }
-
-    &.selected {
-      background: $color-lightened-6;
-    }
-
-    &:hover {
-      background: $color-lightened-65;
-    }
-
-    & .balances {
-      width: 100%;
-      margin: 0 0 0 1em;
-    }
-  }
-
-  & .balance-tez {
-    min-width: 10em;
-    width: 100%;
-    text-align: right;
-    color: $base-font-color;
-    font-weight: 500;
-    @include m.multiply("font-size", 1.5, "em", 1.3);
-  }
-
-  & .balance-fiat {
-    width: 100%;
-    text-align: right;
-    color: $base-font-color-secondary;
-    font-weight: 500;
-    @include m.multiply("font-size", 1.125, "em", 1.3);
-  }
-
-  & .total-balances {
-    padding: 1em 1.25em;
-    position: relative;
-    z-index: 1;
-    width: calc(100% - 3em);
-    align-items: center;
-
-    & .balance-fiat {
-      @include m.multiply("font-size", 1.225, "em", 1.3);
-    }
-
-    & .balance-tez {
-      @include m.multiply("font-size", 1.75, "em", 1.3);
-    }
-
-    & h3 {
-      letter-spacing: 0.02em;
-      @include m.multiply("font-size", 1.75, "em", 1.3);
-      font-weight: 500;
-      color: $base-font-color;
-      margin: 0 0 0 1em;
-      width: 13em;
-      position: relative;
-    }
+  &.selected {
+    background: var(--account-current-surface);
   }
 }
 
-@media (max-width: v.$layout-break-5) {
-  .list {
-    min-width: unset;
-    max-width: unset;
-    max-height: unset;
+.account-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75em;
+  padding: 0.875em 0.5em 0.875em 1em;
+  color: var(--dialog-text);
+  text-decoration: none;
+}
 
-    & a.option {
-      padding: 1em 0 1em 0em;
-      margin: 0;
-      width: 100%;
-      & .left span.addr {
-        font-family: 'Roboto Condensed';
-        margin: 0 0 0 1.375em;
+.identity,
+.balances {
+  display: grid;
+  gap: 0.125em;
+}
 
-        &.default {
-          margin: 0 0 0 1em;
-        }
-      }
+.alias {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
 
-      & .balances {
-        width: calc(100% - 4em);
-        margin: 0 2em 0 0em;
+.logo {
+  width: 1em;
+  height: 1em;
+}
 
-        & .balance {
-          &-tez {
-            min-width: unset;
-          }
-        }
-      }
-    }
-    & .total-balances {
-      padding: 1em 2em 0 2em;
-      width: calc(100% - 4em);
+.address {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 0.875em;
+  overflow-wrap: anywhere;
+  user-select: text;
+}
 
-      & h3 {
-        margin: unset;
-        width: 5em;
-        top: -0.5em;
-      }
-    }
+.balances {
+  text-align: end;
+}
+
+.fiat,
+.copy-status {
+  color: var(--account-text-secondary);
+}
+
+.copy-address {
+  display: grid;
+  place-items: center;
+  width: 2.75em;
+  height: 2.75em;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  border-radius: v.$border-radius-hardest;
+  background: transparent;
+  cursor: pointer;
+
+  img {
+    width: 1em;
+    height: 1em;
+    filter: v.$base-filter-invert-1;
   }
+}
+
+:is(.account-link, .copy-address):focus-visible {
+  outline: 2px solid var(--dialog-focus-ring);
+  outline-offset: -3px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :is(.account-link, .copy-address):hover {
+    background: var(--account-hover-surface);
+  }
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75em;
+  padding: 0.75em 1em 0.25em;
+}
+
+.empty,
+.copy-status {
+  margin: 0;
+  padding: 0.25em 1em;
+}
+
+.empty {
+  padding-block: 1em;
+}
+
+.copy-status {
+  min-height: 1.5em;
 }

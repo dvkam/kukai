@@ -1,4 +1,3 @@
-import { AccountDropdownComponent } from '../../../ui/dropdown/account/account-dropdown.component';
 import { Component, OnInit, Input, SimpleChanges, OnChanges, OnDestroy, ElementRef, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { WalletService } from '../../../../services/wallet/wallet.service';
@@ -16,6 +15,8 @@ import { Subscription } from 'rxjs';
 import { DeeplinkService } from '../../../../services/deeplink/deeplink.service';
 import { UnlockableService } from '../../../../services/unlockable/unlockable.service';
 import { MobileMenuDropdownComponent } from '../../../ui/dropdown/mobile-menu/mobile-menu.component';
+import { AccountDropdownComponent } from '../../../ui/dropdown/account/account-dropdown.component';
+import type { DialogInvocation } from '../../../modals/invoked-dialog';
 import type { ReceiveData } from '../../../modals/receive/receive.component';
 
 @Component({
@@ -115,6 +116,17 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
   focusAccountPicker(): void {
     this.pickers.some((picker) => picker.focusIfVisible());
+  }
+
+  showAccounts(invocation: DialogInvocation): void {
+    const pickerButtons = this.pickers.map((picker) => picker.pickerTrigger);
+    ModalComponent.currentModel.next({
+      name: 'account-list',
+      data: {
+        ...invocation,
+        focusAfterClose: [...(invocation.focusAfterClose ?? []), ...pickerButtons]
+      } satisfies DialogInvocation
+    });
   }
 
   receive(invoker: HTMLButtonElement): void {

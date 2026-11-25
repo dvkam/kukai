@@ -114,7 +114,7 @@ describe('ReceiveComponent', () => {
   });
 
   it('leaves the address selected for manual copying when clipboard access fails', async () => {
-    spyOn(navigator.clipboard, 'writeText').and.rejectWith(new Error('Clipboard denied'));
+    spyOn(navigator.clipboard, 'writeText').and.callFake(() => new Promise<void>((_, reject) => setTimeout(() => reject(new Error('Clipboard denied')), 0)));
     spyOn(document, 'execCommand').and.throwError('Copy denied');
     const dialog = open();
     dialog.querySelector<HTMLButtonElement>('button[aria-label="Copy address"]').click();
