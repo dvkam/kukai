@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, HostListener, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { TorusWallet } from '../../../../services/wallet/wallet';
 import { WalletService } from '../../../../services/wallet/wallet.service';
@@ -14,14 +14,18 @@ import { Subscription } from 'rxjs';
   styleUrls: ['../../../../../scss/components/ui/dropdown/account-dropdown.component.scss']
 })
 export class AccountDropdownComponent extends DropdownComponent implements OnInit, OnChanges, OnDestroy {
+  private static nextId = 0;
+  override ecmpId = `account-picker-${AccountDropdownComponent.nextId++}`;
+  @ViewChild('panelTrigger') private trigger?: ElementRef<HTMLButtonElement>;
   postfix = '';
 
   private subscriptions: Subscription = new Subscription();
 
-  constructor(public router: Router, public lookupService: LookupService, private walletService: WalletService) {
+  constructor(public router: Router, public lookupService: LookupService, private walletService: WalletService, private host: ElementRef<HTMLElement>) {
     super();
     this.subscriptions.add(
-      this.router.events.pipe(filter((evt) => evt instanceof NavigationEnd)).subscribe(async (r: NavigationEnd) => {
+      this.router.events.pipe(filter((evt) => evt instanceof NavigationEnd)).subscribe((r: NavigationEnd) => {
+        this.isOpen = false;
         let accountAddress = r.url.substr(r.url.indexOf('/account/') + 9);
         this.postfix = !!accountAddress.substring(36) ? accountAddress.substring(36) : '';
       })
@@ -64,7 +68,28 @@ export class AccountDropdownComponent extends DropdownComponent implements OnIni
       return 'domain';
     }
   }
+  @HostListener('keydown.escape', ['$event'])
+  escape(event: KeyboardEvent): void {
+    if (this.isOpen) {
+      event.stopPropagation();
+      this.returnToTrigger();
+    }
+  }
+
+  @HostListener('focusout', ['$event'])
+  closeOnFocusOut(event: FocusEvent): void {
+    if (this.isOpen && event.relatedTarget instanceof Node && !this.host.nativeElement.contains(event.relatedTarget)) {
+      this.isOpen = false;
+    }
+  }
+
+  returnToTrigger(): void {
+    this.isOpen = false;
+    this.trigger?.nativeElement.focus({ preventScroll: true });
+  }
+
   showAll(): void {
+    this.returnToTrigger();
     ModalComponent.currentModel.next({ name: 'account-list', data: null });
   }
   trackAccount(index: number, account: any) {

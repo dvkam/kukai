@@ -11,7 +11,7 @@
     "build-mainnet": "node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng build --configuration mainnet",
     "build-dev": "npm run build-testnet",
     "test": "ng test",
-    "lint": "npx eslint -c ./.eslintrc --ext .ts src/app/ && eslint src/app/components/ui/dropdown/mobile-menu/mobile-menu.component.html src/app/components/views/start/start.component.html src/app/components/ui/button/basic/send/send-button.component.html src/app/components/views/error/404.component.html src/app/components/views/error/500.component.html && eslint tests/*.cjs",
+    "lint": "npx eslint -c ./.eslintrc --ext .ts src/app/ && eslint src/app/components/ui/dropdown/mobile-menu/mobile-menu.component.html src/app/components/ui/dropdown/account/account-dropdown.component.html src/app/components/views/start/start.component.html src/app/components/ui/button/basic/send/send-button.component.html src/app/components/views/error/404.component.html src/app/components/views/error/500.component.html && eslint tests/*.cjs",
     "e2e": "ng e2e",
     "generate-rpc-errors-file": "tsx scripts/generate-rpc-errors-file.ts",
     "prepare": "husky install",
