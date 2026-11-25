@@ -24,21 +24,19 @@ class ProgramRecordsTests(unittest.TestCase):
 
   def test_incomplete_duplicate_and_wrong_version_results_fail(self):
     with tempfile.TemporaryDirectory() as directory:
-      root = Path(directory)
-      shutil.copytree(ROOT / 'docs/program', root / 'docs/program')
-      shutil.copytree(ROOT / 'experiments', root / 'experiments', ignore=shutil.ignore_patterns('__pycache__'))
-      result_path = root / 'docs/program/capabilities/build-evidence/results.json'
+      evidence = Path(directory) / 'build-evidence'
+      shutil.copytree(ROOT / 'docs/program/capabilities/build-evidence', evidence)
+      result_path = evidence / 'results.json'
       original = json.loads(result_path.read_text())
       wrong_version = copy.deepcopy(original['checks'])
       wrong_version[0]['version'] = '0.0.0'
       cases = {'empty': [], 'missing': original['checks'][:-1],
                'duplicate': [original['checks'][0]] * 4, 'wrong-version': wrong_version}
-      with patch.object(records, 'ROOT', root), patch.object(records, 'PROGRAM', root / 'docs/program'):
-        for name, checks in cases.items():
-          with self.subTest(name=name):
-            result_path.write_text(json.dumps({**original, 'checks': checks}))
-            with self.assertRaisesRegex(ValueError, 'complete unique pinned'):
-              records.main()
+      for name, checks in cases.items():
+        with self.subTest(name=name):
+          result_path.write_text(json.dumps({**original, 'checks': checks}))
+          with self.assertRaisesRegex(ValueError, 'complete unique pinned'):
+            records.check_build_evidence(evidence, ROOT / 'experiments/library-build-check/sources.json')
 
 
   def test_changed_obligation_is_rejected_even_with_updated_digest(self):
