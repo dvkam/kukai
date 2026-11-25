@@ -101,8 +101,8 @@ describe('Prepare Send draft actions', () => {
     mode.click();
     fixture.detectChanges();
     await fixture.whenStable();
-    expect(modal.querySelector('textarea')).not.toBeNull();
-    expect(component.amount).toBe('');
+    expect(modal.querySelector<HTMLTextAreaElement>('textarea')?.value).toBe('');
+    expect(modal.querySelector('.amount input')).toBeNull();
     expect(component.toPkh).toBe('');
     expect(prepareResponse).not.toHaveBeenCalled();
   });
