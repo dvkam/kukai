@@ -1,0 +1,22 @@
+{
+  "branch": "BLDTpzk6Gx6PN6at6gBtGREQFqHMKZ6TDCeJadj1XDBNaZHf9v2",
+  "transaction": {
+    "kind": "transaction",
+    "source": "tz1Mk7tsCHsJdcDMxR7StU7EWSmqSh8hdcEP",
+    "fee": "500",
+    "counter": "1",
+    "gas_limit": "1500",
+    "storage_limit": "0",
+    "amount": "1000000"
+  },
+  "destinations": {
+    "tz1": {
+      "destination": "tz1ajtd8XhW7Q9Ez21XSLTwRP61ZtkeSKDHt",
+      "expected": "42424242424242424242424242424242424242424242424242424242424242426c001717171717171717171717171717171717171717f40301dc0b00c0843d0000a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a500"
+    },
+    "tz5": {
+      "destination": "tz5c7vUDWabv2uRKQsmdfeng6xJcUBjDVEMX",
+      "expected": "42424242424242424242424242424242424242424242424242424242424242426c001717171717171717171717171717171717171717f40301dc0b00c0843d0004a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a500"
+    }
+  }
+}

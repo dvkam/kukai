@@ -1,0 +1,17 @@
+{
+  "octez": {
+    "commit": "8a624bedbe0c920521a7e4cc1b23bb0547890d6a",
+    "encoding": "025-PsUshuai.operation.unsigned",
+    "codecSha256": "b68d583e21f8ae8d95b3ad1d10ed229ad8594a30e395c48fbaa439ae5e466c3d",
+    "snapshotSha256": "19f7556b95ba1992e975ad73e431fd082d99a7fa59072d9cf0a4c5b121792501",
+    "sampleSha256": {
+      "transaction-to-implicit": "220e5dac3bf53bce21e79e51c28881d359427332015acc6c78c788148843f093",
+      "reveal": "43ed34b3838da002bf700a26e82a57a58d0ffef4a508dc42a013b655bfd20633",
+      "reveal-with-proof": "a096e08b72d0ae0801748a17edbbb6b43c8123821d130389869369e4b40f762f"
+    }
+  },
+  "taquito": {
+    "version": "25.1.1",
+    "commitHash": "1cc2663cf397066ce46065a2595aaeaf41c42552"
+  }
+}
