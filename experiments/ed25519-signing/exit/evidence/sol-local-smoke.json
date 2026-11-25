@@ -1,0 +1,50 @@
+{
+  "mode": "unisolated_smoke",
+  "interfaces": null,
+  "external_ipv4_route": null,
+  "signer_sha256": "10e6a1a0e2bb7957b825163e6422355838ca2dbbbb1645540d3a2d079ceab3c2",
+  "cases": {
+    "old": {
+      "sender_before_lamports": 10000000,
+      "sender_after_lamports": 7995000,
+      "recipient_before_lamports": 0,
+      "recipient_after_lamports": 2000000,
+      "fee_lamports": 5000,
+      "required_signatures": 1,
+      "changed_fields_refused": [
+        "payer",
+        "recipient",
+        "amount",
+        "blockhash"
+      ],
+      "empty_signature_refused": true,
+      "source_present_after_transfer": true,
+      "receiver_key_possession_verified": true
+    },
+    "fresh": {
+      "sender_before_lamports": 10000000,
+      "sender_after_lamports": 0,
+      "recipient_before_lamports": 0,
+      "recipient_after_lamports": 9995000,
+      "fee_lamports": 5000,
+      "required_signatures": 1,
+      "changed_fields_refused": [
+        "payer",
+        "recipient",
+        "amount",
+        "blockhash"
+      ],
+      "empty_signature_refused": true,
+      "source_present_after_transfer": true,
+      "receiver_key_possession_verified": true,
+      "later_deposit_to_swept_address_lamports": 1000000
+    },
+    "stale_recovery": "refused",
+    "one_share": "refused",
+    "wrong_account": "refused",
+    "swapped_roles": "refused",
+    "wrong_transfer_payer": "refused",
+    "wrong_transfer_amount": "refused",
+    "truncated_transfer": "refused"
+  }
+}

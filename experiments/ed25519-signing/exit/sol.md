@@ -37,3 +37,7 @@ unshare --user --map-root-user --net -- /tmp/kukai-sol-exit/bin/python experimen
 ```
 
 The runner checks for a different namespace inode, loopback as the sole interface, and no external IPv4 route. CI uses the same private-namespace checks after dropping back to the runner's UID and GID. The processes share the host kernel and filesystem. On a host that cannot create a namespace, `--unisolated-smoke` instead of `--parent-net-inode` runs the transaction and refusal tests and labels them as unisolated.
+
+## Recorded run
+
+On November 25, 2026, the local smoke test at commit `1ba9e79388af6f1345d01cde8f49221e0f4ca28c` recorded both transfers, the receiver possession checks, the later deposit and all seven refusals. Its output identifies the signer binary by SHA-256. The GitHub Actions replay of that commit passed the step **Execute retained-quorum SOL transfers without network access** in a private Linux network namespace. The JSON below comes from the local smoke run. [Local output](evidence/sol-local-smoke.json) · [Hosted job](https://github.com/dvkam/kukai/actions/runs/45619222580/job/139222612240)
