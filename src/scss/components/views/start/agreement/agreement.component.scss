@@ -26,7 +26,7 @@
 
   h2 { font-size: 2rem; }
   p { font-size: 1.75rem; }
-  a { color: v.$base-blue-color; text-decoration: underline; }
+  a { color: v.$base-font-color; text-decoration: underline; }
   button {
     margin: 1rem 0;
     color: v.$base-end-color-static;
@@ -49,7 +49,7 @@
 
   .decline button {
     border: v.$border-width solid v.$base-blue-color;
-    color: v.$base-blue-color;
+    color: v.$base-font-color;
     background: v.$base-end-color;
   }
 }
