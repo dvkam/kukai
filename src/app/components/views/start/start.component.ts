@@ -15,7 +15,6 @@ import { Subscription } from 'rxjs';
   styleUrls: ['../../../../scss/components/views/start/start.component.scss']
 })
 export class StartComponent implements OnInit, OnDestroy {
-  isMobile = false;
   private subscriptions: Subscription = new Subscription();
 
   constructor(
@@ -48,12 +47,6 @@ export class StartComponent implements OnInit, OnDestroy {
     if (!this.walletService.wallet) {
       this.torusService.initTorus();
     }
-
-    const e = () => {
-      this.isMobile = !!parseInt(getComputedStyle(document.documentElement).getPropertyValue('--is-mobile'));
-    };
-    window.addEventListener('resize', e);
-    e();
   }
 
   ngOnDestroy(): void {

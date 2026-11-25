@@ -456,3 +456,13 @@ $base-background-color: v.$base-background-color;
     min-height: calc(100vw / 1.75 - 18rem);
   }
 }
+
+@media (width < v.$layout-break-6) {
+  .top h1::before {
+    content: "\00a0";
+  }
+
+  .desktop-line-break {
+    display: none;
+  }
+}
